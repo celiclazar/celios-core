@@ -1,0 +1,25 @@
+<?php
+
+return [
+    'add_new_item' => 'Dodaj novu stavku',
+    'bulk_actions' => 'Masovne akcije',
+    'cancel' => 'Otkaži',
+    'create' => 'Kreiraj',
+    'create_new' => 'Kreiraj novo',
+    'delete' => 'Obriši',
+    'delete_selected' => 'Obriši selektovano',
+    'edit' => 'Izmeni',
+    'preview' => 'Pregledaj',
+    'preview_draft' => 'Pregledaj draft',
+    'publish' => 'Objavi',
+    'publish_changes' => 'Objavi izmene',
+    'save' => 'Sačuvaj izmene',
+    'view' => 'Pregledaj',
+    'manage_links' => 'Upravljaj linkovima',
+    'revisions' => 'Istorija izmena',
+    'restore_to_draft' => 'Vrati u draft',
+    'restore_to_draft_heading' => 'Vrati ovu reviziju u draft?',
+    'restore_to_draft_description' => 'Ova akcija će učitati sadržaj ove revizije u radni draft. Moći ćete da pregledate i uredite sadržaj pre objavljivanja.',
+    'save_snapshot' => 'Sačuvaj snapshot',
+    'back_to_editor' => 'Nazad na uređivanje',
+];

@@ -1,0 +1,25 @@
+<?php
+
+return [
+    'add_new_item' => 'Aggiungi Nuova Voce',
+    'bulk_actions' => 'Azioni di Massa',
+    'cancel' => 'Annulla',
+    'create' => 'Crea',
+    'create_new' => 'Crea Nuovo',
+    'delete' => 'Elimina',
+    'delete_selected' => 'Elimina Selezionati',
+    'edit' => 'Modifica',
+    'manage_links' => 'Gestisci Link',
+    'preview' => 'Visualizza',
+    'preview_draft' => 'Visualizza Bozza',
+    'publish' => 'Pubblica',
+    'publish_changes' => 'Pubblica Modifiche',
+    'save' => 'Salva Modifiche',
+    'view' => 'Visualizza',
+    'revisions' => 'Cronologia Revisioni',
+    'restore_to_draft' => 'Ripristina in Bozza',
+    'restore_to_draft_heading' => 'Ripristinare questa revisione in bozza?',
+    'restore_to_draft_description' => 'Questo caricherà il contenuto di questa revisione nella tua bozza di lavoro. Potrai rivederlo e modificarlo prima della pubblicazione.',
+    'save_snapshot' => 'Salva Istantanea',
+    'back_to_editor' => 'Torna all\'editor',
+];
