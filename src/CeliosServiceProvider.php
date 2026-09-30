@@ -128,6 +128,8 @@ class CeliosServiceProvider extends ServiceProvider
                 ->group(__DIR__ . '/../routes/web.php');
         }
 
+
+
         // 4. Publishable assets, views, translations, and configs
         if ($this->app->runningInConsole()) {
             $this->commands([

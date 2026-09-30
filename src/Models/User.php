@@ -55,7 +55,18 @@ class User extends Authenticatable implements FilamentUser, HasMedia
     {
         $allowedRoles = ['super_admin', 'super-admin', 'admin', 'panel_user'];
 
-        return $this->hasAnyRole($allowedRoles) && ($this->status === true || $this->getRawOriginal('status') === 'active');
+        $hasRole = $this->hasAnyRole($allowedRoles);
+
+        if (!$hasRole && \Illuminate\Support\Facades\Schema::hasTable('model_has_roles')) {
+            $hasRole = \Illuminate\Support\Facades\DB::table('model_has_roles')
+                ->join('roles', 'roles.id', '=', 'model_has_roles.role_id')
+                ->where('model_has_roles.model_id', $this->getKey())
+                ->whereIn('model_has_roles.model_type', ['App\\Models\\User', static::class])
+                ->whereIn('roles.name', $allowedRoles)
+                ->exists();
+        }
+
+        return $hasRole && ($this->status === true || $this->getRawOriginal('status') === 'active');
     }
 
     public function getActivitylogOptions(): LogOptions
