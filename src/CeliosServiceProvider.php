@@ -133,6 +133,7 @@ class CeliosServiceProvider extends ServiceProvider
         // 4. Publishable assets, views, translations, and configs
         if ($this->app->runningInConsole()) {
             $this->commands([
+                \Celios\Core\Console\Commands\InstallCeliosCommand::class,
                 \Celios\Core\Console\Commands\GenerateSitemapCommand::class,
                 \Celios\Core\Console\Commands\MakeModuleCommand::class,
             ]);
@@ -142,6 +143,10 @@ class CeliosServiceProvider extends ServiceProvider
                 __DIR__ . '/../config/locales.php' => config_path('locales.php'),
                 __DIR__ . '/../config/sitemap.php' => config_path('sitemap.php'),
             ], 'celios-config');
+
+            $this->publishes([
+                __DIR__ . '/../resources/css/filament/admin/theme.css' => resource_path('css/filament/admin/theme.css'),
+            ], 'celios-theme');
 
             $this->publishes([
                 __DIR__ . '/../resources/views' => resource_path('views/vendor/celios'),

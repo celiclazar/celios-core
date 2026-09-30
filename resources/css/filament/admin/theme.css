@@ -1,0 +1,788 @@
+@import '../../../../vendor/filament/filament/resources/css/theme.css';
+@import '../../../../vendor/awcodes/filament-curator/resources/css/plugin.css';
+
+@variant dark (&:where(.dark, .dark *));
+
+@source '../../../../packages/*/resources/views/**/*.blade.php';
+@source '../../../../packages/*/src/Filament/**/*';
+@source '../../../../app/Providers/Filament/**/*';
+@source '../../../../resources/views/**/*.blade.php';
+@source '../../../../vendor/filament/**/*.blade.php';
+@source '../../../../vendor/awcodes/filament-curator/resources/**/*.blade.php';
+@source '../../../../vendor/bezhansalleh/filament-shield/resources/**/*.blade.php';
+@source '../../../../vendor/bezhansalleh/filament-language-switch/resources/**/*.blade.php';
+
+/* Hide tree dots and connecting vertical lines in sidebar */
+.fi-sidebar-item-grouped-border {
+    display: none !important;
+}
+
+/* ==========================================================================
+   ADMIN PANEL INDEPENDENT THEMES
+   1. Ocean Blue (Default)
+   2. Emerald Forest
+   3. Midnight Obsidian
+   ========================================================================== */
+
+/* 1. Theme: Ocean Blue (Default) */
+:root,
+[data-admin-theme="ocean"] {
+    --brand-primary: #4474bf;
+    --brand-primary-hover: #275ba5;
+    --brand-surface: #f9f9ff;
+    --brand-surface-card: #ffffff;
+    --brand-surface-low: #f1f3ff;
+    --brand-surface-container: #e8eeff;
+    --brand-surface-high: #dfe8ff;
+    --brand-surface-highest: #d8e2fc;
+    --brand-on-surface: #111c2e;
+    --brand-on-surface-variant: #424751;
+    --brand-outline: #c3c6d3;
+    --brand-secondary: #3f6654;
+    --brand-secondary-container: #bee9d3;
+    --brand-secondary-text: #005233;
+    --brand-tertiary: #088557;
+    --brand-tertiary-container: #c1ecd5;
+}
+
+/* 2. Theme: Emerald Forest */
+[data-admin-theme="emerald"] {
+    --brand-primary: #059669;
+    --brand-primary-hover: #047857;
+    --brand-surface: #f5faf7;
+    --brand-surface-card: #ffffff;
+    --brand-surface-low: #eef7f2;
+    --brand-surface-container: #dcfce7;
+    --brand-surface-high: #bbf7d0;
+    --brand-surface-highest: #86efac;
+    --brand-on-surface: #064e3b;
+    --brand-on-surface-variant: #065f46;
+    --brand-outline: #a7f3d0;
+    --brand-secondary: #0284c7;
+    --brand-secondary-container: #e0f2fe;
+    --brand-secondary-text: #0369a1;
+    --brand-tertiary: #16a34a;
+    --brand-tertiary-container: #dcfce7;
+}
+
+/* 3. Theme: Midnight Obsidian */
+[data-admin-theme="midnight"],
+[data-admin-theme="obsidian"] {
+    --brand-primary: #7c3aed;
+    --brand-primary-hover: #6d28d9;
+    --brand-surface: #0e0e11;
+    --brand-surface-card: #18181b;
+    --brand-surface-low: #121216;
+    --brand-surface-container: #27272a;
+    --brand-surface-high: #3f3f46;
+    --brand-surface-highest: #52525b;
+    --brand-on-surface: #f4f4f5;
+    --brand-on-surface-variant: #a1a1aa;
+    --brand-outline: #3f3f46;
+    --brand-secondary: #d97706;
+    --brand-secondary-container: #451a03;
+    --brand-secondary-text: #fbbf24;
+    --brand-tertiary: #10b981;
+    --brand-tertiary-container: #064e3b;
+
+    color-scheme: dark;
+}
+
+/* Eliminate white backgrounds and style cards in Midnight Obsidian */
+[data-admin-theme="midnight"],
+[data-admin-theme="obsidian"] {
+    color: #f4f4f5 !important;
+}
+
+[data-admin-theme="midnight"] body.fi-body,
+[data-admin-theme="obsidian"] body.fi-body {
+    background-color: var(--brand-surface) !important;
+    color: #f4f4f5 !important;
+}
+
+[data-admin-theme="midnight"] .fi-section,
+[data-admin-theme="midnight"] .fi-section-content-ctn,
+[data-admin-theme="midnight"] .fi-section-header,
+[data-admin-theme="midnight"] .fi-card,
+[data-admin-theme="midnight"] .fi-ta-ctn,
+[data-admin-theme="midnight"] .fi-ta-content,
+[data-admin-theme="midnight"] .fi-ta-row,
+[data-admin-theme="midnight"] .fi-ta-header,
+[data-admin-theme="midnight"] .fi-ta-header-cell,
+[data-admin-theme="midnight"] .fi-ta-table thead .fi-ta-selection-cell,
+[data-admin-theme="midnight"] .fi-ta-actions-header-cell,
+[data-admin-theme="midnight"] .fi-ta-table-stacked-header-cell,
+[data-admin-theme="midnight"] .fi-ta-content-header,
+[data-admin-theme="midnight"] .fi-ta-table thead tr,
+[data-admin-theme="midnight"] .fi-ta-table thead th,
+[data-admin-theme="midnight"] .fi-ta-filter-indicators,
+[data-admin-theme="midnight"] .fi-ta-pagination,
+[data-admin-theme="midnight"] .fi-input-wrp,
+[data-admin-theme="midnight"] .fi-select-input,
+[data-admin-theme="midnight"] .fi-dropdown-panel,
+[data-admin-theme="midnight"] .fi-dropdown-list,
+[data-admin-theme="midnight"] .fi-modal-window,
+[data-admin-theme="midnight"] .fi-modal-header,
+[data-admin-theme="midnight"] .fi-modal-footer,
+[data-admin-theme="midnight"] .fi-widget,
+[data-admin-theme="midnight"] .fi-tabs,
+[data-admin-theme="midnight"] .fi-tabs-item,
+[data-admin-theme="midnight"] .bg-white,
+[data-admin-theme="obsidian"] .fi-section,
+[data-admin-theme="obsidian"] .fi-section-content-ctn,
+[data-admin-theme="obsidian"] .fi-section-header,
+[data-admin-theme="obsidian"] .fi-card,
+[data-admin-theme="obsidian"] .fi-ta-ctn,
+[data-admin-theme="obsidian"] .fi-ta-content,
+[data-admin-theme="obsidian"] .fi-ta-row,
+[data-admin-theme="obsidian"] .fi-ta-header,
+[data-admin-theme="obsidian"] .fi-ta-header-cell,
+[data-admin-theme="obsidian"] .fi-ta-table thead .fi-ta-selection-cell,
+[data-admin-theme="obsidian"] .fi-ta-actions-header-cell,
+[data-admin-theme="obsidian"] .fi-ta-table-stacked-header-cell,
+[data-admin-theme="obsidian"] .fi-ta-content-header,
+[data-admin-theme="obsidian"] .fi-ta-table thead tr,
+[data-admin-theme="obsidian"] .fi-ta-table thead th,
+[data-admin-theme="obsidian"] .fi-ta-filter-indicators,
+[data-admin-theme="obsidian"] .fi-ta-pagination,
+[data-admin-theme="obsidian"] .fi-input-wrp,
+[data-admin-theme="obsidian"] .fi-select-input,
+[data-admin-theme="obsidian"] .fi-dropdown-panel,
+[data-admin-theme="obsidian"] .fi-dropdown-list,
+[data-admin-theme="obsidian"] .fi-modal-window,
+[data-admin-theme="obsidian"] .fi-modal-header,
+[data-admin-theme="obsidian"] .fi-modal-footer,
+[data-admin-theme="obsidian"] .fi-widget,
+[data-admin-theme="obsidian"] .fi-tabs,
+[data-admin-theme="obsidian"] .fi-tabs-item,
+[data-admin-theme="obsidian"] .bg-white {
+    background-color: var(--brand-surface-card) !important;
+    color: #f4f4f5 !important;
+    border-color: var(--brand-surface-container) !important;
+}
+
+[data-admin-theme="midnight"] input,
+[data-admin-theme="midnight"] select,
+[data-admin-theme="midnight"] textarea,
+[data-admin-theme="obsidian"] input,
+[data-admin-theme="obsidian"] select,
+[data-admin-theme="obsidian"] textarea {
+    background-color: var(--brand-surface-low) !important;
+    color: #f4f4f5 !important;
+    border-color: var(--brand-surface-container) !important;
+}
+
+[data-admin-theme="midnight"] .fi-input-wrp input,
+[data-admin-theme="obsidian"] .fi-input-wrp input {
+    background-color: transparent !important;
+    color: #f4f4f5 !important;
+}
+
+[data-admin-theme="midnight"] .fi-ta-row:hover,
+[data-admin-theme="obsidian"] .fi-ta-row:hover {
+    background-color: var(--brand-surface-low) !important;
+}
+
+/* Ensure ALL text in Midnight Obsidian is high-contrast light text */
+[data-admin-theme="midnight"] p,
+[data-admin-theme="midnight"] span,
+[data-admin-theme="midnight"] label,
+[data-admin-theme="midnight"] h1,
+[data-admin-theme="midnight"] h2,
+[data-admin-theme="midnight"] h3,
+[data-admin-theme="midnight"] h4,
+[data-admin-theme="midnight"] td,
+[data-admin-theme="midnight"] th,
+[data-admin-theme="midnight"] .fi-header-heading,
+[data-admin-theme="midnight"] .fi-section-header-heading,
+[data-admin-theme="midnight"] .fi-ta-header-heading,
+[data-admin-theme="midnight"] .fi-fo-field-wrp-label,
+[data-admin-theme="midnight"] .fi-fo-field-wrp-label span,
+[data-admin-theme="midnight"] .fi-ta-text-item,
+[data-admin-theme="midnight"] .fi-ta-text-item span,
+[data-admin-theme="midnight"] .fi-breadcrumbs-item-label,
+[data-admin-theme="obsidian"] p,
+[data-admin-theme="obsidian"] span,
+[data-admin-theme="obsidian"] label,
+[data-admin-theme="obsidian"] h1,
+[data-admin-theme="obsidian"] h2,
+[data-admin-theme="obsidian"] h3,
+[data-admin-theme="obsidian"] h4,
+[data-admin-theme="obsidian"] td,
+[data-admin-theme="obsidian"] th,
+[data-admin-theme="obsidian"] .fi-header-heading,
+[data-admin-theme="obsidian"] .fi-section-header-heading,
+[data-admin-theme="obsidian"] .fi-ta-header-heading,
+[data-admin-theme="obsidian"] .fi-fo-field-wrp-label,
+[data-admin-theme="obsidian"] .fi-fo-field-wrp-label span,
+[data-admin-theme="obsidian"] .fi-ta-text-item,
+[data-admin-theme="obsidian"] .fi-ta-text-item span,
+[data-admin-theme="obsidian"] .fi-breadcrumbs-item-label {
+    color: #f4f4f5;
+}
+
+/* Override all light text colors in Midnight Obsidian */
+[data-admin-theme="midnight"] .text-gray-950,
+[data-admin-theme="midnight"] .text-gray-900,
+[data-admin-theme="midnight"] .text-gray-800,
+[data-admin-theme="midnight"] .text-gray-700,
+[data-admin-theme="midnight"] .text-\[\#111c2e\],
+[data-admin-theme="midnight"] .text-black,
+[data-admin-theme="obsidian"] .text-gray-950,
+[data-admin-theme="obsidian"] .text-gray-900,
+[data-admin-theme="obsidian"] .text-gray-800,
+[data-admin-theme="obsidian"] .text-gray-700,
+[data-admin-theme="obsidian"] .text-\[\#111c2e\],
+[data-admin-theme="obsidian"] .text-black {
+    color: #f4f4f5 !important;
+}
+
+[data-admin-theme="midnight"] .text-gray-600,
+[data-admin-theme="midnight"] .text-gray-500,
+[data-admin-theme="midnight"] .text-gray-400,
+[data-admin-theme="midnight"] .text-\[\#424751\],
+[data-admin-theme="midnight"] .text-\[\#737782\],
+[data-admin-theme="obsidian"] .text-gray-600,
+[data-admin-theme="obsidian"] .text-gray-500,
+[data-admin-theme="obsidian"] .text-gray-400,
+[data-admin-theme="obsidian"] .text-\[\#424751\],
+[data-admin-theme="obsidian"] .text-\[\#737782\] {
+    color: #a1a1aa !important;
+}
+
+[data-admin-theme="midnight"] .text-\[\#00458d\],
+[data-admin-theme="obsidian"] .text-\[\#00458d\] {
+    color: var(--brand-primary) !important;
+}
+
+/* ==========================================================================
+   UNIVERSAL THEME TOKEN MAPPINGS FOR WIDGETS & BLADE VIEWS
+   Maps hardcoded palette classes used across widgets, headers, and pages
+   to the active theme's CSS custom properties.
+   ========================================================================== */
+
+/* Primary brand background */
+.bg-\[\#4474bf\] {
+    background-color: var(--brand-primary) !important;
+}
+
+.bg-\[\#275ba5\],
+.hover\:bg-\[\#275ba5\]:hover {
+    background-color: var(--brand-primary-hover) !important;
+}
+
+/* Surface backgrounds */
+.bg-\[\#f9f9ff\] {
+    background-color: var(--brand-surface) !important;
+}
+
+.bg-\[\#f1f3ff\],
+.hover\:bg-\[\#f1f3ff\]:hover {
+    background-color: var(--brand-surface-low) !important;
+}
+
+.bg-\[\#e8eeff\],
+.hover\:bg-\[\#e8eeff\]:hover {
+    background-color: var(--brand-surface-container) !important;
+}
+
+.bg-\[\#d6e3ff\],
+.bg-\[\#dfe8ff\] {
+    background-color: var(--brand-surface-high) !important;
+}
+
+/* Secondary & Tertiary badge backgrounds */
+.bg-\[\#bee9d3\] {
+    background-color: var(--brand-secondary-container) !important;
+}
+
+.bg-\[\#c1ecd5\] {
+    background-color: var(--brand-tertiary-container) !important;
+}
+
+.bg-\[\#108859\] {
+    background-color: var(--brand-tertiary) !important;
+}
+
+.bg-\[\#3f6654\] {
+    background-color: var(--brand-secondary) !important;
+}
+
+/* Text colors */
+.text-\[\#4474bf\],
+.hover\:text-\[\#4474bf\]:hover,
+.group:hover .group-hover\:text-\[\#4474bf\],
+.group\/pill:hover .group-hover\/pill\:text-\[\#4474bf\] {
+    color: var(--brand-primary) !important;
+}
+
+.hover\:text-\[\#275ba5\]:hover {
+    color: var(--brand-primary-hover) !important;
+}
+
+.text-\[\#00458d\] {
+    color: var(--brand-primary) !important;
+}
+
+.text-\[\#111c2e\],
+.group:hover .group-hover\:text-\[\#111c2e\] {
+    color: var(--brand-on-surface) !important;
+}
+
+.text-\[\#424751\],
+.text-\[\#737782\] {
+    color: var(--brand-on-surface-variant) !important;
+}
+
+.placeholder-\[\#737782\]::placeholder {
+    color: var(--brand-on-surface-variant) !important;
+}
+
+.text-\[\#c3c6d3\] {
+    color: var(--brand-outline) !important;
+}
+
+.text-\[\#005233\] {
+    color: var(--brand-secondary-text) !important;
+}
+
+.text-\[\#108859\] {
+    color: var(--brand-tertiary) !important;
+}
+
+.text-\[\#3f6654\] {
+    color: var(--brand-secondary) !important;
+}
+
+/* Borders and dividers */
+.border-\[\#dfe8ff\],
+.border-\[\#dfe8ff\]\/60,
+.border-gray-200,
+.border-gray-100 {
+    border-color: var(--brand-surface-container) !important;
+}
+
+.border-\[\#f1f3ff\] {
+    border-color: var(--brand-surface-container) !important;
+}
+
+.border-\[\#c3c6d3\] {
+    border-color: var(--brand-outline) !important;
+}
+
+.divide-\[\#f1f3ff\] > :not([hidden]) ~ :not([hidden]) {
+    border-color: var(--brand-surface-container) !important;
+}
+
+.before\:bg-\[\#dfe8ff\]::before {
+    background-color: var(--brand-surface-container) !important;
+}
+
+.border-\[\#4474bf\]\/40,
+.hover\:border-\[\#4474bf\]\/40:hover {
+    border-color: color-mix(in srgb, var(--brand-primary) 40%, transparent) !important;
+}
+
+.focus\:border-\[\#4474bf\]:focus {
+    border-color: var(--brand-primary) !important;
+}
+
+/* Rings, shadows, strokes */
+.ring-\[\#e8eeff\] {
+    --tw-ring-color: var(--brand-surface-container) !important;
+}
+
+.focus\:ring-\[\#4474bf\]:focus {
+    --tw-ring-color: var(--brand-primary) !important;
+}
+
+.stroke-\[\#4474bf\] {
+    stroke: var(--brand-primary) !important;
+}
+
+.shadow-\[\#4474bf\]\/30 {
+    box-shadow: 0 1px 3px color-mix(in srgb, var(--brand-primary) 30%, transparent) !important;
+}
+
+/* Base Body & Layout Styling */
+body.fi-body {
+    background-color: var(--brand-surface) !important;
+    color: var(--brand-on-surface);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* Main Topbar inside fi-main-ctn */
+.fi-topbar-ctn {
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 20 !important;
+    width: 100% !important;
+}
+
+.fi-topbar {
+    background-color: var(--brand-surface-card) !important;
+    border-bottom: 1px solid var(--brand-surface-container) !important;
+}
+
+/* Layout container */
+.fi-layout {
+    display: flex !important;
+    min-height: 100dvh !important;
+    width: 100% !important;
+}
+
+.fi-main-ctn {
+    flex: 1 1 0% !important;
+    min-width: 0 !important;
+    width: auto !important;
+    max-width: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+}
+
+/* Sidebar Styles - full-height from top 0 to bottom */
+.fi-sidebar,
+.fi-body-has-topbar .fi-sidebar {
+    top: 0 !important;
+    height: 100dvh !important;
+    background-color: var(--brand-surface) !important;
+    border-right: 1px solid var(--brand-surface-container) !important;
+}
+
+/* Navigation Group Headers - flat, uppercase, clean section labels */
+.fi-sidebar-group {
+    margin-bottom: 0.5rem;
+}
+
+.fi-sidebar-group-btn {
+    display: flex !important;
+    align-items: center !important;
+    gap: 0.5rem !important;
+    padding: 0.5rem 0.75rem !important;
+    cursor: default !important;
+    border-radius: 0.5rem !important;
+    transition: background-color 0.15s ease;
+}
+
+.fi-sidebar-group.fi-collapsible > .fi-sidebar-group-btn {
+    cursor: pointer !important;
+}
+
+.fi-sidebar-group.fi-collapsible > .fi-sidebar-group-btn:hover {
+    background-color: var(--brand-surface-container) !important;
+}
+
+.fi-sidebar-group-btn > .fi-icon,
+.fi-sidebar-group-icon {
+    width: 1.125rem !important;
+    height: 1.125rem !important;
+    color: var(--brand-on-surface-variant) !important;
+    opacity: 0.8;
+    flex-shrink: 0 !important;
+}
+
+.fi-sidebar-group-label {
+    flex: 1 1 0% !important;
+    font-size: 0.6875rem !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.08em !important;
+    text-transform: uppercase !important;
+    color: var(--brand-on-surface-variant) !important;
+}
+
+/* Ensure non-collapsible groups never show any chevron */
+.fi-sidebar-group:not(.fi-collapsible) .fi-sidebar-group-collapse-btn {
+    display: none !important;
+}
+
+/* Collapsible groups have subtle chevron */
+.fi-sidebar-group.fi-collapsible .fi-sidebar-group-collapse-btn {
+    display: flex !important;
+    color: var(--brand-on-surface-variant) !important;
+    opacity: 0.7;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.fi-sidebar-group.fi-collapsible .fi-sidebar-group-collapse-btn:hover {
+    opacity: 1;
+}
+
+.fi-sidebar-group.fi-collapsed .fi-sidebar-group-collapse-btn {
+    transform: rotate(180deg) !important;
+}
+
+/* Active Navigation Item (Dashboard, Categories, Pages, Posts, etc.) */
+.fi-sidebar-item.fi-active > .fi-sidebar-item-btn {
+    background-color: var(--brand-primary) !important;
+    color: #ffffff !important;
+    border-radius: 0.5rem !important;
+    box-shadow: 0 2px 8px color-mix(in srgb, var(--brand-primary) 30%, transparent) !important;
+}
+
+.fi-sidebar-item.fi-active > .fi-sidebar-item-btn .fi-sidebar-item-icon,
+.fi-sidebar-item.fi-active > .fi-sidebar-item-btn .fi-icon,
+.fi-sidebar-item.fi-active > .fi-sidebar-item-btn svg {
+    color: #ffffff !important;
+    stroke: #ffffff !important;
+}
+
+.fi-sidebar-item.fi-active > .fi-sidebar-item-btn .fi-sidebar-item-label,
+.fi-sidebar-item.fi-active > .fi-sidebar-item-btn span {
+    color: #ffffff !important;
+    font-weight: 500 !important;
+}
+
+.fi-sidebar-item.fi-active > .fi-sidebar-item-btn:hover {
+    background-color: var(--brand-primary-hover) !important;
+    color: #ffffff !important;
+}
+
+/* Active Item Badge */
+.fi-sidebar-item.fi-active > .fi-sidebar-item-btn .fi-sidebar-item-badge-ctn .fi-badge {
+    background-color: rgba(255, 255, 255, 0.22) !important;
+    color: #ffffff !important;
+    font-size: 0.75rem !important;
+    font-weight: 600 !important;
+    border-radius: 9999px !important;
+    padding: 0.125rem 0.5rem !important;
+    border: none !important;
+}
+
+/* Inactive Sidebar Items */
+.fi-sidebar-item:not(.fi-active) > .fi-sidebar-item-btn {
+    border-radius: 0.5rem !important;
+    color: var(--brand-on-surface-variant) !important;
+    transition: all 0.15s ease-in-out;
+}
+
+.fi-sidebar-item:not(.fi-active) > .fi-sidebar-item-btn .fi-sidebar-item-icon,
+.fi-sidebar-item:not(.fi-active) > .fi-sidebar-item-btn .fi-icon,
+.fi-sidebar-item:not(.fi-active) > .fi-sidebar-item-btn svg {
+    color: var(--brand-on-surface-variant) !important;
+    transition: color 0.15s ease-in-out;
+}
+
+.fi-sidebar-item:not(.fi-active) > .fi-sidebar-item-btn .fi-sidebar-item-label {
+    color: var(--brand-on-surface-variant) !important;
+    font-weight: 500 !important;
+}
+
+.fi-sidebar-item:not(.fi-active) > .fi-sidebar-item-btn:hover {
+    background-color: var(--brand-surface-container) !important;
+    color: var(--brand-on-surface) !important;
+}
+
+.fi-sidebar-item:not(.fi-active) > .fi-sidebar-item-btn:hover .fi-sidebar-item-icon,
+.fi-sidebar-item:not(.fi-active) > .fi-sidebar-item-btn:hover .fi-icon,
+.fi-sidebar-item:not(.fi-active) > .fi-sidebar-item-btn:hover svg {
+    color: var(--brand-on-surface) !important;
+}
+
+.fi-sidebar-item:not(.fi-active) > .fi-sidebar-item-btn:hover .fi-sidebar-item-label {
+    color: var(--brand-on-surface) !important;
+}
+
+/* Inactive Navigation Badges */
+.fi-sidebar-item:not(.fi-active) .fi-sidebar-item-badge-ctn .fi-badge {
+    background-color: var(--brand-surface-container) !important;
+    color: var(--brand-primary) !important;
+    font-size: 0.75rem !important;
+    font-weight: 600 !important;
+    border-radius: 9999px !important;
+    padding: 0.125rem 0.5rem !important;
+    border: none !important;
+}
+
+/* Filament Sections, Panels, Cards & Widget Cards */
+.fi-section,
+.fi-card,
+.fi-ta-ctn {
+    background-color: var(--brand-surface-card) !important;
+    border: 1px solid var(--brand-surface-container) !important;
+    border-radius: 0.75rem !important;
+    box-shadow: 0 1px 3px rgba(17, 28, 46, 0.04) !important;
+}
+
+.fi-section-header {
+    border-bottom: 1px solid var(--brand-surface-container) !important;
+}
+
+.fi-section-header-heading {
+    color: var(--brand-on-surface) !important;
+    font-weight: 700 !important;
+}
+
+.fi-section-header-description {
+    color: var(--brand-on-surface-variant) !important;
+}
+
+.fi-section-content-ctn {
+    background-color: transparent !important;
+}
+
+.fi-widget {
+    border-radius: 0.75rem !important;
+}
+
+.fi-ta-row {
+    border-color: var(--brand-surface-container) !important;
+}
+
+.fi-ta-row:hover {
+    background-color: var(--brand-surface-low) !important;
+}
+
+.fi-ta-pagination {
+    background-color: var(--brand-surface-card) !important;
+    border-top: 1px solid var(--brand-surface-container) !important;
+}
+
+/* Form Inputs */
+.fi-input-wrp {
+    border-color: var(--brand-surface-container) !important;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.fi-input-wrp:focus-within {
+    border-color: var(--brand-primary) !important;
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--brand-primary) 20%, transparent) !important;
+}
+
+/* Modals and Dropdowns */
+.fi-modal-window {
+    background-color: var(--brand-surface-card) !important;
+    border: 1px solid var(--brand-surface-container) !important;
+    border-radius: 1rem !important;
+}
+
+.fi-modal-header,
+.fi-modal-footer {
+    border-color: var(--brand-surface-container) !important;
+}
+
+.fi-dropdown-panel {
+    background-color: var(--brand-surface-card) !important;
+    border: 1px solid var(--brand-surface-container) !important;
+    border-radius: 0.75rem !important;
+}
+
+.fi-dropdown-list-item:hover {
+    background-color: var(--brand-surface-low) !important;
+}
+
+/* ==========================================================================
+   TABLE HEADER UNIFIED STYLING
+   ========================================================================== */
+.fi-ta-header-ctn,
+.fi-ta-header-toolbar {
+    background-color: var(--brand-surface-card) !important;
+    border-bottom: 1px solid var(--brand-surface-container) !important;
+}
+
+.fi-ta-table thead,
+.fi-ta-table thead tr,
+.fi-ta-table thead th,
+.fi-ta-table thead td,
+.fi-ta-header-cell,
+.fi-ta-table thead .fi-ta-selection-cell,
+.fi-ta-actions-header-cell,
+.fi-ta-empty-header-cell,
+.fi-ta-header-group-cell,
+.fi-ta-table-stacked-header-row,
+.fi-ta-table-stacked-header-cell,
+.fi-ta-content-header {
+    background-color: var(--brand-surface-low) !important;
+    border-color: var(--brand-surface-container) !important;
+}
+
+/* Table Body Cells and Rows */
+.fi-ta-table tbody .fi-ta-cell,
+.fi-ta-table tbody .fi-ta-selection-cell {
+    background-color: transparent !important;
+}
+
+.fi-ta-table tbody .fi-ta-row:hover,
+.fi-ta-table tbody .fi-ta-row:hover .fi-ta-cell,
+.fi-ta-table tbody .fi-ta-row:hover .fi-ta-selection-cell,
+.fi-ta-table tbody .fi-ta-row.fi-selected,
+.fi-ta-table tbody .fi-ta-row.fi-selected .fi-ta-cell,
+.fi-ta-table tbody .fi-ta-row.fi-selected .fi-ta-selection-cell {
+    background-color: var(--brand-surface-low) !important;
+}
+
+.fi-ta-header-cell,
+.fi-ta-header-cell span,
+.fi-ta-header-cell button,
+.fi-ta-header-group-cell {
+    color: var(--brand-on-surface-variant) !important;
+    font-weight: 600 !important;
+    font-size: 0.75rem !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.05em !important;
+}
+
+.fi-ta-header-cell button:hover {
+    color: var(--brand-on-surface) !important;
+}
+
+/* Global Search Input Pill */
+.fi-global-search-field .fi-input-wrp {
+    background-color: var(--brand-surface-low) !important;
+    border: 1px solid var(--brand-surface-container) !important;
+    border-radius: 9999px !important;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    overflow: hidden !important;
+}
+
+.fi-global-search-field .fi-input-wrp:focus-within {
+    border-color: var(--brand-primary) !important;
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--brand-primary) 20%, transparent) !important;
+}
+
+.fi-global-search-field input {
+    background-color: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    font-size: 0.875rem !important;
+    color: var(--brand-on-surface) !important;
+    padding-top: 0.5rem !important;
+    padding-bottom: 0.5rem !important;
+}
+
+.fi-global-search-field input:focus {
+    outline: none !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+.fi-global-search-field .fi-input-wrp-prefix,
+.fi-global-search-field .fi-input-wrp-suffix {
+    background-color: transparent !important;
+    border: none !important;
+}
+
+/* Custom Scrollbars */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+::-webkit-scrollbar-thumb {
+    background: var(--brand-surface-high);
+    border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: var(--brand-outline);
+}
+
+/* Hide topbar logo on desktop since brand is in the sidebar */
+@media (min-width: 1024px) {
+    .fi-topbar-start .fi-logo {
+        display: none !important;
+    }
+}
+
