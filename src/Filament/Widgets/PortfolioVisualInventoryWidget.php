@@ -53,29 +53,6 @@ class PortfolioVisualInventoryWidget extends Widget
             // fallback
         }
 
-        if (empty($items)) {
-            $items = [
-                [
-                    'title' => 'VILA DEDINJE RESURS',
-                    'subtitle' => '14 slika • Dodato pre 2h',
-                    'image' => 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=600&q=80',
-                    'url' => url('/admin/pages'),
-                ],
-                [
-                    'title' => 'PLANINSKA LOŽA ZLATIBOR',
-                    'subtitle' => 'Draft • 8 slika',
-                    'image' => 'https://images.unsplash.com/photo-1510798831971-661eb04b3739?auto=format&fit=crop&w=600&q=80',
-                    'url' => url('/admin/pages'),
-                ],
-                [
-                    'title' => 'DORĆOL LOFT 04',
-                    'subtitle' => 'Naslovni blok • Live',
-                    'image' => 'https://images.unsplash.com/photo-1600565193348-f74bd3c7ccdf?auto=format&fit=crop&w=600&q=80',
-                    'url' => url('/admin/pages'),
-                ],
-            ];
-        }
-
         return [
             'items' => $items,
         ];

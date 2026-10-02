@@ -50,12 +50,14 @@ class LocalizationWidget extends Widget
                 }
 
                 $enPct = round(($enCount / max(1, $total)) * 100, 1);
+                $pendingCount = max(0, $total - $enCount);
 
                 return [
                     'totalResources' => $total,
                     'serbianTranslated' => $srCount,
                     'englishTranslated' => $enCount,
                     'englishPercentage' => $enPct,
+                    'pendingCount' => $pendingCount,
                     'pendingItem' => $pendingTitle ?: 'Svi resursi su prevedeni na engleski',
                 ];
             }
@@ -64,11 +66,12 @@ class LocalizationWidget extends Widget
         }
 
         return [
-            'totalResources' => 48,
-            'serbianTranslated' => 48,
-            'englishTranslated' => 47,
-            'englishPercentage' => 97.8,
-            'pendingItem' => 'Blog: "Održiva arhitektura i pasivna gradnja"',
+            'totalResources' => 0,
+            'serbianTranslated' => 0,
+            'englishTranslated' => 0,
+            'englishPercentage' => 100,
+            'pendingCount' => 0,
+            'pendingItem' => 'Nema kreiranih stranica ili objava',
         ];
     }
 }

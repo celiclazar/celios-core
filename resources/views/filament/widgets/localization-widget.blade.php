@@ -29,10 +29,10 @@
                     <span class="w-2 h-2 rounded-full bg-[#4474bf]"></span>
                     Srpski (Glavni izvor)
                 </div>
-                <span class="font-bold text-[#4474bf]">100%</span>
+                <span class="font-bold text-[#4474bf]">{{ $totalResources > 0 ? '100%' : '0%' }}</span>
             </div>
             <div class="w-full bg-[#f1f3ff] rounded-full h-2 overflow-hidden">
-                <div class="bg-[#4474bf] h-2 rounded-full" style="width: 100%"></div>
+                <div class="bg-[#4474bf] h-2 rounded-full" style="width: {{ $totalResources > 0 ? '100%' : '0%' }}"></div>
             </div>
             <div class="text-[11px] text-[#424751] mt-1">
                 {{ $serbianTranslated }}/{{ $totalResources }} resursa prevedeno i odobreno
@@ -46,10 +46,10 @@
                     <span class="w-2 h-2 rounded-full bg-[#3f6654]"></span>
                     Engleski (Međunarodno)
                 </div>
-                <span class="font-bold text-[#3f6654]">{{ $englishPercentage }}%</span>
+                <span class="font-bold text-[#3f6654]">{{ $totalResources > 0 ? $englishPercentage . '%' : '0%' }}</span>
             </div>
             <div class="w-full bg-[#f1f3ff] rounded-full h-2 overflow-hidden">
-                <div class="bg-[#3f6654] h-2 rounded-full" style="width: {{ $englishPercentage }}%"></div>
+                <div class="bg-[#3f6654] h-2 rounded-full" style="width: {{ $totalResources > 0 ? $englishPercentage : 0 }}%"></div>
             </div>
             <div class="text-[11px] text-[#424751] mt-1">
                 {{ $englishTranslated }}/{{ $totalResources }} resursa sinhronizovano
@@ -66,7 +66,15 @@
             </svg>
         </div>
         <div>
-            <div class="font-bold text-[#111c2e]">1 unos čeka prevod</div>
+            <div class="font-bold text-[#111c2e]">
+                @if($pendingCount > 0)
+                    {{ $pendingCount }} {{ $pendingCount === 1 ? 'unos čeka prevod' : 'unosa čekaju prevod' }}
+                @elseif($totalResources > 0)
+                    Svi resursi su sinhronizovani
+                @else
+                    Nema sadržaja za prevod
+                @endif
+            </div>
             <div class="text-[11px] text-[#424751] mt-0.5">
                 {{ $pendingItem }}
             </div>

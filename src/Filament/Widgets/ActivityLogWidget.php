@@ -41,29 +41,6 @@ class ActivityLogWidget extends Widget
             // fallback
         }
 
-        if (empty($activities)) {
-            $activities = [
-                [
-                    'title' => 'Aleksa V. ažurirao blok "Hero Cinematic"',
-                    'subtitle' => '14:22 • Izmenjen naslovni tag',
-                    'dot' => 'bg-[#4474bf]',
-                    'url' => url('/admin/activities'),
-                ],
-                [
-                    'title' => 'Automatizovan Redis keš purge',
-                    'subtitle' => '12:00 • Sistem periodični zadatak',
-                    'dot' => 'bg-[#737782]',
-                    'url' => url('/admin/activities'),
-                ],
-                [
-                    'title' => 'Nova medijska stavka uploadovana',
-                    'subtitle' => '09:41 • planinska-loza-01.webp',
-                    'dot' => 'bg-[#c3c6d3]',
-                    'url' => url('/admin/activities'),
-                ],
-            ];
-        }
-
         return [
             'activities' => $activities,
         ];

@@ -14,18 +14,13 @@
             </div>
             <div class="flex items-baseline gap-2.5 mt-2">
                 <span class="text-3xl font-bold text-[#111c2e] tracking-tight">{{ $totalContent }}</span>
-                <span class="px-2 py-0.5 rounded-full text-xs font-bold bg-[#c1ecd5] text-[#005233]">
-                    +12%
+                <span class="px-2 py-0.5 rounded-full text-xs font-bold {{ $totalContent > 0 ? 'bg-[#c1ecd5] text-[#005233]' : 'bg-[#f1f3ff] text-[#424751]' }}">
+                    {{ $totalContent > 0 ? 'Aktivno' : 'Prazno' }}
                 </span>
             </div>
         </div>
 
         <div class="mt-4 pt-3 border-t border-[#f1f3ff] flex items-center justify-between">
-            <div class="w-24 h-6">
-                <svg viewBox="0 0 100 28" class="w-full h-full stroke-[#4474bf] fill-none" stroke-width="2.5" stroke-linecap="round">
-                    <path d="M 2 24 Q 25 22 45 14 T 98 4" />
-                </svg>
-            </div>
             <span class="text-xs font-medium text-[#424751]">
                 {{ $postsCount }} objave / {{ $pagesCount }} str.
             </span>
@@ -56,10 +51,10 @@
         <div class="mt-4 pt-3 border-t border-[#f1f3ff] flex items-center justify-between text-xs">
             <div class="flex items-center gap-1.5 font-medium text-[#111c2e]">
                 <span class="w-2 h-2 rounded-full bg-[#4474bf]"></span>
-                98% usklađeno
+                {{ $translatedPercentage }}% usklađeno
             </div>
             <span class="text-[#424751]">
-                {{ $pendingTranslations }} prevod na čekanju
+                {{ $pendingTranslations }} {{ $pendingTranslations === 1 ? 'prevod na čekanju' : 'prevoda na čekanju' }}
             </span>
         </div>
     </div>
