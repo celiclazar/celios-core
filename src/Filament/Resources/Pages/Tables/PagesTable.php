@@ -81,7 +81,10 @@ class PagesTable
                     ->label('Visual')
                     ->icon('heroicon-o-paint-brush')
                     ->color('primary')
-                    ->url(fn (Page $record): string => route('admin.visual_builder.edit', ['page' => $record->id])),
+                    ->visible(fn () => \Illuminate\Support\Facades\Route::has('admin.visual_builder.edit'))
+                    ->url(fn (Page $record): ?string => \Illuminate\Support\Facades\Route::has('admin.visual_builder.edit')
+                        ? route('admin.visual_builder.edit', ['page' => $record->id])
+                        : null),
 
                 EditAction::make()
                     ->label(fn () => __('actions.edit')),

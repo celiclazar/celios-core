@@ -37,7 +37,10 @@ class EditPage extends EditRecord
                 ->label('Visual Designer (Beta)')
                 ->icon('heroicon-o-paint-brush')
                 ->color('primary')
-                ->url(fn () => route('admin.visual_builder.edit', ['page' => $this->getRecord()->id])),
+                ->visible(fn () => \Illuminate\Support\Facades\Route::has('admin.visual_builder.edit'))
+                ->url(fn () => \Illuminate\Support\Facades\Route::has('admin.visual_builder.edit')
+                    ? route('admin.visual_builder.edit', ['page' => $this->getRecord()->id])
+                    : null),
 
             Action::make('publish')
                 ->label(fn() => __('actions.publish'))
