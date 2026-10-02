@@ -20,6 +20,10 @@
         "spatie/laravel-permission": "^6.0|^7.0",
         "spatie/laravel-activitylog": "^4.12",
         "spatie/laravel-medialibrary": "^10.0|^11.0",
+        "spatie/laravel-health": "^1.39",
+        "spatie/cpu-load-health-check": "^1.0",
+        "spatie/laravel-backup": "^10.2",
+        "dedoc/scramble": "^0.13.43",
         "laravel/sanctum": "^4.0"
     },
     "autoload": {
