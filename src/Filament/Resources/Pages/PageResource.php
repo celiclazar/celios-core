@@ -30,9 +30,10 @@ class PageResource extends Resource
     public static function getNavigationBadge(): ?string
     {
         try {
-            return (string) (\Celios\Core\Models\Page::count() ?: 14);
+            $count = \Celios\Core\Models\Page::count();
+            return $count > 0 ? (string) $count : null;
         } catch (\Throwable $e) {
-            return '14';
+            return null;
         }
     }
 

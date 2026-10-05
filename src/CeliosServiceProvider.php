@@ -128,6 +128,14 @@ class CeliosServiceProvider extends ServiceProvider
                 ->group(__DIR__ . '/../routes/web.php');
         }
 
+        // 6. Superadmin Gate Authorization
+        \Illuminate\Support\Facades\Gate::before(function ($user, $ability) {
+            if (is_object($user) && method_exists($user, 'hasRole')) {
+                return ($user->hasRole('super_admin') || $user->hasRole('super-admin')) ? true : null;
+            }
+            return null;
+        });
+
 
 
         // 4. Publishable assets, views, translations, and configs

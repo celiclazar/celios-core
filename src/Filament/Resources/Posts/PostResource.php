@@ -35,9 +35,10 @@ class PostResource extends Resource
     public static function getNavigationBadge(): ?string
     {
         try {
-            return (string) (\Celios\Core\Models\Post::count() ?: 42);
+            $count = \Celios\Core\Models\Post::count();
+            return $count > 0 ? (string) $count : null;
         } catch (\Throwable $e) {
-            return '42';
+            return null;
         }
     }
 

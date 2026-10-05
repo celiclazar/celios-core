@@ -64,6 +64,12 @@ class InstallCeliosCommand extends Command
                 $this->call('migrate', ['--force' => true]);
                 return true;
             });
+
+            // Ensure core roles exist
+            $this->components->task('Verifying system roles', function () {
+                $this->seedDefaultRoles();
+                return true;
+            });
         }
 
         // 5. Create Superadmin User
@@ -77,6 +83,20 @@ class InstallCeliosCommand extends Command
         $this->components->info('Celios CMS installation complete! Access your admin panel at: ' . url('/admin'));
 
         return Command::SUCCESS;
+    }
+
+    /**
+     * Seed default system roles.
+     */
+    protected function seedDefaultRoles(): void
+    {
+        if (! Schema::hasTable('roles')) {
+            return;
+        }
+
+        Role::firstOrCreate(['name' => 'super_admin', 'guard_name' => 'web']);
+        Role::firstOrCreate(['name' => 'admin', 'guard_name' => 'web']);
+        Role::firstOrCreate(['name' => 'panel_user', 'guard_name' => 'web']);
     }
 
     /**
@@ -112,9 +132,6 @@ class InstallCeliosCommand extends Command
 
         // Assign super_admin role
         $role = Role::firstOrCreate(['name' => 'super_admin', 'guard_name' => 'web']);
-        Role::firstOrCreate(['name' => 'super-admin', 'guard_name' => 'web']);
-        Role::firstOrCreate(['name' => 'admin', 'guard_name' => 'web']);
-        Role::firstOrCreate(['name' => 'panel_user', 'guard_name' => 'web']);
 
         if (! $user->hasRole('super_admin')) {
             $user->assignRole($role);
