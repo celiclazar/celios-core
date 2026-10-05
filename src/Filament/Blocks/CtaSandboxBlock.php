@@ -21,29 +21,29 @@ class CtaSandboxBlock
                     ->tabs(
                         TranslatableTabs::make(fn ($lang) => [
                             TextInput::make("status_pill.{$lang}")
-                                ->label('Status bedž (' . strtoupper($lang) . ')')
+                                ->label('Status bedž ('.strtoupper($lang).')')
                                 ->default('Trenutno Aktivan: Celios Sandbox Environment'),
 
                             TextInput::make("heading.{$lang}")
-                                ->label('Naslov banera (' . strtoupper($lang) . ')')
+                                ->label('Naslov banera ('.strtoupper($lang).')')
                                 ->required($lang === 'sr')
                                 ->default('Isprobajte Celios Admin u testnom režimu'),
 
                             Textarea::make("description.{$lang}")
-                                ->label('Opis banera (' . strtoupper($lang) . ')')
+                                ->label('Opis banera ('.strtoupper($lang).')')
                                 ->rows(3)
                                 ->default('Istražite upravljanje sadržajem, višejezičnost i modularne blokove u realnom Filament v3 okruženju. Bez instalacije, bez kreditne kartice.'),
 
                             TextInput::make("button_text.{$lang}")
-                                ->label('Tekst na dugmetu (' . strtoupper($lang) . ')')
+                                ->label('Tekst na dugmetu ('.strtoupper($lang).')')
                                 ->default('Uđi u Admin Kontrolnu Tablu (Test Demo)'),
 
                             TextInput::make("footer_note_1.{$lang}")
-                                ->label('Donja napomena 1 (' . strtoupper($lang) . ')')
+                                ->label('Donja napomena 1 ('.strtoupper($lang).')')
                                 ->default('Demo nalog unapred popunjen'),
 
                             TextInput::make("footer_note_2.{$lang}")
-                                ->label('Donja napomena 2 (' . strtoupper($lang) . ')')
+                                ->label('Donja napomena 2 ('.strtoupper($lang).')')
                                 ->default('Reset baze svakih 60 minuta'),
                         ])
                     ),

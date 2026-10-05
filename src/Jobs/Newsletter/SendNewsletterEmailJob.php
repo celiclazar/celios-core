@@ -20,6 +20,7 @@ class SendNewsletterEmailJob implements ShouldQueue
     use Batchable, Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     public int $tries = 2;
+
     public int $timeout = 60;
 
     public function __construct(
@@ -37,15 +38,16 @@ class SendNewsletterEmailJob implements ShouldQueue
         $subscriber = NewsletterSubscriber::find($this->subscriberId);
         $log = NewsletterCampaignLog::find($this->logId);
 
-        if (!$subscriber || !$log) {
+        if (! $subscriber || ! $log) {
             return;
         }
 
         if ($subscriber->status !== 'active') {
             $log->update([
                 'status' => 'failed',
-                'error_message' => 'Subscriber is not active (status: ' . $subscriber->status . ')',
+                'error_message' => 'Subscriber is not active (status: '.$subscriber->status.')',
             ]);
+
             return;
         }
 
@@ -127,7 +129,7 @@ class SendNewsletterEmailJob implements ShouldQueue
 
             $this->campaign->increment('sent_count');
         } catch (\Throwable $e) {
-            Log::error("Failed sending newsletter campaign #{$this->campaign->id} to {$subscriber->email}: " . $e->getMessage());
+            Log::error("Failed sending newsletter campaign #{$this->campaign->id} to {$subscriber->email}: ".$e->getMessage());
 
             $log->update([
                 'status' => 'failed',

@@ -76,7 +76,7 @@ class DocumentCategory extends Model
 
         if (blank($title)) {
             $all = $this->getTranslations('title');
-            $title = !empty($all) ? (reset($all) ?: null) : null;
+            $title = ! empty($all) ? (reset($all) ?: null) : null;
         }
 
         return $title ?: __('fields.no_title');
@@ -94,7 +94,7 @@ class DocumentCategory extends Model
 
         if (blank($slug)) {
             $all = $this->getTranslations('slug');
-            $slug = !empty($all) ? (reset($all) ?: '') : '';
+            $slug = ! empty($all) ? (reset($all) ?: '') : '';
         }
 
         return $slug ?: '';
@@ -105,7 +105,7 @@ class DocumentCategory extends Model
         $slug = $this->getLocalizedSlug($locale);
 
         return filled($slug)
-            ? url("/" . ($locale ?? app()->getLocale()) . "/documents/category/" . ltrim($slug, '/'))
-            : url("/" . ($locale ?? app()->getLocale()) . "/documents");
+            ? url('/'.($locale ?? app()->getLocale()).'/documents/category/'.ltrim($slug, '/'))
+            : url('/'.($locale ?? app()->getLocale()).'/documents');
     }
 }

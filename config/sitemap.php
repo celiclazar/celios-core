@@ -1,5 +1,9 @@
 <?php
 
+use Celios\Core\Models\Category;
+use Celios\Core\Models\Page;
+use Celios\Core\Models\Post;
+
 return [
 
     /*
@@ -54,19 +58,19 @@ return [
     'models' => [
         'pages' => [
             'enabled' => true,
-            'class' => \App\Models\Page::class,
+            'class' => Page::class,
             'priority' => 0.8,
             'changefreq' => 'weekly',
         ],
         'posts' => [
             'enabled' => true,
-            'class' => \App\Models\Post::class,
+            'class' => Post::class,
             'priority' => 0.7,
             'changefreq' => 'weekly',
         ],
         'categories' => [
             'enabled' => true,
-            'class' => \App\Models\Category::class,
+            'class' => Category::class,
             'priority' => 0.6,
             'changefreq' => 'weekly',
         ],

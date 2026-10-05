@@ -74,6 +74,7 @@ class NewsletterCampaign extends Model
         if ($this->sent_count <= 0) {
             return 0.0;
         }
+
         return round(($this->open_count / $this->sent_count) * 100, 1);
     }
 
@@ -82,6 +83,7 @@ class NewsletterCampaign extends Model
         if ($this->sent_count <= 0) {
             return 0.0;
         }
+
         return round(($this->click_count / $this->sent_count) * 100, 1);
     }
 }

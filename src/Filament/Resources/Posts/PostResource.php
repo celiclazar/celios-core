@@ -2,17 +2,16 @@
 
 namespace Celios\Core\Filament\Resources\Posts;
 
+use BackedEnum;
 use Celios\Core\Filament\Resources\Posts\Pages\CreatePost;
 use Celios\Core\Filament\Resources\Posts\Pages\EditPost;
 use Celios\Core\Filament\Resources\Posts\Pages\ListPosts;
 use Celios\Core\Filament\Resources\Posts\Schemas\PostForm;
 use Celios\Core\Filament\Resources\Posts\Tables\PostsTable;
+use Celios\Core\Filament\Traits\HasModuleToggle;
 use Celios\Core\Models\Post;
-use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
-use Filament\Support\Icons\Heroicon;
-use Celios\Core\Filament\Traits\HasModuleToggle;
 use Filament\Tables\Table;
 
 class PostResource extends Resource
@@ -35,14 +34,15 @@ class PostResource extends Resource
     public static function getNavigationBadge(): ?string
     {
         try {
-            $count = \Celios\Core\Models\Post::count();
+            $count = Post::count();
+
             return $count > 0 ? (string) $count : null;
         } catch (\Throwable $e) {
             return null;
         }
     }
 
-    public static function getNavigationBadgeColor(): string | array | null
+    public static function getNavigationBadgeColor(): string|array|null
     {
         return 'gray';
     }

@@ -5,6 +5,7 @@ namespace Celios\Core\Filament\Resources\Pages\Tables;
 use Celios\Core\Enums\PageType;
 use Celios\Core\Models\Page;
 use Filament\Actions\Action;
+use Filament\Actions\ActionGroup;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
@@ -14,6 +15,8 @@ use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\Route;
 
 class PagesTable
 {
@@ -24,16 +27,16 @@ class PagesTable
                 TextColumn::make('title')
                     ->label(fn () => __('fields.title'))
                     ->state(fn (Page $record): string => (
-                    $record->getTranslation('title', app()->getLocale(), true)
-                        ?: __('fields.no_title')
+                        $record->getTranslation('title', app()->getLocale(), true)
+                            ?: __('fields.no_title')
                     ))
                     ->searchable(),
 
                 TextColumn::make('slug')
                     ->label(fn () => __('fields.url_slug'))
                     ->state(fn (Page $record): string => (
-                    $record->getTranslation('slug', app()->getLocale(), true)
-                        ?: ''
+                        $record->getTranslation('slug', app()->getLocale(), true)
+                            ?: ''
                     ))
                     ->searchable(),
 
@@ -81,15 +84,15 @@ class PagesTable
                     ->label('Visual')
                     ->icon('heroicon-o-paint-brush')
                     ->color('primary')
-                    ->visible(fn () => \Illuminate\Support\Facades\Route::has('admin.visual_builder.edit'))
-                    ->url(fn (Page $record): ?string => \Illuminate\Support\Facades\Route::has('admin.visual_builder.edit')
+                    ->visible(fn () => Route::has('admin.visual_builder.edit'))
+                    ->url(fn (Page $record): ?string => Route::has('admin.visual_builder.edit')
                         ? route('admin.visual_builder.edit', ['page' => $record->id])
                         : null),
 
                 EditAction::make()
                     ->label(fn () => __('actions.edit')),
 
-                \Filament\Actions\ActionGroup::make([
+                ActionGroup::make([
                     Action::make('preview')
                         ->label(fn () => __('actions.preview'))
                         ->icon('heroicon-o-eye')
@@ -126,7 +129,7 @@ class PagesTable
                 BulkActionGroup::make([
                     DeleteBulkAction::make()
                         ->label(fn () => __('actions.delete_selected'))
-                        ->action(function (\Illuminate\Database\Eloquent\Collection $records) {
+                        ->action(function (Collection $records) {
                             $records->reject(fn (Page $page) => $page->isSystem())->each->delete();
                         }),
                 ])->label(fn () => __('actions.bulk_actions')),

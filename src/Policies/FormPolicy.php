@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Celios\Core\Policies;
 
 use Celios\Core\Models\Form;
-use Illuminate\Foundation\Auth\User as AuthUser;
 use Illuminate\Auth\Access\HandlesAuthorization;
+use Illuminate\Foundation\Auth\User as AuthUser;
 
 class FormPolicy
 {

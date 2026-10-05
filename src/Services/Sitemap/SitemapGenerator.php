@@ -2,10 +2,10 @@
 
 namespace Celios\Core\Services\Sitemap;
 
+use Carbon\Carbon;
 use Celios\Core\Models\Category;
 use Celios\Core\Models\Page;
 use Celios\Core\Models\Post;
-use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\File;
@@ -120,7 +120,7 @@ class SitemapGenerator
         // Add default homepage
         $urls->push([
             'type' => 'static',
-            'title' => 'Home (' . strtoupper($defaultLocale) . ')',
+            'title' => 'Home ('.strtoupper($defaultLocale).')',
             'loc' => url('/'),
             'lastmod' => now()->toIso8601String(),
             'changefreq' => $homeChangefreq,
@@ -137,7 +137,7 @@ class SitemapGenerator
             }
             $urls->push([
                 'type' => 'static',
-                'title' => 'Home (' . strtoupper($locale) . ')',
+                'title' => 'Home ('.strtoupper($locale).')',
                 'loc' => url("/{$locale}"),
                 'lastmod' => now()->toIso8601String(),
                 'changefreq' => $homeChangefreq,
@@ -165,7 +165,7 @@ class SitemapGenerator
             foreach ($availableLocales as $locale) {
                 $urls->push([
                     'type' => 'static',
-                    'title' => 'Blog Index (' . strtoupper($locale) . ')',
+                    'title' => 'Blog Index ('.strtoupper($locale).')',
                     'loc' => url("/{$locale}/blog"),
                     'lastmod' => now()->toIso8601String(),
                     'changefreq' => $blogChangefreq,
@@ -233,7 +233,7 @@ class SitemapGenerator
 
                 $urls->push([
                     'type' => 'page',
-                    'title' => $data['title'] . ' (' . strtoupper($locale) . ')',
+                    'title' => $data['title'].' ('.strtoupper($locale).')',
                     'loc' => $data['url'],
                     'lastmod' => $lastmod,
                     'changefreq' => $changefreq,
@@ -289,7 +289,7 @@ class SitemapGenerator
             foreach ($urlsByLocale as $locale => $data) {
                 $urls->push([
                     'type' => 'category',
-                    'title' => $data['title'] . ' (' . strtoupper($locale) . ')',
+                    'title' => $data['title'].' ('.strtoupper($locale).')',
                     'loc' => $data['url'],
                     'lastmod' => $lastmod,
                     'changefreq' => $changefreq,
@@ -316,7 +316,7 @@ class SitemapGenerator
             ->where('is_published', true)
             ->where(function ($q) {
                 $q->whereNull('published_at')
-                  ->orWhere('published_at', '<=', now());
+                    ->orWhere('published_at', '<=', now());
             })
             ->with(['featuredImage'])
             ->get();
@@ -366,7 +366,7 @@ class SitemapGenerator
             foreach ($urlsByLocale as $locale => $data) {
                 $urls->push([
                     'type' => 'post',
-                    'title' => $data['title'] . ' (' . strtoupper($locale) . ')',
+                    'title' => $data['title'].' ('.strtoupper($locale).')',
                     'loc' => $data['url'],
                     'lastmod' => $lastmod,
                     'changefreq' => $changefreq,
@@ -428,6 +428,7 @@ class SitemapGenerator
                     return true;
                 }
             }
+
             return false;
         })->unique('loc')->values();
     }
@@ -441,7 +442,7 @@ class SitemapGenerator
         $includeAlternates = config('sitemap.include_alternates', true);
         $includeImages = config('sitemap.include_images', true);
 
-        $xml = '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
+        $xml = '<?xml version="1.0" encoding="UTF-8"?>'."\n";
         $xml .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"';
 
         if ($includeAlternates) {
@@ -455,24 +456,24 @@ class SitemapGenerator
 
         foreach ($urls as $url) {
             $xml .= "  <url>\n";
-            $xml .= "    <loc>" . htmlspecialchars($url['loc'], ENT_XML1, 'UTF-8') . "</loc>\n";
+            $xml .= '    <loc>'.htmlspecialchars($url['loc'], ENT_XML1, 'UTF-8')."</loc>\n";
 
             if (! empty($url['lastmod'])) {
-                $xml .= "    <lastmod>" . htmlspecialchars($url['lastmod'], ENT_XML1, 'UTF-8') . "</lastmod>\n";
+                $xml .= '    <lastmod>'.htmlspecialchars($url['lastmod'], ENT_XML1, 'UTF-8')."</lastmod>\n";
             }
 
             if (! empty($url['changefreq'])) {
-                $xml .= "    <changefreq>" . htmlspecialchars($url['changefreq'], ENT_XML1, 'UTF-8') . "</changefreq>\n";
+                $xml .= '    <changefreq>'.htmlspecialchars($url['changefreq'], ENT_XML1, 'UTF-8')."</changefreq>\n";
             }
 
             if (! empty($url['priority'])) {
-                $xml .= "    <priority>" . htmlspecialchars($url['priority'], ENT_XML1, 'UTF-8') . "</priority>\n";
+                $xml .= '    <priority>'.htmlspecialchars($url['priority'], ENT_XML1, 'UTF-8')."</priority>\n";
             }
 
             // Alternate hreflang tags
             if ($includeAlternates && ! empty($url['alternates']) && count($url['alternates']) > 1) {
                 foreach ($url['alternates'] as $hreflang => $altHref) {
-                    $xml .= '    <xhtml:link rel="alternate" hreflang="' . htmlspecialchars($hreflang, ENT_XML1, 'UTF-8') . '" href="' . htmlspecialchars($altHref, ENT_XML1, 'UTF-8') . '"/>' . "\n";
+                    $xml .= '    <xhtml:link rel="alternate" hreflang="'.htmlspecialchars($hreflang, ENT_XML1, 'UTF-8').'" href="'.htmlspecialchars($altHref, ENT_XML1, 'UTF-8').'"/>'."\n";
                 }
             }
 
@@ -483,12 +484,12 @@ class SitemapGenerator
                         continue;
                     }
                     $xml .= "    <image:image>\n";
-                    $xml .= "      <image:loc>" . htmlspecialchars($img['loc'], ENT_XML1, 'UTF-8') . "</image:loc>\n";
+                    $xml .= '      <image:loc>'.htmlspecialchars($img['loc'], ENT_XML1, 'UTF-8')."</image:loc>\n";
                     if (! empty($img['title'])) {
-                        $xml .= "      <image:title>" . htmlspecialchars($img['title'], ENT_XML1, 'UTF-8') . "</image:title>\n";
+                        $xml .= '      <image:title>'.htmlspecialchars($img['title'], ENT_XML1, 'UTF-8')."</image:title>\n";
                     }
                     if (! empty($img['caption'])) {
-                        $xml .= "      <image:caption>" . htmlspecialchars($img['caption'], ENT_XML1, 'UTF-8') . "</image:caption>\n";
+                        $xml .= '      <image:caption>'.htmlspecialchars($img['caption'], ENT_XML1, 'UTF-8')."</image:caption>\n";
                     }
                     $xml .= "    </image:image>\n";
                 }
@@ -528,7 +529,7 @@ class SitemapGenerator
             'custom_count' => $urls->where('type', 'custom')->count(),
             'has_static_file' => $hasStaticFile,
             'static_path' => $staticPath,
-            'static_size' => $hasStaticFile ? round(File::size($staticPath) / 1024, 2) . ' KB' : '0 KB',
+            'static_size' => $hasStaticFile ? round(File::size($staticPath) / 1024, 2).' KB' : '0 KB',
             'static_modified' => $hasStaticFile ? Carbon::createFromTimestamp(File::lastModified($staticPath))->format('d.m.Y H:i:s') : null,
             'is_cached' => Cache::has(config('sitemap.cache_key', 'sitemap_xml_cache')),
             'sitemap_url' => url('/sitemap.xml'),

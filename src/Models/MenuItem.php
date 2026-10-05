@@ -2,6 +2,7 @@
 
 namespace Celios\Core\Models;
 
+use Celios\Core\Services\MenuResolverService;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -21,7 +22,7 @@ class MenuItem extends Model
         'title',
         'custom_url',
         'target',
-        'is_visible'
+        'is_visible',
     ];
 
     protected $casts = [
@@ -79,7 +80,7 @@ class MenuItem extends Model
                 $slug = $this->linkable->getTranslation('slug', $defaultLocale, false);
             }
 
-            return filled($slug) ? url("/{$locale}/" . ltrim($slug, '/')) : url("/{$locale}");
+            return filled($slug) ? url("/{$locale}/".ltrim($slug, '/')) : url("/{$locale}");
         }
 
         // Ako nije izabrana stranica, vraća formatirani custom_url
@@ -93,6 +94,6 @@ class MenuItem extends Model
             return '#';
         }
 
-        return app(\Celios\Core\Services\MenuResolverService::class)->formatCustomUrl($customUrl, $locale);
+        return app(MenuResolverService::class)->formatCustomUrl($customUrl, $locale);
     }
 }

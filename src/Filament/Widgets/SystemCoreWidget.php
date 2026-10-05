@@ -2,8 +2,10 @@
 
 namespace Celios\Core\Filament\Widgets;
 
+use Carbon\Carbon;
 use Filament\Widgets\Widget;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Storage;
 
 class SystemCoreWidget extends Widget
 {
@@ -21,7 +23,7 @@ class SystemCoreWidget extends Widget
         $backupStatus = 'Nema kreiranih kopija';
         try {
             $diskName = config('backup.backup.destination.disks')[0] ?? 'local';
-            $disk = \Illuminate\Support\Facades\Storage::disk($diskName);
+            $disk = Storage::disk($diskName);
             $backupName = config('backup.backup.name') ?? 'Laravel';
 
             $files = $disk->allFiles($backupName);
@@ -29,13 +31,13 @@ class SystemCoreWidget extends Widget
                 $files = collect($disk->allFiles())->filter(fn ($p) => str_ends_with(strtolower($p), '.zip'))->all();
             }
 
-            if (!empty($files)) {
+            if (! empty($files)) {
                 $latestTime = 0;
                 foreach ($files as $f) {
                     $latestTime = max($latestTime, $disk->lastModified($f));
                 }
                 if ($latestTime > 0) {
-                    $backupStatus = \Carbon\Carbon::createFromTimestamp($latestTime)->diffForHumans();
+                    $backupStatus = Carbon::createFromTimestamp($latestTime)->diffForHumans();
                 }
             }
         } catch (\Throwable $e) {
@@ -43,7 +45,7 @@ class SystemCoreWidget extends Widget
         }
 
         $dbDriver = config('database.default');
-        $dbLabel = match($dbDriver) {
+        $dbLabel = match ($dbDriver) {
             'mysql' => 'MySQL 8.0',
             'pgsql' => 'PostgreSQL 16',
             'sqlite' => 'SQLite 3',
@@ -53,7 +55,7 @@ class SystemCoreWidget extends Widget
         return [
             'cmsVersion' => 'Celios v1.4.2',
             'adminPlatform' => 'Filament v3.2.115',
-            'backend' => 'Laravel ' . App::version() . ' (PHP ' . PHP_MAJOR_VERSION . '.' . PHP_MINOR_VERSION . ')',
+            'backend' => 'Laravel '.App::version().' (PHP '.PHP_MAJOR_VERSION.'.'.PHP_MINOR_VERSION.')',
             'database' => $dbLabel,
             'activeTheme' => 'Svetla (Light Minimal)',
             'backupStatus' => $backupStatus,

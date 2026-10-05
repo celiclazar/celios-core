@@ -60,13 +60,13 @@ class NewsletterCampaignsTable
                     ->label('Open Rate')
                     ->badge()
                     ->color('info')
-                    ->formatStateUsing(fn (NewsletterCampaign $record): string => $record->open_rate . '% (' . $record->open_count . ')'),
+                    ->formatStateUsing(fn (NewsletterCampaign $record): string => $record->open_rate.'% ('.$record->open_count.')'),
 
                 TextColumn::make('click_rate')
                     ->label('Click Rate')
                     ->badge()
                     ->color('success')
-                    ->formatStateUsing(fn (NewsletterCampaign $record): string => $record->click_rate . '% (' . $record->click_count . ')'),
+                    ->formatStateUsing(fn (NewsletterCampaign $record): string => $record->click_rate.'% ('.$record->click_count.')'),
 
                 TextColumn::make('scheduled_at')
                     ->label('Scheduled For')
@@ -116,7 +116,7 @@ class NewsletterCampaignsTable
                                 'unsubscribe_token' => 'test-token',
                             ]);
 
-                            $subject = '[TEST] ' . ($record->getTranslation('subject', $locale) ?: $record->title);
+                            $subject = '[TEST] '.($record->getTranslation('subject', $locale) ?: $record->title);
                             $content = $record->getTranslation('content', $locale) ?: '';
 
                             $mailer = $mailerService->getMailer();
@@ -134,12 +134,12 @@ class NewsletterCampaignsTable
                             $mailer->to($data['test_email'])->send($mail);
 
                             Notification::make()
-                                ->title('Test email sent to ' . $data['test_email'])
+                                ->title('Test email sent to '.$data['test_email'])
                                 ->success()
                                 ->send();
                         } catch (\Throwable $e) {
                             Notification::make()
-                                ->title('Failed sending test: ' . $e->getMessage())
+                                ->title('Failed sending test: '.$e->getMessage())
                                 ->danger()
                                 ->send();
                         }

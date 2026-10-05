@@ -2,12 +2,12 @@
 
 namespace Celios\Core\Services\Queue;
 
+use Carbon\Carbon;
 use Celios\Core\Models\FailedJob;
 use Celios\Core\Models\JobBatch;
 use Celios\Core\Services\Queue\Contracts\QueueDriverInspectorInterface;
 use Celios\Core\Services\Queue\Drivers\DatabaseQueueInspector;
 use Celios\Core\Services\Queue\Drivers\RedisQueueInspector;
-use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
 use Throwable;

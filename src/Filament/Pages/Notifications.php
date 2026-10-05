@@ -2,12 +2,13 @@
 
 namespace Celios\Core\Filament\Pages;
 
-use Filament\Pages\Page;
 use Filament\Notifications\Notification as FilamentNotification;
+use Filament\Pages\Page;
 
 class Notifications extends Page
 {
     protected static string|null|\BackedEnum $navigationIcon = 'heroicon-o-bell';
+
     protected string $view = 'filament.pages.notifications';
 
     public static function getNavigationLabel(): string

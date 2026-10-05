@@ -4,7 +4,7 @@
     $showDescription = $data['show_description'] ?? true;
     $locale = app()->getLocale();
 
-    $form = $formId ? \App\Models\Form::where('is_active', true)->find($formId) : null;
+    $form = $formId ? \Celios\Core\Models\Form::where('is_active', true)->find($formId) : null;
 @endphp
 
 @if($form)

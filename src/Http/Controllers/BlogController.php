@@ -20,8 +20,8 @@ class BlogController extends Controller
             ->when($search, function ($query, $search) use ($locale) {
                 $query->where(function ($q) use ($search, $locale) {
                     $q->where("title->{$locale}", 'like', "%{$search}%")
-                      ->orWhere("excerpt->{$locale}", 'like', "%{$search}%")
-                      ->orWhere("body->{$locale}", 'like', "%{$search}%");
+                        ->orWhere("excerpt->{$locale}", 'like', "%{$search}%")
+                        ->orWhere("body->{$locale}", 'like', "%{$search}%");
                 });
             })
             ->orderByRaw('COALESCE(published_at, created_at) DESC')
@@ -102,8 +102,8 @@ class BlogController extends Controller
             ->when($search, function ($query, $search) use ($locale) {
                 $query->where(function ($q) use ($search, $locale) {
                     $q->where("title->{$locale}", 'like', "%{$search}%")
-                      ->orWhere("excerpt->{$locale}", 'like', "%{$search}%")
-                      ->orWhere("body->{$locale}", 'like', "%{$search}%");
+                        ->orWhere("excerpt->{$locale}", 'like', "%{$search}%")
+                        ->orWhere("body->{$locale}", 'like', "%{$search}%");
                 });
             })
             ->orderByRaw('COALESCE(published_at, created_at) DESC')
@@ -181,11 +181,13 @@ class BlogController extends Controller
         if ($locale && in_array($locale, $availableLocales)) {
             app()->setLocale($locale);
             session()->put('locale', $locale);
+
             return $locale;
         }
 
         $sessionLocale = session('locale', $defaultLocale);
         app()->setLocale($sessionLocale);
+
         return $sessionLocale;
     }
 }

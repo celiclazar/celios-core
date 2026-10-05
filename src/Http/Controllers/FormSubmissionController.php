@@ -11,7 +11,6 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Notification;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 class FormSubmissionController extends Controller
@@ -34,7 +33,7 @@ class FormSubmissionController extends Controller
             })
             ->first();
 
-        if (!$form) {
+        if (! $form) {
             if ($request->expectsJson() || $request->ajax()) {
                 return response()->json([
                     'success' => false,
@@ -67,12 +66,12 @@ class FormSubmissionController extends Controller
 
         foreach ($fields as $field) {
             $key = $field['key'] ?? null;
-            if (!$key) {
+            if (! $key) {
                 continue;
             }
 
             $type = $field['type'] ?? 'text';
-            $isRequired = !empty($field['required']);
+            $isRequired = ! empty($field['required']);
             $fieldRules = [$isRequired ? 'required' : 'nullable'];
 
             // Field Label for error messages
@@ -104,10 +103,10 @@ class FormSubmissionController extends Controller
                 case 'file':
                     $fieldRules[] = 'file';
                     $fieldRules[] = 'max:20480'; // 20MB max
-                    if (!empty($field['allowed_types'])) {
+                    if (! empty($field['allowed_types'])) {
                         $extensions = array_filter(array_map('trim', explode(',', str_replace('.', '', $field['allowed_types']))));
-                        if (!empty($extensions)) {
-                            $fieldRules[] = 'mimes:' . implode(',', $extensions);
+                        if (! empty($extensions)) {
+                            $fieldRules[] = 'mimes:'.implode(',', $extensions);
                         }
                     }
                     break;
@@ -146,7 +145,7 @@ class FormSubmissionController extends Controller
             if ($type === 'file' && $request->hasFile($key)) {
                 $file = $request->file($key);
                 if ($file && $file->isValid()) {
-                    $path = $file->store('forms/submissions/' . date('Y/m'), 'public');
+                    $path = $file->store('forms/submissions/'.date('Y/m'), 'public');
                     $uploadedFiles[$key] = $path;
                 }
             }
@@ -157,7 +156,7 @@ class FormSubmissionController extends Controller
         $excludedKeys = ['_token', '_hp_name', '_hp_time', '_method'];
         foreach ($fields as $field) {
             $key = $field['key'] ?? null;
-            if (!$key || in_array($key, $excludedKeys)) {
+            if (! $key || in_array($key, $excludedKeys)) {
                 continue;
             }
 
@@ -195,7 +194,7 @@ class FormSubmissionController extends Controller
 
             // A. Send email notifications to assigned system users
             $recipientUserIds = $form->recipient_user_ids ?? [];
-            if (is_array($recipientUserIds) && !empty($recipientUserIds)) {
+            if (is_array($recipientUserIds) && ! empty($recipientUserIds)) {
                 $users = User::whereIn('id', $recipientUserIds)->get();
                 foreach ($users as $u) {
                     if ($u->email) {
@@ -228,13 +227,13 @@ class FormSubmissionController extends Controller
             if ($form->send_confirmation_email) {
                 $submitterEmail = null;
                 foreach ($form->fields ?? [] as $f) {
-                    if (($f['type'] ?? '') === 'email' && !empty($data[$f['key']])) {
+                    if (($f['type'] ?? '') === 'email' && ! empty($data[$f['key']])) {
                         $submitterEmail = $data[$f['key']];
                         break;
                     }
                 }
 
-                if (!$submitterEmail) {
+                if (! $submitterEmail) {
                     foreach ($data as $val) {
                         if (is_string($val) && filter_var($val, FILTER_VALIDATE_EMAIL)) {
                             $submitterEmail = $val;

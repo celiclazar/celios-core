@@ -2,6 +2,7 @@
 
 namespace Celios\Core\Filament\Resources\Contacts;
 
+use BackedEnum;
 use Celios\Core\Filament\Resources\Contacts\Pages\CreateContact;
 use Celios\Core\Filament\Resources\Contacts\Pages\EditContact;
 use Celios\Core\Filament\Resources\Contacts\Pages\ListContacts;
@@ -10,7 +11,6 @@ use Celios\Core\Filament\Resources\Contacts\Schemas\ContactForm;
 use Celios\Core\Filament\Resources\Contacts\Tables\ContactsTable;
 use Celios\Core\Filament\Traits\HasModuleToggle;
 use Celios\Core\Models\Contact;
-use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Tables\Table;

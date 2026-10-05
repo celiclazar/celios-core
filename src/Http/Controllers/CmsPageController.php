@@ -12,12 +12,14 @@ class CmsPageController extends Controller
     public function home()
     {
         $defaultLocale = config('locales.default', 'sr');
+
         return $this->render($defaultLocale, 'home');
     }
 
     public function fallback(Request $request)
     {
         $path = trim($request->path(), '/');
+
         return $this->render(null, $path);
     }
 
@@ -46,7 +48,7 @@ class CmsPageController extends Controller
         }
 
         // KORAK 2: Ako jezik NIJE prosleđen (npr. samo /test ili /proba) OR prva pretraga nije uspela
-        if (!$page) {
+        if (! $page) {
             $targetSlug = $slug ?: $locale;
 
             if (empty($targetSlug) || $targetSlug === '/' || $targetSlug === 'home') {
@@ -55,7 +57,7 @@ class CmsPageController extends Controller
                     ->first();
             }
 
-            if (!$page) {
+            if (! $page) {
                 // PAMETNA PRETRAGA: Tražimo slug kroz SVE jezike u bazi odjednom
                 $page = Page::where('is_visible', true)
                     ->where(function ($query) use ($targetSlug, $supportedLocales) {

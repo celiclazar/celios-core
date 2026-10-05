@@ -64,7 +64,7 @@ return [
     'submission_failed' => 'Došlo je do greške prilikom slanja obrasca. Molimo pokušajte ponovo.',
     'sending' => 'Slanje u toku...',
     'submit' => 'Pošalji',
-    
+
     // Types
     'type_text' => 'Kratak tekst (Text)',
     'type_email' => 'Email adresa',

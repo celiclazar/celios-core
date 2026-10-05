@@ -27,13 +27,13 @@ class CategoryForm
                             ->tabs(
                                 collect(config('locales.available', ['sr' => 'Srpski', 'en' => 'English', 'it' => 'Italiano']))
                                     ->map(function (string $label, string $lang) {
-                                        return Tabs\Tab::make(strtoupper($lang) . " ({$label})")
+                                        return Tabs\Tab::make(strtoupper($lang)." ({$label})")
                                             ->id($lang)
                                             ->schema([
                                                 Grid::make(2)
                                                     ->schema([
                                                         TextInput::make("title.{$lang}")
-                                                            ->label(__('fields.title') . ' (' . strtoupper($lang) . ')')
+                                                            ->label(__('fields.title').' ('.strtoupper($lang).')')
                                                             ->required($lang === config('locales.default', 'sr'))
                                                             ->live(onBlur: true)
                                                             ->afterStateUpdated(function ($state, callable $set) use ($lang) {
@@ -41,7 +41,7 @@ class CategoryForm
                                                             }),
 
                                                         TextInput::make("slug.{$lang}")
-                                                            ->label(__('fields.url_slug') . ' (' . strtoupper($lang) . ')')
+                                                            ->label(__('fields.url_slug').' ('.strtoupper($lang).')')
                                                             ->required($lang === config('locales.default', 'sr'))
                                                             ->unique(
                                                                 table: 'categories',
@@ -51,7 +51,7 @@ class CategoryForm
                                                     ]),
 
                                                 Textarea::make("description.{$lang}")
-                                                    ->label(__('fields.description') . ' (' . strtoupper($lang) . ')')
+                                                    ->label(__('fields.description').' ('.strtoupper($lang).')')
                                                     ->rows(3),
                                             ]);
                                     })

@@ -2,11 +2,12 @@
 
 namespace Celios\Core\Http\Resources\V1;
 
+use Celios\Core\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
- * @mixin \Celios\Core\Models\Category
+ * @mixin Category
  */
 class CategoryResource extends JsonResource
 {

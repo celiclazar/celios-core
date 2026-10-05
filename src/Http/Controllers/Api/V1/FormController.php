@@ -5,13 +5,11 @@ namespace Celios\Core\Http\Controllers\Api\V1;
 use Celios\Core\Http\Controllers\Controller;
 use Celios\Core\Models\Form;
 use Celios\Core\Models\FormSubmission;
-use Celios\Core\Models\User;
 use Celios\Core\Notifications\FormSubmissionConfirmationNotification;
 use Celios\Core\Notifications\NewFormSubmissionNotification;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Notification;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 class FormController extends Controller
@@ -92,7 +90,7 @@ class FormController extends Controller
                     if (! empty($field['allowed_types'])) {
                         $extensions = array_filter(array_map('trim', explode(',', str_replace('.', '', $field['allowed_types']))));
                         if (! empty($extensions)) {
-                            $fieldRules[] = 'mimes:' . implode(',', $extensions);
+                            $fieldRules[] = 'mimes:'.implode(',', $extensions);
                         }
                     }
                     break;
@@ -126,7 +124,7 @@ class FormController extends Controller
             $key = $field['key'] ?? null;
             if ($key && ($field['type'] ?? '') === 'file' && $request->hasFile($key)) {
                 $file = $request->file($key);
-                $path = $file->store('form-attachments/' . date('Y/m'), 'private');
+                $path = $file->store('form-attachments/'.date('Y/m'), 'private');
                 $uploadedFiles[] = [
                     'field' => $key,
                     'original_name' => $file->getClientOriginalName(),

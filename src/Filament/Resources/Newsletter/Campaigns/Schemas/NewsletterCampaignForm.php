@@ -2,7 +2,6 @@
 
 namespace Celios\Core\Filament\Resources\Newsletter\Campaigns\Schemas;
 
-use Filament\Forms\Components\CheckboxList;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
@@ -70,20 +69,20 @@ class NewsletterCampaignForm
                         Tabs::make('campaign_content_tabs')
                             ->tabs(
                                 collect($locales)->map(function (string $label, string $lang) {
-                                    return Tabs\Tab::make(strtoupper($lang) . " ({$label})")
+                                    return Tabs\Tab::make(strtoupper($lang)." ({$label})")
                                         ->id($lang)
                                         ->schema([
                                             TextInput::make("subject.{$lang}")
-                                                ->label(__('fields.title') . ' / Email Subject (' . strtoupper($lang) . ')')
+                                                ->label(__('fields.title').' / Email Subject ('.strtoupper($lang).')')
                                                 ->required($lang === config('locales.default', 'sr'))
                                                 ->placeholder('Exciting updates from Celios CMS!'),
 
                                             TextInput::make("preview_text.{$lang}")
-                                                ->label('Inbox Preview Text (' . strtoupper($lang) . ')')
+                                                ->label('Inbox Preview Text ('.strtoupper($lang).')')
                                                 ->placeholder('Brief teaser shown in the inbox summary snippet'),
 
                                             RichEditor::make("content.{$lang}")
-                                                ->label('Email Body (' . strtoupper($lang) . ')')
+                                                ->label('Email Body ('.strtoupper($lang).')')
                                                 ->required($lang === config('locales.default', 'sr'))
                                                 ->toolbarButtons([
                                                     'bold',

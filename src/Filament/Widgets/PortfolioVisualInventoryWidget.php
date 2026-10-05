@@ -2,6 +2,9 @@
 
 namespace Celios\Core\Filament\Widgets;
 
+use Celios\Core\Filament\Resources\Posts\PostResource;
+use Celios\Core\Models\Media;
+use Celios\Core\Models\Post;
 use Filament\Widgets\Widget;
 
 class PortfolioVisualInventoryWidget extends Widget
@@ -19,30 +22,30 @@ class PortfolioVisualInventoryWidget extends Widget
     {
         $items = [];
         try {
-            $postsWithImage = \Celios\Core\Models\Post::with('featuredImage')
+            $postsWithImage = Post::with('featuredImage')
                 ->whereNotNull('featured_image_id')
                 ->latest()
                 ->take(3)
                 ->get();
 
             foreach ($postsWithImage as $post) {
-                if ($post->featuredImage && !empty($post->featuredImage->url)) {
+                if ($post->featuredImage && ! empty($post->featuredImage->url)) {
                     $items[] = [
                         'title' => mb_strtoupper($post->getTranslation('title', 'sr', false) ?: $post->getTranslation('title', 'en', false) ?: 'BLOG OBJAVA'),
-                        'subtitle' => ($post->is_published ? 'Live' : 'Draft') . ' • ' . ($post->created_at ? $post->created_at->diffForHumans() : ''),
+                        'subtitle' => ($post->is_published ? 'Live' : 'Draft').' • '.($post->created_at ? $post->created_at->diffForHumans() : ''),
                         'image' => $post->featuredImage->url,
-                        'url' => \Celios\Core\Filament\Resources\Posts\PostResource::getUrl('edit', ['record' => $post]),
+                        'url' => PostResource::getUrl('edit', ['record' => $post]),
                     ];
                 }
             }
 
             if (count($items) < 3) {
-                $mediaItems = \Celios\Core\Models\Media::latest()->take(3 - count($items))->get();
+                $mediaItems = Media::latest()->take(3 - count($items))->get();
                 foreach ($mediaItems as $media) {
-                    if (!empty($media->url)) {
+                    if (! empty($media->url)) {
                         $items[] = [
                             'title' => mb_strtoupper($media->title ?: $media->name ?: 'MEDIJ'),
-                            'subtitle' => ($media->width && $media->height ? "{$media->width}x{$media->height} • " : '') . ($media->created_at ? $media->created_at->diffForHumans() : ''),
+                            'subtitle' => ($media->width && $media->height ? "{$media->width}x{$media->height} • " : '').($media->created_at ? $media->created_at->diffForHumans() : ''),
                             'image' => $media->url,
                             'url' => url('/admin/media'),
                         ];

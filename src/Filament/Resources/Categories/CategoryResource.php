@@ -2,17 +2,16 @@
 
 namespace Celios\Core\Filament\Resources\Categories;
 
+use BackedEnum;
 use Celios\Core\Filament\Resources\Categories\Pages\CreateCategory;
 use Celios\Core\Filament\Resources\Categories\Pages\EditCategory;
 use Celios\Core\Filament\Resources\Categories\Pages\ListCategories;
 use Celios\Core\Filament\Resources\Categories\Schemas\CategoryForm;
 use Celios\Core\Filament\Resources\Categories\Tables\CategoriesTable;
+use Celios\Core\Filament\Traits\HasModuleToggle;
 use Celios\Core\Models\Category;
-use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
-use Filament\Support\Icons\Heroicon;
-use Celios\Core\Filament\Traits\HasModuleToggle;
 use Filament\Tables\Table;
 
 class CategoryResource extends Resource

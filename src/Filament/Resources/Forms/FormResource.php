@@ -2,16 +2,16 @@
 
 namespace Celios\Core\Filament\Resources\Forms;
 
+use BackedEnum;
 use Celios\Core\Filament\Resources\Forms\Pages\CreateForm;
 use Celios\Core\Filament\Resources\Forms\Pages\EditForm;
 use Celios\Core\Filament\Resources\Forms\Pages\ListForms;
 use Celios\Core\Filament\Resources\Forms\Schemas\FormForm;
 use Celios\Core\Filament\Resources\Forms\Tables\FormsTable;
+use Celios\Core\Filament\Traits\HasModuleToggle;
 use Celios\Core\Models\Form;
-use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
-use Celios\Core\Filament\Traits\HasModuleToggle;
 use Filament\Tables\Table;
 
 class FormResource extends Resource
@@ -65,13 +65,13 @@ class FormResource extends Resource
         return __('forms.form_single');
     }
 
-    public static function getNavigationItemActiveRoutePattern(): string | array
+    public static function getNavigationItemActiveRoutePattern(): string|array
     {
         return [
-            static::getRouteBaseName() . '.index',
-            static::getRouteBaseName() . '.create',
-            static::getRouteBaseName() . '.edit',
-            static::getRouteBaseName() . '.view',
+            static::getRouteBaseName().'.index',
+            static::getRouteBaseName().'.create',
+            static::getRouteBaseName().'.edit',
+            static::getRouteBaseName().'.view',
         ];
     }
 }

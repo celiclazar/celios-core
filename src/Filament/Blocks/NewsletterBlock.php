@@ -21,23 +21,23 @@ class NewsletterBlock
                     ->tabs(
                         TranslatableTabs::make(fn ($lang) => [
                             TextInput::make("title.{$lang}")
-                                ->label(fn () => __('newsletter.block_heading') . ' (' . strtoupper($lang) . ')')
+                                ->label(fn () => __('newsletter.block_heading').' ('.strtoupper($lang).')')
                                 ->placeholder(fn () => __('newsletter.block_default_title', [], $lang))
                                 ->default(fn () => __('newsletter.block_default_title', [], $lang)),
 
                             Textarea::make("description.{$lang}")
-                                ->label(fn () => __('newsletter.block_description') . ' (' . strtoupper($lang) . ')')
+                                ->label(fn () => __('newsletter.block_description').' ('.strtoupper($lang).')')
                                 ->rows(3)
                                 ->placeholder(fn () => __('newsletter.block_default_description', [], $lang))
                                 ->default(fn () => __('newsletter.block_default_description', [], $lang)),
 
                             TextInput::make("button_text.{$lang}")
-                                ->label(fn () => __('newsletter.block_button_text') . ' (' . strtoupper($lang) . ')')
+                                ->label(fn () => __('newsletter.block_button_text').' ('.strtoupper($lang).')')
                                 ->placeholder(fn () => __('newsletter.block_default_button', [], $lang))
                                 ->default(fn () => __('newsletter.block_default_button', [], $lang)),
 
                             TextInput::make("disclaimer.{$lang}")
-                                ->label(fn () => __('newsletter.block_disclaimer') . ' (' . strtoupper($lang) . ')')
+                                ->label(fn () => __('newsletter.block_disclaimer').' ('.strtoupper($lang).')')
                                 ->placeholder(fn () => __('newsletter.block_default_disclaimer', [], $lang))
                                 ->default(fn () => __('newsletter.block_default_disclaimer', [], $lang)),
                         ])

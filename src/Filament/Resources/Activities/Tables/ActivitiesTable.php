@@ -31,7 +31,7 @@ class ActivitiesTable
                         'deleted' => __('fields.action_deleted'),
                         'marked_as_read' => __('forms.mark_as_read'),
                         'marked_as_unread' => __('forms.mark_as_unread'),
-                        'submission_received' => __('forms.submission_single') . ' - ' . __('forms.submitted_at'),
+                        'submission_received' => __('forms.submission_single').' - '.__('forms.submitted_at'),
                         default => Str::headline($state),
                     })
                     ->sortable(),

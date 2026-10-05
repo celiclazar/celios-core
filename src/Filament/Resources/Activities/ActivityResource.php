@@ -2,17 +2,16 @@
 
 namespace Celios\Core\Filament\Resources\Activities;
 
+use BackedEnum;
 use Celios\Core\Filament\Resources\Activities\Pages\ListActivities;
 use Celios\Core\Filament\Resources\Activities\Pages\ViewActivity;
 use Celios\Core\Filament\Resources\Activities\Schemas\ActivityForm;
 use Celios\Core\Filament\Resources\Activities\Schemas\ActivityInfolist;
 use Celios\Core\Filament\Resources\Activities\Tables\ActivitiesTable;
-use BackedEnum;
+use Celios\Core\Filament\Traits\HasModuleToggle;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
-use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
-use Celios\Core\Filament\Traits\HasModuleToggle;
 use Spatie\Activitylog\Models\Activity;
 
 class ActivityResource extends Resource
@@ -60,9 +59,9 @@ class ActivityResource extends Resource
     {
         return [
             'index' => ListActivities::route('/'),
-            //'create' => CreateActivity::route('/create'),
+            // 'create' => CreateActivity::route('/create'),
             'view' => ViewActivity::route('/{record}'),
-            //'edit' => EditActivity::route('/{record}/edit'),
+            // 'edit' => EditActivity::route('/{record}/edit'),
         ];
     }
 
@@ -70,6 +69,7 @@ class ActivityResource extends Resource
     {
         return false;
     }
+
     public static function canEdit($record): bool
     {
         return false;

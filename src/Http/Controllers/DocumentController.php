@@ -5,10 +5,8 @@ namespace Celios\Core\Http\Controllers;
 use Celios\Core\Models\Document;
 use Celios\Core\Models\DocumentCategory;
 use Celios\Core\Models\DocumentDownloadLog;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class DocumentController extends Controller
 {
@@ -33,8 +31,8 @@ class DocumentController extends Controller
         if (filled($search)) {
             $query->where(function ($q) use ($search, $locale) {
                 $q->where("title->{$locale}", 'like', "%{$search}%")
-                  ->orWhere("description->{$locale}", 'like', "%{$search}%")
-                  ->orWhere('file_name', 'like', "%{$search}%");
+                    ->orWhere("description->{$locale}", 'like', "%{$search}%")
+                    ->orWhere('file_name', 'like', "%{$search}%");
             });
         }
 
@@ -51,7 +49,7 @@ class DocumentController extends Controller
             ->active()
             ->where(function ($q) use ($category_slug, $locale) {
                 $q->where("slug->{$locale}", $category_slug)
-                  ->orWhere("slug->" . config('locales.default', 'sr'), $category_slug);
+                    ->orWhere('slug->'.config('locales.default', 'sr'), $category_slug);
             })
             ->firstOrFail();
 
@@ -98,7 +96,7 @@ class DocumentController extends Controller
             ->published()
             ->where(function ($q) use ($slug, $locale) {
                 $q->where("slug->{$locale}", $slug)
-                  ->orWhere("slug->" . config('locales.default', 'sr'), $slug);
+                    ->orWhere('slug->'.config('locales.default', 'sr'), $slug);
             })
             ->firstOrFail();
 
@@ -147,7 +145,7 @@ class DocumentController extends Controller
             ->published()
             ->where(function ($q) use ($slug, $locale) {
                 $q->where("slug->{$locale}", $slug)
-                  ->orWhere("slug->" . config('locales.default', 'sr'), $slug);
+                    ->orWhere('slug->'.config('locales.default', 'sr'), $slug);
             })
             ->firstOrFail();
 
@@ -168,7 +166,7 @@ class DocumentController extends Controller
         $fileName = $document->file_name ?: basename($document->file_path);
 
         return $disk->response($document->file_path, $fileName, [
-            'Content-Disposition' => 'inline; filename="' . $fileName . '"',
+            'Content-Disposition' => 'inline; filename="'.$fileName.'"',
         ]);
     }
 
@@ -208,7 +206,7 @@ class DocumentController extends Controller
         $fileName = $document->file_name ?: basename($document->file_path);
 
         return $disk->response($document->file_path, $fileName, [
-            'Content-Disposition' => 'inline; filename="' . $fileName . '"',
+            'Content-Disposition' => 'inline; filename="'.$fileName.'"',
         ]);
     }
 
@@ -220,6 +218,7 @@ class DocumentController extends Controller
         if ($locale && in_array($locale, $locales)) {
             app()->setLocale($locale);
             session()->put('locale', $locale);
+
             return $locale;
         }
 

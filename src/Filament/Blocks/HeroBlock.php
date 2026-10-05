@@ -2,10 +2,10 @@
 
 namespace Celios\Core\Filament\Blocks;
 
+use Awcodes\Curator\Components\Forms\CuratorPicker;
 use Celios\Core\Filament\Helpers\BlockLabelHelper;
 use Celios\Core\Filament\Helpers\TranslatableTabs;
 use Celios\Core\Support\Translations;
-use Awcodes\Curator\Components\Forms\CuratorPicker;
 use Filament\Forms\Components\Builder\Block;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
@@ -23,21 +23,21 @@ class HeroBlock
                     ->tabs(
                         TranslatableTabs::make(fn ($lang) => [
                             TextInput::make("badge_text.{$lang}")
-                                ->label(fn () => 'Bedž oznaka (' . strtoupper($lang) . ')'),
+                                ->label(fn () => 'Bedž oznaka ('.strtoupper($lang).')'),
 
                             TextInput::make("heading.{$lang}")
                                 ->label(Translations::get($lang, 'heading'))
                                 ->required($lang === 'sr'),
 
                             TextInput::make("highlighted_text.{$lang}")
-                                ->label(fn () => 'Akcentovani / Podvučeni tekst (' . strtoupper($lang) . ')'),
+                                ->label(fn () => 'Akcentovani / Podvučeni tekst ('.strtoupper($lang).')'),
 
                             Textarea::make("subtitle.{$lang}")
                                 ->label(Translations::get($lang, 'subtitle'))
                                 ->rows(3),
 
                             TextInput::make("button_text.{$lang}")
-                                ->label(fn () => __('blocks.button_text') . ' (' . strtoupper($lang) . ')'),
+                                ->label(fn () => __('blocks.button_text').' ('.strtoupper($lang).')'),
                         ])
                     ),
 
@@ -49,4 +49,3 @@ class HeroBlock
             ]);
     }
 }
-

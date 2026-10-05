@@ -2,16 +2,16 @@
 
 namespace Celios\Core\Filament\Resources\Forms;
 
+use BackedEnum;
 use Celios\Core\Filament\Resources\Forms\Pages\ListFormSubmissions;
 use Celios\Core\Filament\Resources\Forms\Pages\ViewFormSubmission;
 use Celios\Core\Filament\Resources\Forms\Schemas\FormSubmissionInfolist;
 use Celios\Core\Filament\Resources\Forms\Tables\FormSubmissionsTable;
+use Celios\Core\Filament\Traits\HasModuleToggle;
 use Celios\Core\Models\FormSubmission;
-use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Tables\Table;
-use Celios\Core\Filament\Traits\HasModuleToggle;
 use Illuminate\Database\Eloquent\Builder;
 
 class FormSubmissionResource extends Resource
@@ -36,7 +36,7 @@ class FormSubmissionResource extends Resource
     public static function getNavigationBadge(): ?string
     {
         $user = auth()->user();
-        if (!$user) {
+        if (! $user) {
             return null;
         }
 
@@ -44,7 +44,7 @@ class FormSubmissionResource extends Resource
             ->where('is_read', false)
             ->count();
 
-        return $count > 0 ? (string)$count : null;
+        return $count > 0 ? (string) $count : null;
     }
 
     public static function getNavigationBadgeColor(): ?string
@@ -58,7 +58,7 @@ class FormSubmissionResource extends Resource
 
         return parent::getEloquentQuery()
             ->with('form')
-            ->when($user && !$user->hasRole('super_admin'), function ($query) use ($user) {
+            ->when($user && ! $user->hasRole('super_admin'), function ($query) use ($user) {
                 $query->whereHas('form', function ($q) use ($user) {
                     $userRoles = $user->roles->pluck('name')->toArray();
                     $q->where(function ($sub) use ($userRoles) {

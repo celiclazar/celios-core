@@ -81,7 +81,7 @@ class Category extends Model
             $parent = $this->relationLoaded('parent') ? $this->parent : $this->parent()->first();
             $parentSlug = $parent?->getNestedSlug($locale);
             if (filled($parentSlug)) {
-                return "{$parentSlug}/" . ltrim($slug, '/');
+                return "{$parentSlug}/".ltrim($slug, '/');
             }
         }
 
@@ -95,7 +95,7 @@ class Category extends Model
         $prefix = static::getRoutePrefix($locale);
 
         return filled($slugPath)
-            ? url("/{$locale}/{$prefix}/" . ltrim($slugPath, '/'))
+            ? url("/{$locale}/{$prefix}/".ltrim($slugPath, '/'))
             : url("/{$locale}/blog");
     }
 }

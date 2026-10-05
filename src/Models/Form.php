@@ -104,6 +104,7 @@ class Form extends Model
 
         if ($this->redirect_type === 'page' && $this->redirect_page_id) {
             $page = $this->redirectPage ?? Page::find($this->redirect_page_id);
+
             return $page ? $page->getUrl($locale) : null;
         }
 
@@ -112,7 +113,8 @@ class Form extends Model
             if (str_starts_with($url, 'http://') || str_starts_with($url, 'https://')) {
                 return $url;
             }
-            return url('/' . ltrim($url, '/'));
+
+            return url('/'.ltrim($url, '/'));
         }
 
         return null;
@@ -125,7 +127,7 @@ class Form extends Model
     {
         $user = $user ?? auth()->user();
 
-        if (!$user) {
+        if (! $user) {
             return false;
         }
 

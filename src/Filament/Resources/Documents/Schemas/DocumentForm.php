@@ -32,13 +32,13 @@ class DocumentForm
                             ->tabs(
                                 collect(config('locales.available', ['sr' => 'Srpski', 'en' => 'English', 'it' => 'Italiano']))
                                     ->map(function (string $label, string $lang) {
-                                        return Tabs\Tab::make(strtoupper($lang) . " ({$label})")
+                                        return Tabs\Tab::make(strtoupper($lang)." ({$label})")
                                             ->id($lang)
                                             ->schema([
                                                 Grid::make(2)
                                                     ->schema([
                                                         TextInput::make("title.{$lang}")
-                                                            ->label(__('fields.title') . ' (' . strtoupper($lang) . ')')
+                                                            ->label(__('fields.title').' ('.strtoupper($lang).')')
                                                             ->required($lang === config('locales.default', 'sr'))
                                                             ->live(onBlur: true)
                                                             ->afterStateUpdated(function (string $operation, $state, callable $set, callable $get) use ($lang) {
@@ -48,7 +48,7 @@ class DocumentForm
                                                             }),
 
                                                         TextInput::make("slug.{$lang}")
-                                                            ->label(__('fields.url_slug') . ' (' . strtoupper($lang) . ')')
+                                                            ->label(__('fields.url_slug').' ('.strtoupper($lang).')')
                                                             ->required($lang === config('locales.default', 'sr'))
                                                             ->dehydrated()
                                                             ->unique(
@@ -59,7 +59,7 @@ class DocumentForm
                                                     ]),
 
                                                 Textarea::make("description.{$lang}")
-                                                    ->label(__('fields.description') . ' (' . strtoupper($lang) . ')')
+                                                    ->label(__('fields.description').' ('.strtoupper($lang).')')
                                                     ->rows(3),
                                             ]);
                                     })
@@ -113,7 +113,7 @@ class DocumentForm
                                         return DocumentCategory::query()
                                             ->get()
                                             ->mapWithKeys(fn (DocumentCategory $cat) => [
-                                                $cat->id => ($cat->is_internal ? '[🔒 ' . __('documents.access_internal') . '] ' : '') . $cat->getLocalizedTitle(),
+                                                $cat->id => ($cat->is_internal ? '[🔒 '.__('documents.access_internal').'] ' : '').$cat->getLocalizedTitle(),
                                             ])
                                             ->all();
                                     })

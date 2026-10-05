@@ -20,8 +20,11 @@ class RecentResourcesTableWidget extends Widget
     protected static ?int $sort = 3;
 
     public string $search = '';
+
     public string $filter = 'all'; // 'all', 'pages', 'posts'
+
     public int $page = 1;
+
     public int $perPage = 5;
 
     public function updatedSearch(): void
@@ -69,10 +72,10 @@ class RecentResourcesTableWidget extends Widget
                 $pagesQuery = Page::query()->latest('updated_at');
 
                 if (filled($this->search)) {
-                    $term = '%' . trim($this->search) . '%';
+                    $term = '%'.trim($this->search).'%';
                     $pagesQuery->where(function ($q) use ($term) {
                         $q->where('title', 'like', $term)
-                          ->orWhere('slug', 'like', $term);
+                            ->orWhere('slug', 'like', $term);
                     });
                 }
 
@@ -87,7 +90,7 @@ class RecentResourcesTableWidget extends Widget
                         $title = reset($page->title) ?: null;
                     }
 
-                    $title = $title ?: 'Stranica #' . $page->id;
+                    $title = $title ?: 'Stranica #'.$page->id;
 
                     $slug = $page->getTranslation('slug', 'sr', false)
                         ?: $page->getTranslation('slug', 'en', false)
@@ -100,16 +103,16 @@ class RecentResourcesTableWidget extends Widget
                     try {
                         $editUrl = PageResource::getUrl('edit', ['record' => $page]);
                     } catch (\Throwable $e) {
-                        $editUrl = url('/admin/pages/' . $page->id . '/edit');
+                        $editUrl = url('/admin/pages/'.$page->id.'/edit');
                     }
 
                     try {
                         $publicUrl = $page->getUrl('sr');
                     } catch (\Throwable $e) {
-                        $publicUrl = url('/' . ltrim($slug, '/'));
+                        $publicUrl = url('/'.ltrim($slug, '/'));
                     }
 
-                    if (!empty($page->draft_content)) {
+                    if (! empty($page->draft_content)) {
                         $status = 'U pregledu';
                         $statusType = 'review';
                     } elseif ($page->is_visible) {
@@ -121,9 +124,9 @@ class RecentResourcesTableWidget extends Widget
                     }
 
                     $items->push([
-                        'id' => 'page-' . $page->id,
+                        'id' => 'page-'.$page->id,
                         'title' => $title,
-                        'url' => '/' . ltrim($slug, '/'),
+                        'url' => '/'.ltrim($slug, '/'),
                         'public_url' => $publicUrl,
                         'edit_url' => $editUrl,
                         'module' => 'Stranica',
@@ -145,10 +148,10 @@ class RecentResourcesTableWidget extends Widget
                 $postsQuery = Post::query()->latest('updated_at');
 
                 if (filled($this->search)) {
-                    $term = '%' . trim($this->search) . '%';
+                    $term = '%'.trim($this->search).'%';
                     $postsQuery->where(function ($q) use ($term) {
                         $q->where('title', 'like', $term)
-                          ->orWhere('slug', 'like', $term);
+                            ->orWhere('slug', 'like', $term);
                     });
                 }
 
@@ -163,7 +166,7 @@ class RecentResourcesTableWidget extends Widget
                         $title = reset($post->title) ?: null;
                     }
 
-                    $title = $title ?: 'Objava #' . $post->id;
+                    $title = $title ?: 'Objava #'.$post->id;
 
                     $slug = $post->getTranslation('slug', 'sr', false)
                         ?: $post->getTranslation('slug', 'en', false)
@@ -176,13 +179,13 @@ class RecentResourcesTableWidget extends Widget
                     try {
                         $editUrl = PostResource::getUrl('edit', ['record' => $post]);
                     } catch (\Throwable $e) {
-                        $editUrl = url('/admin/posts/' . $post->id . '/edit');
+                        $editUrl = url('/admin/posts/'.$post->id.'/edit');
                     }
 
                     try {
                         $publicUrl = $post->getUrl('sr');
                     } catch (\Throwable $e) {
-                        $publicUrl = url('/blog/' . ltrim($slug, '/'));
+                        $publicUrl = url('/blog/'.ltrim($slug, '/'));
                     }
 
                     if ($post->is_published && ($post->published_at === null || $post->published_at->isPast())) {
@@ -194,9 +197,9 @@ class RecentResourcesTableWidget extends Widget
                     }
 
                     $items->push([
-                        'id' => 'post-' . $post->id,
+                        'id' => 'post-'.$post->id,
                         'title' => $title,
-                        'url' => '/blog/' . ltrim($slug, '/'),
+                        'url' => '/blog/'.ltrim($slug, '/'),
                         'public_url' => $publicUrl,
                         'edit_url' => $editUrl,
                         'module' => 'Blog',

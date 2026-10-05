@@ -21,64 +21,64 @@ class InteractiveShowcaseBlock
                     ->tabs(
                         TranslatableTabs::make(fn ($lang) => [
                             TextInput::make("section_tag.{$lang}")
-                                ->label('Tag sekcije (' . strtoupper($lang) . ')')
+                                ->label('Tag sekcije ('.strtoupper($lang).')')
                                 ->default('Fleksibilni Graditelj Stranica'),
 
                             TextInput::make("section_title.{$lang}")
-                                ->label('Naslov sekcije (' . strtoupper($lang) . ')')
+                                ->label('Naslov sekcije ('.strtoupper($lang).')')
                                 ->required($lang === 'sr')
                                 ->default('Modularni Blokovi u Akciji'),
 
                             Textarea::make("section_desc.{$lang}")
-                                ->label('Opis sekcije (' . strtoupper($lang) . ')')
+                                ->label('Opis sekcije ('.strtoupper($lang).')')
                                 ->rows(2)
                                 ->default('Odaberite stil prikaza i testirajte ponašanje sekcija na radnoj površini sa dinamičkom dvojezičnom proverom.'),
 
                             TextInput::make("split_tag.{$lang}")
-                                ->label('Split Tab - Oznaka (' . strtoupper($lang) . ')')
+                                ->label('Split Tab - Oznaka ('.strtoupper($lang).')')
                                 ->default('Block: Architecture & Space Showcase'),
 
                             TextInput::make("split_title.{$lang}")
-                                ->label('Split Tab - Naslov (' . strtoupper($lang) . ')')
+                                ->label('Split Tab - Naslov ('.strtoupper($lang).')')
                                 ->default('Precizna estetika za moderne kreativne studije.'),
 
                             Textarea::make("split_desc.{$lang}")
-                                ->label('Split Tab - Opis (' . strtoupper($lang) . ')')
+                                ->label('Split Tab - Opis ('.strtoupper($lang).')')
                                 ->rows(2)
                                 ->default('Svi blokovi poseduju direktne opcije konfiguracije kroz Filament panel: izmene margina, tipografskih razmera, relacija sa slikama iz biblioteke i SEO meta oznakama na nivou fragmenta.'),
 
                             TextInput::make("split_btn_text.{$lang}")
-                                ->label('Split Tab - Dugme (' . strtoupper($lang) . ')')
+                                ->label('Split Tab - Dugme ('.strtoupper($lang).')')
                                 ->default('Pogledaj Arhivu Radova'),
 
                             TextInput::make("split_project_title.{$lang}")
-                                ->label('Split Tab - Naziv projekta (' . strtoupper($lang) . ')')
+                                ->label('Split Tab - Naziv projekta ('.strtoupper($lang).')')
                                 ->default('Atelje Beograd • Monolit 24'),
 
                             TextInput::make("bento_1_title.{$lang}")
-                                ->label('Bento Tab - Naslov 1 (' . strtoupper($lang) . ')')
+                                ->label('Bento Tab - Naslov 1 ('.strtoupper($lang).')')
                                 ->default('Interaktivni Digitalni Arhiv'),
 
                             Textarea::make("bento_1_desc.{$lang}")
-                                ->label('Bento Tab - Opis 1 (' . strtoupper($lang) . ')')
+                                ->label('Bento Tab - Opis 1 ('.strtoupper($lang).')')
                                 ->rows(2)
                                 ->default('Strukturirana baza eksponata sa više od 4,000 unosa, asinhronim pretraživanjem i automatskim generisanjem OpenGraph slika.'),
 
                             TextInput::make("case_1_title.{$lang}")
-                                ->label('Case Study 1 - Naslov (' . strtoupper($lang) . ')')
+                                ->label('Case Study 1 - Naslov ('.strtoupper($lang).')')
                                 ->default('Nordic Furniture Lab — Digitalni Salon 2024'),
 
                             Textarea::make("case_1_desc.{$lang}")
-                                ->label('Case Study 1 - Opis (' . strtoupper($lang) . ')')
+                                ->label('Case Study 1 - Opis ('.strtoupper($lang).')')
                                 ->rows(2)
                                 ->default('Kako smo postigli 300% brži odziv kataloga sa preko 1,200 3D modela koristeći Celios blokove.'),
 
                             TextInput::make("case_2_title.{$lang}")
-                                ->label('Case Study 2 - Naslov (' . strtoupper($lang) . ')')
+                                ->label('Case Study 2 - Naslov ('.strtoupper($lang).')')
                                 ->default('Kvantum Branding Hub — Multi-tenant sajt'),
 
                             Textarea::make("case_2_desc.{$lang}")
-                                ->label('Case Study 2 - Opis (' . strtoupper($lang) . ')')
+                                ->label('Case Study 2 - Opis ('.strtoupper($lang).')')
                                 ->rows(2)
                                 ->default('Jedinstvena CMS instanca koja u realnom vremenu opslužuje 6 nezavisnih portfolio domena.'),
                         ])

@@ -71,6 +71,7 @@ class ContactsTable
                         if (is_array($sources) && isset($sources[$state])) {
                             return $sources[$state];
                         }
+
                         return $state ? ucfirst(str_replace('_', ' ', $state)) : '-';
                     })
                     ->toggleable(isToggledHiddenByDefault: true),

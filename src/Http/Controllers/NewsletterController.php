@@ -6,6 +6,7 @@ use Celios\Core\Jobs\Newsletter\SendSubscriptionConfirmationJob;
 use Celios\Core\Models\NewsletterCampaign;
 use Celios\Core\Models\NewsletterCampaignLog;
 use Celios\Core\Models\NewsletterSubscriber;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -85,6 +86,7 @@ class NewsletterController extends Controller
         // 4. Dispatch verification job if double opt-in is active
         if ($doubleOptIn && $subscriber->status === 'pending') {
             SendSubscriptionConfirmationJob::dispatch($subscriber);
+
             return $this->subscribeResponse($request, true, __('newsletter.confirm_email_sent'));
         }
 
@@ -94,7 +96,7 @@ class NewsletterController extends Controller
     /**
      * Double Opt-In verification page.
      */
-    public function verify(Request $request, ?string $locale = null, ?string $token = null): \Illuminate\Contracts\View\View|RedirectResponse
+    public function verify(Request $request, ?string $locale = null, ?string $token = null): View|RedirectResponse
     {
         if ($token === null && $locale !== null) {
             $token = $locale;
@@ -107,9 +109,10 @@ class NewsletterController extends Controller
 
         $subscriber = NewsletterSubscriber::where('verification_token', $token)->first();
 
-        if (!$subscriber) {
+        if (! $subscriber) {
             // Check if already verified
             $alreadyActive = NewsletterSubscriber::where('status', 'active')->whereNull('verification_token')->exists();
+
             return view('newsletter.verified', [
                 'status' => 'already_or_invalid',
                 'message' => __('newsletter.verify_invalid_or_expired'),
@@ -128,7 +131,7 @@ class NewsletterController extends Controller
     /**
      * Unsubscribe web page.
      */
-    public function unsubscribe(Request $request, ?string $locale = null, ?string $token = null): \Illuminate\Contracts\View\View|RedirectResponse
+    public function unsubscribe(Request $request, ?string $locale = null, ?string $token = null): View|RedirectResponse
     {
         if ($token === null && $locale !== null) {
             $token = $locale;
@@ -141,7 +144,7 @@ class NewsletterController extends Controller
 
         $subscriber = NewsletterSubscriber::where('unsubscribe_token', $token)->first();
 
-        if (!$subscriber) {
+        if (! $subscriber) {
             abort(404);
         }
 
@@ -216,7 +219,7 @@ class NewsletterController extends Controller
             }
         }
 
-        if (empty($target) || !filter_var($target, FILTER_VALIDATE_URL)) {
+        if (empty($target) || ! filter_var($target, FILTER_VALIDATE_URL)) {
             return redirect()->to('/');
         }
 

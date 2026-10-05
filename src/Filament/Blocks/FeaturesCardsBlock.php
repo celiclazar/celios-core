@@ -22,16 +22,16 @@ class FeaturesCardsBlock
                     ->tabs(
                         TranslatableTabs::make(fn ($lang) => [
                             TextInput::make("section_tag.{$lang}")
-                                ->label('Tag sekcije (' . strtoupper($lang) . ')')
+                                ->label('Tag sekcije ('.strtoupper($lang).')')
                                 ->default('Arhitektura & Mogućnosti'),
 
                             TextInput::make("section_title.{$lang}")
-                                ->label('Naslov sekcije (' . strtoupper($lang) . ')')
+                                ->label('Naslov sekcije ('.strtoupper($lang).')')
                                 ->required($lang === 'sr')
                                 ->default('Zašto programeri i dizajneri biraju Celios'),
 
                             Textarea::make("section_desc.{$lang}")
-                                ->label('Opis sekcije (' . strtoupper($lang) . ')')
+                                ->label('Opis sekcije ('.strtoupper($lang).')')
                                 ->rows(2)
                                 ->default('Bez komplikovanih eksternih servisa ili glomaznih dodataka. Sve je napisano u modernom Laravelu prateći najviše inženjerske i vizuelne standarde.'),
                         ])
@@ -49,15 +49,15 @@ class FeaturesCardsBlock
                             ->tabs(
                                 TranslatableTabs::make(fn ($lang) => [
                                     TextInput::make("title.{$lang}")
-                                        ->label('Naslov kartice (' . strtoupper($lang) . ')')
+                                        ->label('Naslov kartice ('.strtoupper($lang).')')
                                         ->required($lang === 'sr'),
 
                                     Textarea::make("description.{$lang}")
-                                        ->label('Opis kartice (' . strtoupper($lang) . ')')
+                                        ->label('Opis kartice ('.strtoupper($lang).')')
                                         ->rows(3),
 
                                     Textarea::make("checklist.{$lang}")
-                                        ->label('Stavke sa kvačicom (jedna po liniji) (' . strtoupper($lang) . ')')
+                                        ->label('Stavke sa kvačicom (jedna po liniji) ('.strtoupper($lang).')')
                                         ->rows(2)
                                         ->helperText('Unesite stavke razdvojene novim redom'),
                                 ])

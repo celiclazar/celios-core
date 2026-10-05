@@ -59,6 +59,7 @@ class NewsletterSubscriber extends Model
         if ($locale && $locale !== 'all') {
             return $query->where('locale', $locale);
         }
+
         return $query;
     }
 
@@ -88,7 +89,8 @@ class NewsletterSubscriber extends Model
 
     public function getFullNameAttribute(): string
     {
-        $name = trim(($this->first_name ?? '') . ' ' . ($this->last_name ?? ''));
+        $name = trim(($this->first_name ?? '').' '.($this->last_name ?? ''));
+
         return $name ?: $this->email;
     }
 }

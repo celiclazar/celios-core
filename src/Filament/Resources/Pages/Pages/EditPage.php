@@ -3,10 +3,13 @@
 namespace Celios\Core\Filament\Resources\Pages\Pages;
 
 use Celios\Core\Filament\Resources\Pages\PageResource;
+use Celios\Core\Models\Page;
 use Filament\Actions\Action;
 use Filament\Actions\DeleteAction;
+use Filament\Forms\Components\TextInput;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\EditRecord;
+use Illuminate\Support\Facades\Route;
 
 class EditPage extends EditRecord
 {
@@ -37,19 +40,19 @@ class EditPage extends EditRecord
                 ->label('Visual Designer (Beta)')
                 ->icon('heroicon-o-paint-brush')
                 ->color('primary')
-                ->visible(fn () => \Illuminate\Support\Facades\Route::has('admin.visual_builder.edit'))
-                ->url(fn () => \Illuminate\Support\Facades\Route::has('admin.visual_builder.edit')
+                ->visible(fn () => Route::has('admin.visual_builder.edit'))
+                ->url(fn () => Route::has('admin.visual_builder.edit')
                     ? route('admin.visual_builder.edit', ['page' => $this->getRecord()->id])
                     : null),
 
             Action::make('publish')
-                ->label(fn() => __('actions.publish'))
+                ->label(fn () => __('actions.publish'))
                 ->icon('heroicon-m-cloud-arrow-up')
                 ->color('success')
                 ->requiresConfirmation()
                 ->hidden(fn () => empty($this->getRecord()->draft_content))
                 ->action(function () {
-                    /** @var \Celios\Core\Models\Page $record */
+                    /** @var Page $record */
                     $record = $this->getRecord();
                     $record->publish(auth()->id());
 
@@ -66,13 +69,13 @@ class EditPage extends EditRecord
                 ->icon('heroicon-o-camera')
                 ->color('gray')
                 ->form([
-                    \Filament\Forms\Components\TextInput::make('note')
+                    TextInput::make('note')
                         ->label(fn () => __('fields.snapshot_note'))
                         ->placeholder(fn () => __('fields.snapshot_note_placeholder'))
                         ->maxLength(255),
                 ])
                 ->action(function (array $data): void {
-                    /** @var \Celios\Core\Models\Page $record */
+                    /** @var Page $record */
                     $record = $this->getRecord();
                     $record->createRevision(
                         userId: auth()->id(),
@@ -94,6 +97,7 @@ class EditPage extends EditRecord
                     $record = $this->getRecord();
                     $locale = app()->getLocale();
                     $slug = $record->getTranslation('slug', $locale);
+
                     return url("/{$locale}/{$slug}?preview=true");
                 }),
 

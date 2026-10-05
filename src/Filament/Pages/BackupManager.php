@@ -2,6 +2,8 @@
 
 namespace Celios\Core\Filament\Pages;
 
+use Carbon\Carbon;
+use Celios\Core\Filament\Traits\HasModuleToggle;
 use Filament\Actions\Action;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
@@ -11,14 +13,13 @@ use Filament\Tables\Contracts\HasTable;
 use Filament\Tables\Table;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Artisan;
-use Celios\Core\Filament\Traits\HasModuleToggle;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class BackupManager extends Page implements HasTable
 {
-    use Tables\Concerns\InteractsWithTable;
     use HasModuleToggle;
+    use Tables\Concerns\InteractsWithTable;
 
     public const MODULE_KEY = 'backups';
 
@@ -75,18 +76,18 @@ class BackupManager extends Page implements HasTable
 
             // 3. Check storage/app/Laravel or storage/app directly
             $directDirs = [
-                storage_path('app/' . $backupName),
-                storage_path('app/private/' . $backupName),
+                storage_path('app/'.$backupName),
+                storage_path('app/private/'.$backupName),
                 storage_path('app'),
             ];
 
             foreach ($directDirs as $dir) {
                 if (is_dir($dir)) {
-                    $found = glob($dir . '/*.zip') ?: [];
+                    $found = glob($dir.'/*.zip') ?: [];
                     foreach ($found as $fullPath) {
                         $baseName = basename($fullPath);
-                        $relPath = $backupName . '/' . $baseName;
-                        if (!isset($allZipFiles[$relPath])) {
+                        $relPath = $backupName.'/'.$baseName;
+                        if (! isset($allZipFiles[$relPath])) {
                             $allZipFiles[$relPath] = [
                                 'disk' => $diskName,
                                 'path' => $relPath,
@@ -107,7 +108,7 @@ class BackupManager extends Page implements HasTable
                 $lastMod = $existsOnDisk ? $disk->lastModified($item['path']) : (isset($item['full_path']) && file_exists($item['full_path']) ? filemtime($item['full_path']) : time());
 
                 $sizeMb = round($sizeInBytes / 1024 / 1024, 2);
-                $sizeFormatted = $sizeMb >= 1 ? $sizeMb . ' MB' : round($sizeInBytes / 1024, 1) . ' KB';
+                $sizeFormatted = $sizeMb >= 1 ? $sizeMb.' MB' : round($sizeInBytes / 1024, 1).' KB';
 
                 return [
                     'id' => md5($path),
@@ -115,7 +116,7 @@ class BackupManager extends Page implements HasTable
                     'size' => $sizeFormatted,
                     'size_bytes' => $sizeInBytes,
                     'date' => date('d.m.Y H:i', $lastMod),
-                    'time_ago' => \Carbon\Carbon::createFromTimestamp($lastMod)->diffForHumans(),
+                    'time_ago' => Carbon::createFromTimestamp($lastMod)->diffForHumans(),
                     'raw_date' => $lastMod,
                     'path' => $item['path'],
                     'full_path' => $item['full_path'] ?? null,
@@ -131,9 +132,9 @@ class BackupManager extends Page implements HasTable
         $totalBackups = count($this->backups);
         $totalBytes = collect($this->backups)->sum('size_bytes');
         $totalMb = round($totalBytes / 1024 / 1024, 2);
-        $totalSizeFormatted = $totalMb >= 1 ? $totalMb . ' MB' : round($totalBytes / 1024, 1) . ' KB';
+        $totalSizeFormatted = $totalMb >= 1 ? $totalMb.' MB' : round($totalBytes / 1024, 1).' KB';
 
-        $latestBackup = !empty($this->backups) ? ($this->backups[0]['time_ago'] ?? $this->backups[0]['date']) : 'Nema kopija';
+        $latestBackup = ! empty($this->backups) ? ($this->backups[0]['time_ago'] ?? $this->backups[0]['date']) : 'Nema kopija';
 
         return [
             'total_count' => $totalBackups,
@@ -252,7 +253,7 @@ class BackupManager extends Page implements HasTable
                             return $disk->download($record['path'], $record['name']);
                         }
 
-                        if (!empty($record['full_path']) && file_exists($record['full_path'])) {
+                        if (! empty($record['full_path']) && file_exists($record['full_path'])) {
                             return response()->download($record['full_path'], $record['name']);
                         }
 
@@ -278,7 +279,7 @@ class BackupManager extends Page implements HasTable
                             $disk->delete($record['path']);
                         }
 
-                        if (!empty($record['full_path']) && file_exists($record['full_path'])) {
+                        if (! empty($record['full_path']) && file_exists($record['full_path'])) {
                             @unlink($record['full_path']);
                         }
 
@@ -304,4 +305,3 @@ class BackupManager extends Page implements HasTable
         return __('sidebar.backup_manager');
     }
 }
-

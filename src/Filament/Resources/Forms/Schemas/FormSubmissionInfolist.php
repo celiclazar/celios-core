@@ -9,6 +9,7 @@ use Filament\Infolists\Components\TextEntry;
 use Filament\Schemas\Components\Grid;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
+use Spatie\Activitylog\Models\Activity;
 
 class FormSubmissionInfolist
 {
@@ -71,14 +72,14 @@ class FormSubmissionInfolist
                                     if ($fieldDef && isset($fieldDef['label'])) {
                                         $label = is_array($fieldDef['label'])
                                             ? ($fieldDef['label'][$locale] ?? $fieldDef['label']['sr'] ?? $fieldDef['label']['en'] ?? $key)
-                                            : (string)$fieldDef['label'];
+                                            : (string) $fieldDef['label'];
                                     }
 
                                     if (is_array($val)) {
                                         $val = implode(', ', $val);
                                     }
 
-                                    $formatted[$label] = (string)($val ?? '');
+                                    $formatted[$label] = (string) ($val ?? '');
                                 }
 
                                 return $formatted;
@@ -88,7 +89,7 @@ class FormSubmissionInfolist
                 Section::make(__('forms.files_attached'))
                     ->icon('heroicon-o-paper-clip')
                     ->columnSpanFull()
-                    ->visible(fn (FormSubmission $record) => !empty($record->files))
+                    ->visible(fn (FormSubmission $record) => ! empty($record->files))
                     ->schema([
                         TextEntry::make('files')
                             ->label(__('forms.files_attached'))
@@ -101,7 +102,7 @@ class FormSubmissionInfolist
 
                                 $html = '<ul class="space-y-2">';
                                 foreach ($files as $fieldKey => $path) {
-                                    $url = asset('storage/' . $path);
+                                    $url = asset('storage/'.$path);
                                     $filename = basename($path);
                                     $html .= sprintf(
                                         '<li><a href="%s" target="_blank" download class="inline-flex items-center space-x-2 text-primary-600 hover:underline font-medium"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg> <span>%s: <strong>%s</strong></span></a></li>',
@@ -124,18 +125,18 @@ class FormSubmissionInfolist
                             ->label(__('fields.activity_timestamp'))
                             ->html()
                             ->state(function (FormSubmission $record) {
-                                $activities = \Spatie\Activitylog\Models\Activity::forSubject($record)->latest()->get();
+                                $activities = Activity::forSubject($record)->latest()->get();
                                 if ($activities->isEmpty()) {
-                                    return '<p class="text-sm text-gray-500">' . __('fields.no_previous_data') . '</p>';
+                                    return '<p class="text-sm text-gray-500">'.__('fields.no_previous_data').'</p>';
                                 }
 
                                 $html = '<div class="space-y-2">';
                                 foreach ($activities as $act) {
                                     $actionLabel = match ($act->description) {
-                                        'marked_as_read' => '<span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold bg-green-100 text-green-800">' . __('forms.mark_as_read') . '</span>',
-                                        'marked_as_unread' => '<span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold bg-amber-100 text-amber-800">' . __('forms.mark_as_unread') . '</span>',
-                                        'submission_received' => '<span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold bg-blue-100 text-blue-800">' . __('forms.submission_single') . '</span>',
-                                        default => '<span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold bg-gray-100 text-gray-800">' . e(str($act->description)->headline()) . '</span>',
+                                        'marked_as_read' => '<span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold bg-green-100 text-green-800">'.__('forms.mark_as_read').'</span>',
+                                        'marked_as_unread' => '<span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold bg-amber-100 text-amber-800">'.__('forms.mark_as_unread').'</span>',
+                                        'submission_received' => '<span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold bg-blue-100 text-blue-800">'.__('forms.submission_single').'</span>',
+                                        default => '<span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold bg-gray-100 text-gray-800">'.e(str($act->description)->headline()).'</span>',
                                     };
 
                                     $causerName = $act->causer ? $act->causer->name : __('fields.system');

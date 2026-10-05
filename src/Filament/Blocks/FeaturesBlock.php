@@ -23,13 +23,13 @@ class FeaturesBlock
                     ->tabs(
                         TranslatableTabs::make(fn ($lang) => [
                             TextInput::make("section_tag.{$lang}")
-                                ->label(fn () => 'Sekcijska oznaka / Nadnaslov (' . strtoupper($lang) . ')'),
+                                ->label(fn () => 'Sekcijska oznaka / Nadnaslov ('.strtoupper($lang).')'),
 
                             TextInput::make("section_title.{$lang}")
-                                ->label(fn () => 'Glavni naslov sekcije (' . strtoupper($lang) . ')'),
+                                ->label(fn () => 'Glavni naslov sekcije ('.strtoupper($lang).')'),
 
                             Textarea::make("section_desc.{$lang}")
-                                ->label(fn () => 'Opis sekcije (' . strtoupper($lang) . ')')
+                                ->label(fn () => 'Opis sekcije ('.strtoupper($lang).')')
                                 ->rows(2),
                         ])
                     ),
@@ -38,7 +38,7 @@ class FeaturesBlock
                     ->label(fn () => __('blocks.features_items'))
                     ->schema([
                         TextInput::make('icon')
-                            ->label(fn () => __('blocks.icon') . ' (Material Symbol / Heroicon npr. translate, speed, widgets, star)')
+                            ->label(fn () => __('blocks.icon').' (Material Symbol / Heroicon npr. translate, speed, widgets, star)')
                             ->default('widgets'),
 
                         Tabs::make(fn () => __('blocks.translations'))

@@ -2,8 +2,8 @@
 
 namespace Celios\Core\Services\Queue\Drivers;
 
-use Celios\Core\Services\Queue\Contracts\QueueDriverInspectorInterface;
 use Carbon\Carbon;
+use Celios\Core\Services\Queue\Contracts\QueueDriverInspectorInterface;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Redis;
 use Throwable;

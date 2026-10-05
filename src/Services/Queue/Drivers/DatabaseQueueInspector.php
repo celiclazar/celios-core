@@ -2,9 +2,9 @@
 
 namespace Celios\Core\Services\Queue\Drivers;
 
+use Carbon\Carbon;
 use Celios\Core\Models\QueueJob;
 use Celios\Core\Services\Queue\Contracts\QueueDriverInspectorInterface;
-use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Throwable;

@@ -2,8 +2,11 @@
 
 namespace Celios\Core\Filament\Widgets;
 
+use Celios\Core\Models\FormSubmission;
+use Celios\Core\Models\Media;
 use Celios\Core\Models\Page;
 use Celios\Core\Models\Post;
+use Celios\Core\Models\User;
 use Filament\Widgets\Widget;
 
 class StatsOverviewWidget extends Widget
@@ -19,9 +22,9 @@ class StatsOverviewWidget extends Widget
         try {
             $pagesCount = Page::count();
             $postsCount = Post::count();
-            $mediaCount = class_exists(\Celios\Core\Models\Media::class) ? \Celios\Core\Models\Media::count() : 0;
-            $submissionsCount = class_exists(\Celios\Core\Models\FormSubmission::class) ? \Celios\Core\Models\FormSubmission::count() : 0;
-            $usersCount = class_exists(\Celios\Core\Models\User::class) ? \Celios\Core\Models\User::count() : 1;
+            $mediaCount = class_exists(Media::class) ? Media::count() : 0;
+            $submissionsCount = class_exists(FormSubmission::class) ? FormSubmission::count() : 0;
+            $usersCount = class_exists(User::class) ? User::count() : 1;
 
             $pages = Page::all();
             $posts = Post::all();

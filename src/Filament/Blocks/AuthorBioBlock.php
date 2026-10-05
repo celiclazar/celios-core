@@ -59,21 +59,21 @@ class AuthorBioBlock
                     ->tabs(
                         TranslatableTabs::make(fn ($lang) => [
                             TextInput::make("section_tag.{$lang}")
-                                ->label('Tag sekcije (' . strtoupper($lang) . ')')
+                                ->label('Tag sekcije ('.strtoupper($lang).')')
                                 ->default('O Autoru & Motivacija'),
 
                             TextInput::make("section_heading.{$lang}")
-                                ->label('Naslov sekcije (' . strtoupper($lang) . ')')
+                                ->label('Naslov sekcije ('.strtoupper($lang).')')
                                 ->required($lang === 'sr')
                                 ->default('Zašto sam napravio Celios CMS?'),
 
                             Textarea::make("story_paragraph_1.{$lang}")
-                                ->label('Priča - Pasus 1 (' . strtoupper($lang) . ')')
+                                ->label('Priča - Pasus 1 ('.strtoupper($lang).')')
                                 ->rows(3)
                                 ->default('Kao full-stack inženjer i dizajner sa dugogodišnjim radom na custom web projektima, konstantno sam se susretao sa istom dilemom: WordPress je bio pretrpan nesigurnim dodacima i teškim za održavanje, dok su pure headless rešenja klijentima delovala previše apstraktno i hladno.'),
 
                             Textarea::make("story_paragraph_2.{$lang}")
-                                ->label('Priča - Pasus 2 (' . strtoupper($lang) . ')')
+                                ->label('Priča - Pasus 2 ('.strtoupper($lang).')')
                                 ->rows(3)
                                 ->default('Celios CMS je rođen iz potrebe za čistom, beskompromisnom platformom. Spojio sam eleganciju i reaktivnost Filament v3 administracije sa robusnim Laravel backendom i čistim Tailwind komponentama. Rezultat je CMS u kome klijenti intuitivno uređuju višejezične sadržaje i slažu vizuelne blokove, a developeri imaju 100% čist Blade i PHP kod bez crnih kutija.'),
                         ])

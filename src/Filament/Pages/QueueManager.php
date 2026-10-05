@@ -2,16 +2,16 @@
 
 namespace Celios\Core\Filament\Pages;
 
-use Celios\Core\Jobs\Developer\TestQueueJob;
-use Celios\Core\Services\Queue\QueueInspectorManager;
 use BackedEnum;
+use Celios\Core\Jobs\Developer\TestQueueJob;
+use Celios\Core\Services\ModuleManager;
+use Celios\Core\Services\Queue\QueueInspectorManager;
 use Filament\Actions\Action;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
 use Illuminate\Support\Facades\Artisan;
-use UnitEnum;
 
 class QueueManager extends Page
 {
@@ -32,7 +32,7 @@ class QueueManager extends Page
 
     public static function canAccess(): bool
     {
-        if (! \Celios\Core\Services\ModuleManager::isEnabled('queue_manager')) {
+        if (! ModuleManager::isEnabled('queue_manager')) {
             return false;
         }
 
@@ -47,7 +47,7 @@ class QueueManager extends Page
 
     public static function shouldRegisterNavigation(): bool
     {
-        if (! \Celios\Core\Services\ModuleManager::isEnabled('queue_manager')) {
+        if (! ModuleManager::isEnabled('queue_manager')) {
             return false;
         }
 

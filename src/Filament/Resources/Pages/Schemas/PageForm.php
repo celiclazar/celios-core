@@ -30,6 +30,7 @@ class PageForm
                         if ($value === PageType::STANDARD->value) {
                             return false;
                         }
+
                         return Page::where('type', $value)
                             ->when($record?->exists, fn ($q) => $q->where('id', '!=', $record->id))
                             ->exists();
@@ -63,12 +64,12 @@ class PageForm
 
                 Builder::make('draft_content')
                     ->label(fn () => __('fields.page_content_blocks'))
-                    ->blocks(\Celios\Core\Services\ModuleManager::getAvailablePageBlocks())
+                    ->blocks(ModuleManager::getAvailablePageBlocks())
                     ->cloneable()
                     ->collapsed()
                     ->blockIcons()
                     ->blockPickerColumns(['default' => 1, 'sm' => 2, 'lg' => 3])
-                    ->columnSpanFull()
+                    ->columnSpanFull(),
 
             ]);
     }
@@ -78,7 +79,7 @@ class PageForm
         return Tabs\Tab::make($label)
             ->schema([
                 TextInput::make("title.{$lang}")
-                    ->label(fn () => __('fields.page_title') . ' (' . strtoupper($lang) . ')')
+                    ->label(fn () => __('fields.page_title').' ('.strtoupper($lang).')')
                     ->required($lang === 'sr')
                     ->live(onBlur: true)
                     ->afterStateUpdated(function ($state, callable $set, callable $get) use ($lang) {
@@ -90,11 +91,12 @@ class PageForm
                     }),
 
                 TextInput::make("slug.{$lang}")
-                    ->label(fn () => __('fields.url_slug') . ' (' . strtoupper($lang) . ')')
+                    ->label(fn () => __('fields.url_slug').' ('.strtoupper($lang).')')
                     ->required($lang === 'sr')
                     ->disabled(function (callable $get) {
                         $typeVal = $get('type');
                         $pageType = $typeVal instanceof PageType ? $typeVal : PageType::tryFrom((string) $typeVal);
+
                         return $pageType?->isSystem() ?? false;
                     })
                     ->dehydrated()
@@ -109,6 +111,7 @@ class PageForm
                         if ($pageType && $pageType->isSystem()) {
                             return __('fields.system_page_slug_locked');
                         }
+
                         return __('fields.slug_helper');
                     }),
             ]);

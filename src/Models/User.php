@@ -4,6 +4,7 @@ namespace Celios\Core\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use BezhanSalleh\FilamentShield\Traits\HasPanelShield;
+use Database\Factories\UserFactory;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Panel;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
@@ -12,10 +13,12 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 use Laravel\Sanctum\HasApiTokens;
 use Modules\Payment\Traits\HasPayments;
-use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\Permission\Traits\HasRoles;
@@ -24,11 +27,11 @@ use Spatie\Permission\Traits\HasRoles;
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable implements FilamentUser, HasMedia
 {
-    use HasApiTokens, HasFactory, HasRoles, HasPanelShield, InteractsWithMedia, LogsActivity, Notifiable, HasPayments;
+    use HasApiTokens, HasFactory, HasPanelShield, HasPayments, HasRoles, InteractsWithMedia, LogsActivity, Notifiable;
 
     protected static function newFactory()
     {
-        return \Database\Factories\UserFactory::new();
+        return UserFactory::new();
     }
 
     protected string $guard_name = 'web';
@@ -57,8 +60,8 @@ class User extends Authenticatable implements FilamentUser, HasMedia
 
         $hasRole = $this->hasAnyRole($allowedRoles);
 
-        if (!$hasRole && \Illuminate\Support\Facades\Schema::hasTable('model_has_roles')) {
-            $hasRole = \Illuminate\Support\Facades\DB::table('model_has_roles')
+        if (! $hasRole && Schema::hasTable('model_has_roles')) {
+            $hasRole = DB::table('model_has_roles')
                 ->join('roles', 'roles.id', '=', 'model_has_roles.role_id')
                 ->where('model_has_roles.model_id', $this->getKey())
                 ->whereIn('model_has_roles.model_type', ['App\\Models\\User', static::class])

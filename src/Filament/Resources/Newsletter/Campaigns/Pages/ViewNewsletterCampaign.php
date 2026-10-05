@@ -61,7 +61,7 @@ class ViewNewsletterCampaign extends ViewRecord
                             'unsubscribe_token' => 'test-token',
                         ]);
 
-                        $subject = '[TEST] ' . ($record->getTranslation('subject', $locale) ?: $record->title);
+                        $subject = '[TEST] '.($record->getTranslation('subject', $locale) ?: $record->title);
                         $content = $record->getTranslation('content', $locale) ?: '';
 
                         $mailer = $mailerService->getMailer();
@@ -79,12 +79,12 @@ class ViewNewsletterCampaign extends ViewRecord
                         $mailer->to($data['test_email'])->send($mail);
 
                         Notification::make()
-                            ->title('Test email sent to ' . $data['test_email'])
+                            ->title('Test email sent to '.$data['test_email'])
                             ->success()
                             ->send();
                     } catch (\Throwable $e) {
                         Notification::make()
-                            ->title('Failed sending test: ' . $e->getMessage())
+                            ->title('Failed sending test: '.$e->getMessage())
                             ->danger()
                             ->send();
                     }

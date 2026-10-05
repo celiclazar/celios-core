@@ -2,8 +2,8 @@
 
 namespace Celios\Core\Policies;
 
-use Illuminate\Foundation\Auth\User as AuthUser;
 use Illuminate\Auth\Access\HandlesAuthorization;
+use Illuminate\Foundation\Auth\User as AuthUser;
 
 class DocumentPolicy
 {

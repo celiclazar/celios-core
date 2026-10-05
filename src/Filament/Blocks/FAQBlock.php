@@ -23,13 +23,13 @@ class FAQBlock
                     ->tabs(
                         TranslatableTabs::make(fn ($lang) => [
                             TextInput::make("section_tag.{$lang}")
-                                ->label(fn () => 'Sekcijska oznaka (' . strtoupper($lang) . ')'),
+                                ->label(fn () => 'Sekcijska oznaka ('.strtoupper($lang).')'),
 
                             TextInput::make("heading.{$lang}")
-                                ->label(fn () => 'Glavni naslov (' . strtoupper($lang) . ')'),
+                                ->label(fn () => 'Glavni naslov ('.strtoupper($lang).')'),
 
                             Textarea::make("subtitle.{$lang}")
-                                ->label(fn () => 'Podnaslov (' . strtoupper($lang) . ')')
+                                ->label(fn () => 'Podnaslov ('.strtoupper($lang).')')
                                 ->rows(2),
                         ])
                     ),
@@ -56,4 +56,3 @@ class FAQBlock
             ]);
     }
 }
-

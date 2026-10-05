@@ -21,29 +21,29 @@ class ColorSystemBlock
                     ->tabs(
                         TranslatableTabs::make(fn ($lang) => [
                             TextInput::make("section_tag.{$lang}")
-                                ->label('Tag sekcije (' . strtoupper($lang) . ')')
+                                ->label('Tag sekcije ('.strtoupper($lang).')')
                                 ->default('Adaptivni Kolor Sistem'),
 
                             TextInput::make("heading.{$lang}")
-                                ->label('Naslov sekcije (' . strtoupper($lang) . ')')
+                                ->label('Naslov sekcije ('.strtoupper($lang).')')
                                 ->required($lang === 'sr')
                                 ->default('Fluidni Prelaz Između Svetlog i Tamnog Režima'),
 
                             Textarea::make("description.{$lang}")
-                                ->label('Opis sekcije (' . strtoupper($lang) . ')')
+                                ->label('Opis sekcije ('.strtoupper($lang).')')
                                 ->rows(3)
                                 ->default('Dizajneri nisu primorani na kompromise. Celios tokeni automatski mapiraju kontraste (surface, on-surface, primary i accente) tako da vaš portfolio zadržava identičan nivo elegancije i čitljivosti u bilo koje doba dana.'),
 
                             TextInput::make("chip_1.{$lang}")
-                                ->label('Bedž 1 (' . strtoupper($lang) . ')')
+                                ->label('Bedž 1 ('.strtoupper($lang).')')
                                 ->default('Automatska detekcija OS postavki'),
 
                             TextInput::make("chip_2.{$lang}")
-                                ->label('Bedž 2 (' . strtoupper($lang) . ')')
+                                ->label('Bedž 2 ('.strtoupper($lang).')')
                                 ->default('Tailwind Semantic Tokens'),
 
                             TextInput::make("footer_note.{$lang}")
-                                ->label('Donja napomena (' . strtoupper($lang) . ')')
+                                ->label('Donja napomena ('.strtoupper($lang).')')
                                 ->default('Generisano bez hardkodovanih boja • 100% Tailwind Semantic Classes'),
                         ])
                     ),

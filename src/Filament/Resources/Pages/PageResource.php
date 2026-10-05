@@ -2,16 +2,16 @@
 
 namespace Celios\Core\Filament\Resources\Pages;
 
+use BackedEnum;
 use Celios\Core\Filament\Resources\Pages\Pages\CreatePage;
 use Celios\Core\Filament\Resources\Pages\Pages\EditPage;
 use Celios\Core\Filament\Resources\Pages\Pages\ListPages;
+use Celios\Core\Filament\Resources\Pages\RelationManagers\RevisionsRelationManager;
 use Celios\Core\Filament\Resources\Pages\Schemas\PageForm;
 use Celios\Core\Filament\Resources\Pages\Tables\PagesTable;
 use Celios\Core\Models\Page;
-use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
-use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 
 class PageResource extends Resource
@@ -30,14 +30,15 @@ class PageResource extends Resource
     public static function getNavigationBadge(): ?string
     {
         try {
-            $count = \Celios\Core\Models\Page::count();
+            $count = Page::count();
+
             return $count > 0 ? (string) $count : null;
         } catch (\Throwable $e) {
             return null;
         }
     }
 
-    public static function getNavigationBadgeColor(): string | array | null
+    public static function getNavigationBadgeColor(): string|array|null
     {
         return 'gray';
     }
@@ -57,7 +58,7 @@ class PageResource extends Resource
     public static function getRelations(): array
     {
         return [
-            \Celios\Core\Filament\Resources\Pages\RelationManagers\RevisionsRelationManager::class,
+            RevisionsRelationManager::class,
         ];
     }
 

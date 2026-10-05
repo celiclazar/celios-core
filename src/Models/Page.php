@@ -4,6 +4,7 @@ namespace Celios\Core\Models;
 
 use Celios\Core\Enums\PageType;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Spatie\Translatable\HasTranslations;
 
 class Page extends Model
@@ -16,7 +17,7 @@ class Page extends Model
         'type',
         'content',
         'is_visible',
-        'draft_content'
+        'draft_content',
     ];
 
     public $translatable = [
@@ -72,7 +73,7 @@ class Page extends Model
         });
     }
 
-    public function revisions(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function revisions(): HasMany
     {
         return $this->hasMany(PageRevision::class)->latest('id');
     }
@@ -153,7 +154,7 @@ class Page extends Model
             return $locale === $defaultLocale ? url('/') : url("/{$locale}");
         }
 
-        return url("/{$locale}/" . ltrim($slug, '/'));
+        return url("/{$locale}/".ltrim($slug, '/'));
     }
 
     public function isSystem(): bool
@@ -164,6 +165,7 @@ class Page extends Model
     public function scopeOfType($query, PageType|string $type)
     {
         $val = $type instanceof PageType ? $type->value : $type;
+
         return $query->where('type', $val);
     }
 
@@ -180,6 +182,7 @@ class Page extends Model
     public static function findByType(PageType|string $type): ?self
     {
         $val = $type instanceof PageType ? $type->value : $type;
+
         return static::where('type', $val)->first();
     }
 
@@ -205,7 +208,7 @@ class Page extends Model
 
         $slug = $pageType->standardSlug($locale) ?? $pageType->standardSlug($defaultLocale);
         if ($slug) {
-            return url("/{$locale}/" . ltrim($slug, '/'));
+            return url("/{$locale}/".ltrim($slug, '/'));
         }
 
         return null;

@@ -2,6 +2,7 @@
 
 namespace Celios\Core\Notifications;
 
+use Celios\Core\Filament\Resources\Forms\FormSubmissionResource;
 use Celios\Core\Models\FormSubmission;
 use Filament\Actions\Action as NotificationAction;
 use Filament\Notifications\Notification as FilamentNotification;
@@ -14,9 +15,7 @@ class NewFormSubmissionNotification extends Notification implements ShouldQueue
 {
     use Queueable;
 
-    public function __construct(public FormSubmission $submission)
-    {
-    }
+    public function __construct(public FormSubmission $submission) {}
 
     public function via(object $notifiable): array
     {
@@ -30,9 +29,9 @@ class NewFormSubmissionNotification extends Notification implements ShouldQueue
         $formTitle = $form ? ($form->getTranslation('title', $locale, true) ?: $form->slug) : 'Form';
 
         $mail = (new MailMessage)
-            ->subject(__('forms.submission_single') . ': ' . $formTitle)
+            ->subject(__('forms.submission_single').': '.$formTitle)
             ->greeting(__('forms.submission_details'))
-            ->line(__('forms.form_title') . ': ' . $formTitle);
+            ->line(__('forms.form_title').': '.$formTitle);
 
         $data = $this->submission->data ?? [];
         $fields = $form?->fields ?? [];
@@ -43,22 +42,22 @@ class NewFormSubmissionNotification extends Notification implements ShouldQueue
             if ($fieldDef && isset($fieldDef['label'])) {
                 $label = is_array($fieldDef['label'])
                     ? ($fieldDef['label'][$locale] ?? $fieldDef['label']['sr'] ?? $fieldDef['label']['en'] ?? $key)
-                    : (string)$fieldDef['label'];
+                    : (string) $fieldDef['label'];
             }
 
             if (is_array($val)) {
                 $val = implode(', ', $val);
             }
 
-            $mail->line("**{$label}**: " . ($val ?: '-'));
+            $mail->line("**{$label}**: ".($val ?: '-'));
         }
 
-        if (!empty($this->submission->files)) {
-            $mail->line(__('forms.files_attached') . ': ' . count($this->submission->files));
+        if (! empty($this->submission->files)) {
+            $mail->line(__('forms.files_attached').': '.count($this->submission->files));
         }
 
         try {
-            $viewUrl = \Celios\Core\Filament\Resources\Forms\FormSubmissionResource::getUrl('view', ['record' => $this->submission->id]);
+            $viewUrl = FormSubmissionResource::getUrl('view', ['record' => $this->submission->id]);
             $mail->action(__('forms.view_submissions'), $viewUrl);
         } catch (\Throwable $e) {
             // If route generation fails in CLI/cron
@@ -74,14 +73,14 @@ class NewFormSubmissionNotification extends Notification implements ShouldQueue
         $formTitle = $form ? ($form->getTranslation('title', $locale, true) ?: $form->slug) : 'Form';
 
         try {
-            $viewUrl = \Celios\Core\Filament\Resources\Forms\FormSubmissionResource::getUrl('view', ['record' => $this->submission->id]);
+            $viewUrl = FormSubmissionResource::getUrl('view', ['record' => $this->submission->id]);
         } catch (\Throwable $e) {
-            $viewUrl = url('/admin/forms/form-submissions/' . $this->submission->id);
+            $viewUrl = url('/admin/forms/form-submissions/'.$this->submission->id);
         }
 
         return FilamentNotification::make()
-            ->title(__('forms.submission_single') . ': ' . $formTitle)
-            ->body(__('forms.submitted_at') . ': ' . now()->format('d.m.Y H:i'))
+            ->title(__('forms.submission_single').': '.$formTitle)
+            ->body(__('forms.submitted_at').': '.now()->format('d.m.Y H:i'))
             ->icon('heroicon-o-inbox-stack')
             ->iconColor('success')
             ->actions([

@@ -2,6 +2,7 @@
 
 namespace Celios\Core\Filament\Resources\Menus;
 
+use BackedEnum;
 use Celios\Core\Filament\Resources\Menus\Pages\CreateMenu;
 use Celios\Core\Filament\Resources\Menus\Pages\EditMenu;
 use Celios\Core\Filament\Resources\Menus\Pages\ListMenus;
@@ -9,10 +10,8 @@ use Celios\Core\Filament\Resources\Menus\Pages\ManageMenuLinks;
 use Celios\Core\Filament\Resources\Menus\Schemas\MenuForm;
 use Celios\Core\Filament\Resources\Menus\Tables\MenusTable;
 use Celios\Core\Models\Menu;
-use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
-use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 
 class MenuResource extends Resource
@@ -54,7 +53,7 @@ class MenuResource extends Resource
             'create' => CreateMenu::route('/create'),
             'edit' => EditMenu::route('/{record}/edit'),
             'manage' => ManageMenuLinks::route('/{record}/manage'),
-            ];
+        ];
     }
 
     public static function getNavigationLabel(): string

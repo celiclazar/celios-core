@@ -2,7 +2,6 @@
 
 namespace Celios\Core\Services\Newsletter;
 
-use Celios\Core\Mail\Newsletter\NewsletterCampaignMail;
 use Illuminate\Mail\Mailer;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Mail;
@@ -86,6 +85,7 @@ class NewsletterMailerService
 
         // For example: 20 emails/min => 1 email every 3 seconds
         $secondsPerEmail = 60 / $ratePerMinute;
+
         return (int) round($index * $secondsPerEmail);
     }
 

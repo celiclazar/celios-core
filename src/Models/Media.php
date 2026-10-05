@@ -26,7 +26,7 @@ class Media extends CuratorMedia
                     return $this->path;
                 }
 
-                return '/storage/' . ltrim($this->path, '/');
+                return '/storage/'.ltrim($this->path, '/');
             }
         );
     }

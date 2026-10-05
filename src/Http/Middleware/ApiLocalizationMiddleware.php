@@ -13,7 +13,7 @@ class ApiLocalizationMiddleware
      * Handle an incoming request.
      * Sets the application locale based on the 'Accept-Language' header or '?lang=' query parameter.
      *
-     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
+     * @param  Closure(Request): (Response)  $next
      */
     public function handle(Request $request, Closure $next): Response
     {

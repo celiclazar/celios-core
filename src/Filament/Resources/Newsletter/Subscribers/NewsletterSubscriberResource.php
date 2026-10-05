@@ -2,16 +2,16 @@
 
 namespace Celios\Core\Filament\Resources\Newsletter\Subscribers;
 
+use BackedEnum;
 use Celios\Core\Filament\Resources\Newsletter\Subscribers\Pages\CreateNewsletterSubscriber;
 use Celios\Core\Filament\Resources\Newsletter\Subscribers\Pages\EditNewsletterSubscriber;
 use Celios\Core\Filament\Resources\Newsletter\Subscribers\Pages\ListNewsletterSubscribers;
 use Celios\Core\Filament\Resources\Newsletter\Subscribers\Schemas\NewsletterSubscriberForm;
 use Celios\Core\Filament\Resources\Newsletter\Subscribers\Tables\NewsletterSubscribersTable;
+use Celios\Core\Filament\Traits\HasModuleToggle;
 use Celios\Core\Models\NewsletterSubscriber;
-use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
-use Celios\Core\Filament\Traits\HasModuleToggle;
 use Filament\Tables\Table;
 
 class NewsletterSubscriberResource extends Resource

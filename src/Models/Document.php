@@ -6,6 +6,7 @@ use Celios\Core\Enums\DocumentAccessLevel;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\Storage;
 use Spatie\Translatable\HasTranslations;
 
 class Document extends Model
@@ -49,7 +50,7 @@ class Document extends Model
     {
         static::saving(function (Document $document) {
             if ($document->file_path) {
-                $disk = \Illuminate\Support\Facades\Storage::disk('documents');
+                $disk = Storage::disk('documents');
                 if ($disk->exists($document->file_path)) {
                     if (blank($document->file_size) || $document->file_size === 0) {
                         $document->file_size = $disk->size($document->file_path);
@@ -94,7 +95,7 @@ class Document extends Model
         return match ($this->access_level) {
             DocumentAccessLevel::PUBLIC => true,
             DocumentAccessLevel::AUTHENTICATED => $user !== null,
-            DocumentAccessLevel::ROLES => $user !== null && !empty($this->allowed_roles) && $user->hasAnyRole($this->allowed_roles),
+            DocumentAccessLevel::ROLES => $user !== null && ! empty($this->allowed_roles) && $user->hasAnyRole($this->allowed_roles),
             DocumentAccessLevel::INTERNAL => $user !== null && ($user->can('View:Document') || $user->hasRole(['super_admin', 'admin', 'panel_user'])),
         };
     }
@@ -104,7 +105,7 @@ class Document extends Model
         return $query->where('is_published', true)
             ->where(function ($q) {
                 $q->whereNull('published_at')
-                  ->orWhere('published_at', '<=', now());
+                    ->orWhere('published_at', '<=', now());
             });
     }
 
@@ -113,7 +114,7 @@ class Document extends Model
         return $query->where('access_level', DocumentAccessLevel::PUBLIC->value)
             ->where(function ($q) {
                 $q->whereNull('category_id')
-                  ->orWhereHas('category', fn ($cat) => $cat->where('is_internal', false));
+                    ->orWhereHas('category', fn ($cat) => $cat->where('is_internal', false));
             });
     }
 
@@ -129,7 +130,7 @@ class Document extends Model
                 $sub->where('access_level', DocumentAccessLevel::PUBLIC->value)
                     ->where(function ($c) {
                         $c->whereNull('category_id')
-                          ->orWhereHas('category', fn ($cat) => $cat->where('is_internal', false));
+                            ->orWhereHas('category', fn ($cat) => $cat->where('is_internal', false));
                     });
             });
 
@@ -139,7 +140,7 @@ class Document extends Model
                     $sub->where('access_level', DocumentAccessLevel::AUTHENTICATED->value)
                         ->where(function ($c) {
                             $c->whereNull('category_id')
-                              ->orWhereHas('category', fn ($cat) => $cat->where('is_internal', false));
+                                ->orWhereHas('category', fn ($cat) => $cat->where('is_internal', false));
                         });
                 });
 
@@ -157,7 +158,7 @@ class Document extends Model
                 // Internal level if staff/admin
                 if ($user->can('View:Document') || $user->hasRole(['super_admin', 'admin', 'panel_user'])) {
                     $q->orWhere('access_level', DocumentAccessLevel::INTERNAL->value)
-                      ->orWhereHas('category', fn ($cat) => $cat->where('is_internal', true));
+                        ->orWhereHas('category', fn ($cat) => $cat->where('is_internal', true));
                 }
             }
         });
@@ -167,17 +168,18 @@ class Document extends Model
     {
         $bytes = $this->file_size;
         if ($bytes >= 1073741824) {
-            return number_format($bytes / 1073741824, 2) . ' GB';
+            return number_format($bytes / 1073741824, 2).' GB';
         }
         if ($bytes >= 1048576) {
-            return number_format($bytes / 1048576, 2) . ' MB';
+            return number_format($bytes / 1048576, 2).' MB';
         }
         if ($bytes >= 1024) {
-            return number_format($bytes / 1024, 1) . ' KB';
+            return number_format($bytes / 1024, 1).' KB';
         }
         if ($bytes > 0) {
-            return $bytes . ' B';
+            return $bytes.' B';
         }
+
         return '0 B';
     }
 
@@ -193,7 +195,7 @@ class Document extends Model
 
         if (blank($title)) {
             $all = $this->getTranslations('title');
-            $title = !empty($all) ? (reset($all) ?: null) : null;
+            $title = ! empty($all) ? (reset($all) ?: null) : null;
         }
 
         return $title ?: ($this->file_name ?: __('fields.no_title'));
@@ -211,7 +213,7 @@ class Document extends Model
 
         if (blank($slug)) {
             $all = $this->getTranslations('slug');
-            $slug = !empty($all) ? (reset($all) ?: '') : '';
+            $slug = ! empty($all) ? (reset($all) ?: '') : '';
         }
 
         return $slug ?: '';

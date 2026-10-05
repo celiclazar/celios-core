@@ -1,5 +1,25 @@
 <?php
 
+use Celios\Core\Filament\Blocks\DocumentsBlock;
+use Celios\Core\Filament\Blocks\FormBlock;
+use Celios\Core\Filament\Blocks\NewsletterBlock;
+use Celios\Core\Filament\Blocks\PostsBlock;
+use Celios\Core\Filament\Pages\BackupManager;
+use Celios\Core\Filament\Pages\NewsletterSettingsPage;
+use Celios\Core\Filament\Pages\QueueManager;
+use Celios\Core\Filament\Resources\Activities\ActivityResource;
+use Celios\Core\Filament\Resources\Categories\CategoryResource;
+use Celios\Core\Filament\Resources\Contacts\ContactResource;
+use Celios\Core\Filament\Resources\DocumentCategories\DocumentCategoryResource;
+use Celios\Core\Filament\Resources\Documents\DocumentResource;
+use Celios\Core\Filament\Resources\Forms\FormResource;
+use Celios\Core\Filament\Resources\Forms\FormSubmissionResource;
+use Celios\Core\Filament\Resources\Newsletter\Campaigns\NewsletterCampaignResource;
+use Celios\Core\Filament\Resources\Newsletter\Subscribers\NewsletterSubscriberResource;
+use Celios\Core\Filament\Resources\Posts\PostResource;
+use Modules\Payment\Filament\Resources\PaymentGatewayResource;
+use Modules\Payment\Filament\Resources\PaymentResource;
+
 return [
     /*
     |--------------------------------------------------------------------------
@@ -16,11 +36,11 @@ return [
             'description' => 'Publish multilingual articles, categories, and post feeds.',
             'icon' => 'heroicon-o-newspaper',
             'resources' => [
-                \Celios\Core\Filament\Resources\Posts\PostResource::class,
-                \Celios\Core\Filament\Resources\Categories\CategoryResource::class,
+                PostResource::class,
+                CategoryResource::class,
             ],
             'blocks' => [
-                \Celios\Core\Filament\Blocks\PostsBlock::class,
+                PostsBlock::class,
             ],
         ],
 
@@ -29,11 +49,11 @@ return [
             'description' => 'Create dynamic forms and collect user submissions with spam protection.',
             'icon' => 'heroicon-o-clipboard-document-list',
             'resources' => [
-                \Celios\Core\Filament\Resources\Forms\FormResource::class,
-                \Celios\Core\Filament\Resources\Forms\FormSubmissionResource::class,
+                FormResource::class,
+                FormSubmissionResource::class,
             ],
             'blocks' => [
-                \Celios\Core\Filament\Blocks\FormBlock::class,
+                FormBlock::class,
             ],
         ],
 
@@ -42,11 +62,11 @@ return [
             'description' => 'Manage downloadable files, categories, and tiered access levels.',
             'icon' => 'heroicon-o-document-duplicate',
             'resources' => [
-                \Celios\Core\Filament\Resources\Documents\DocumentResource::class,
-                \Celios\Core\Filament\Resources\DocumentCategories\DocumentCategoryResource::class,
+                DocumentResource::class,
+                DocumentCategoryResource::class,
             ],
             'blocks' => [
-                \Celios\Core\Filament\Blocks\DocumentsBlock::class,
+                DocumentsBlock::class,
             ],
         ],
 
@@ -55,14 +75,14 @@ return [
             'description' => 'Manage subscribers, campaigns, delivery tracking, and double opt-in.',
             'icon' => 'heroicon-o-envelope',
             'resources' => [
-                \Celios\Core\Filament\Resources\Newsletter\Campaigns\NewsletterCampaignResource::class,
-                \Celios\Core\Filament\Resources\Newsletter\Subscribers\NewsletterSubscriberResource::class,
+                NewsletterCampaignResource::class,
+                NewsletterSubscriberResource::class,
             ],
             'pages' => [
-                \Celios\Core\Filament\Pages\NewsletterSettingsPage::class,
+                NewsletterSettingsPage::class,
             ],
             'blocks' => [
-                \Celios\Core\Filament\Blocks\NewsletterBlock::class,
+                NewsletterBlock::class,
             ],
         ],
 
@@ -71,8 +91,8 @@ return [
             'description' => 'Process online payments, manage gateways (Stripe, Bank Transfer), and view audit logs.',
             'icon' => 'heroicon-o-credit-card',
             'resources' => [
-                \Modules\Payment\Filament\Resources\PaymentResource::class,
-                \Modules\Payment\Filament\Resources\PaymentGatewayResource::class,
+                PaymentResource::class,
+                PaymentGatewayResource::class,
             ],
         ],
 
@@ -81,7 +101,7 @@ return [
             'description' => 'Create, monitor, and download automated database and file backups.',
             'icon' => 'heroicon-o-circle-stack',
             'pages' => [
-                \Celios\Core\Filament\Pages\BackupManager::class,
+                BackupManager::class,
             ],
         ],
 
@@ -90,7 +110,7 @@ return [
             'description' => 'Monitor background job queues, view metrics, and retry failed jobs.',
             'icon' => 'heroicon-o-queue-list',
             'pages' => [
-                \Celios\Core\Filament\Pages\QueueManager::class,
+                QueueManager::class,
             ],
         ],
 
@@ -99,7 +119,7 @@ return [
             'description' => 'Detailed audit trail of all content updates, user logins, and administrative actions.',
             'icon' => 'heroicon-o-clipboard-document-check',
             'resources' => [
-                \Celios\Core\Filament\Resources\Activities\ActivityResource::class,
+                ActivityResource::class,
             ],
         ],
 
@@ -108,7 +128,7 @@ return [
             'description' => 'Manage customer leads, contact pipeline, interaction notes, and form-to-lead conversions.',
             'icon' => 'heroicon-o-user-group',
             'resources' => [
-                \Celios\Core\Filament\Resources\Contacts\ContactResource::class,
+                ContactResource::class,
             ],
         ],
 

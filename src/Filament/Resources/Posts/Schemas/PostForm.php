@@ -2,9 +2,9 @@
 
 namespace Celios\Core\Filament\Resources\Posts\Schemas;
 
+use Awcodes\Curator\Components\Forms\CuratorPicker;
 use Celios\Core\Models\Category;
 use Celios\Core\Models\User;
-use Awcodes\Curator\Components\Forms\CuratorPicker;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
@@ -31,13 +31,13 @@ class PostForm
                             ->tabs(
                                 collect(config('locales.available', ['sr' => 'Srpski', 'en' => 'English', 'it' => 'Italiano']))
                                     ->map(function (string $label, string $lang) {
-                                        return Tabs\Tab::make(strtoupper($lang) . " ({$label})")
+                                        return Tabs\Tab::make(strtoupper($lang)." ({$label})")
                                             ->id($lang)
                                             ->schema([
                                                 Grid::make(2)
                                                     ->schema([
                                                         TextInput::make("title.{$lang}")
-                                                            ->label(__('fields.title') . ' (' . strtoupper($lang) . ')')
+                                                            ->label(__('fields.title').' ('.strtoupper($lang).')')
                                                             ->required($lang === config('locales.default', 'sr'))
                                                             ->live(onBlur: true)
                                                             ->afterStateUpdated(function ($state, callable $set) use ($lang) {
@@ -45,7 +45,7 @@ class PostForm
                                                             }),
 
                                                         TextInput::make("slug.{$lang}")
-                                                            ->label(__('fields.url_slug') . ' (' . strtoupper($lang) . ')')
+                                                            ->label(__('fields.url_slug').' ('.strtoupper($lang).')')
                                                             ->required($lang === config('locales.default', 'sr'))
                                                             ->unique(
                                                                 table: 'posts',
@@ -55,11 +55,11 @@ class PostForm
                                                     ]),
 
                                                 Textarea::make("excerpt.{$lang}")
-                                                    ->label(__('blog.excerpt') . ' (' . strtoupper($lang) . ')')
+                                                    ->label(__('blog.excerpt').' ('.strtoupper($lang).')')
                                                     ->rows(3),
 
                                                 RichEditor::make("body.{$lang}")
-                                                    ->label(__('blog.body') . ' (' . strtoupper($lang) . ')')
+                                                    ->label(__('blog.body').' ('.strtoupper($lang).')')
                                                     ->toolbarButtons([
                                                         'attachFiles',
                                                         'blockquote',
@@ -83,7 +83,7 @@ class PostForm
                             ),
                     ]),
 
-                Section::make(__('blog.post_single') . ' ' . __('fields.general_settings'))
+                Section::make(__('blog.post_single').' '.__('fields.general_settings'))
                     ->icon('heroicon-o-cog-6-tooth')
                     ->columnSpanFull()
                     ->schema([
@@ -93,6 +93,7 @@ class PostForm
                                     ->label(__('blog.category'))
                                     ->options(function (): array {
                                         $locale = app()->getLocale();
+
                                         return Category::query()
                                             ->get()
                                             ->mapWithKeys(fn (Category $cat) => [

@@ -2,6 +2,26 @@
 
 namespace Celios\Core\Services;
 
+use Celios\Core\Filament\Blocks\AuthorBioBlock;
+use Celios\Core\Filament\Blocks\ColorSystemBlock;
+use Celios\Core\Filament\Blocks\CTABlock;
+use Celios\Core\Filament\Blocks\CtaSandboxBlock;
+use Celios\Core\Filament\Blocks\DocumentsBlock;
+use Celios\Core\Filament\Blocks\FAQBlock;
+use Celios\Core\Filament\Blocks\FeaturesBlock;
+use Celios\Core\Filament\Blocks\FeaturesCardsBlock;
+use Celios\Core\Filament\Blocks\FormBlock;
+use Celios\Core\Filament\Blocks\GalleryBlock;
+use Celios\Core\Filament\Blocks\HeroBlock;
+use Celios\Core\Filament\Blocks\HeroShowcaseBlock;
+use Celios\Core\Filament\Blocks\ImageBlock;
+use Celios\Core\Filament\Blocks\InteractiveShowcaseBlock;
+use Celios\Core\Filament\Blocks\NewsletterBlock;
+use Celios\Core\Filament\Blocks\PortfolioShowcaseBlock;
+use Celios\Core\Filament\Blocks\PostsBlock;
+use Celios\Core\Filament\Blocks\SliderBlock;
+use Celios\Core\Filament\Blocks\StatsBlock;
+use Celios\Core\Filament\Blocks\TextBlock;
 use Celios\Core\Models\Setting;
 use Illuminate\Support\Facades\Cache;
 
@@ -40,7 +60,7 @@ class ModuleManager
             try {
                 $setting = Setting::where('key', 'active_modules')->first();
 
-                if ($setting && !empty($setting->value)) {
+                if ($setting && ! empty($setting->value)) {
                     $decoded = is_array($setting->value)
                         ? $setting->value
                         : json_decode($setting->value, true);
@@ -72,7 +92,7 @@ class ModuleManager
     {
         try {
             $setting = Setting::where('key', 'current_pricing_plan')->first();
-            if ($setting && !empty($setting->value)) {
+            if ($setting && ! empty($setting->value)) {
                 return (string) $setting->value;
             }
         } catch (\Throwable $e) {
@@ -132,38 +152,38 @@ class ModuleManager
     public static function getAvailablePageBlocks(): array
     {
         $blocks = [
-            \Celios\Core\Filament\Blocks\HeroBlock::make(),
-            \Celios\Core\Filament\Blocks\HeroShowcaseBlock::make(),
-            \Celios\Core\Filament\Blocks\FeaturesCardsBlock::make(),
-            \Celios\Core\Filament\Blocks\InteractiveShowcaseBlock::make(),
-            \Celios\Core\Filament\Blocks\PortfolioShowcaseBlock::make(),
-            \Celios\Core\Filament\Blocks\AuthorBioBlock::make(),
-            \Celios\Core\Filament\Blocks\CtaSandboxBlock::make(),
-            \Celios\Core\Filament\Blocks\ColorSystemBlock::make(),
-            \Celios\Core\Filament\Blocks\TextBlock::make(),
-            \Celios\Core\Filament\Blocks\ImageBlock::make(),
-            \Celios\Core\Filament\Blocks\GalleryBlock::make(),
-            \Celios\Core\Filament\Blocks\CTABlock::make(),
-            \Celios\Core\Filament\Blocks\FeaturesBlock::make(),
-            \Celios\Core\Filament\Blocks\FAQBlock::make(),
-            \Celios\Core\Filament\Blocks\StatsBlock::make(),
-            \Celios\Core\Filament\Blocks\SliderBlock::make(),
+            HeroBlock::make(),
+            HeroShowcaseBlock::make(),
+            FeaturesCardsBlock::make(),
+            InteractiveShowcaseBlock::make(),
+            PortfolioShowcaseBlock::make(),
+            AuthorBioBlock::make(),
+            CtaSandboxBlock::make(),
+            ColorSystemBlock::make(),
+            TextBlock::make(),
+            ImageBlock::make(),
+            GalleryBlock::make(),
+            CTABlock::make(),
+            FeaturesBlock::make(),
+            FAQBlock::make(),
+            StatsBlock::make(),
+            SliderBlock::make(),
         ];
 
-        if (self::isEnabled('blog') && class_exists(\Celios\Core\Filament\Blocks\PostsBlock::class)) {
-            $blocks[] = \Celios\Core\Filament\Blocks\PostsBlock::make();
+        if (self::isEnabled('blog') && class_exists(PostsBlock::class)) {
+            $blocks[] = PostsBlock::make();
         }
 
-        if (self::isEnabled('documents') && class_exists(\Celios\Core\Filament\Blocks\DocumentsBlock::class)) {
-            $blocks[] = \Celios\Core\Filament\Blocks\DocumentsBlock::make();
+        if (self::isEnabled('documents') && class_exists(DocumentsBlock::class)) {
+            $blocks[] = DocumentsBlock::make();
         }
 
-        if (self::isEnabled('forms') && class_exists(\Celios\Core\Filament\Blocks\FormBlock::class)) {
-            $blocks[] = \Celios\Core\Filament\Blocks\FormBlock::make();
+        if (self::isEnabled('forms') && class_exists(FormBlock::class)) {
+            $blocks[] = FormBlock::make();
         }
 
-        if (self::isEnabled('newsletter') && class_exists(\Celios\Core\Filament\Blocks\NewsletterBlock::class)) {
-            $blocks[] = \Celios\Core\Filament\Blocks\NewsletterBlock::make();
+        if (self::isEnabled('newsletter') && class_exists(NewsletterBlock::class)) {
+            $blocks[] = NewsletterBlock::make();
         }
 
         return $blocks;

@@ -23,14 +23,14 @@ class PostsBlock
                     ->tabs(
                         collect(config('locales.available', ['sr' => 'Srpski', 'en' => 'English', 'it' => 'Italiano']))
                             ->map(function ($label, $lang) {
-                                return Tabs\Tab::make(strtoupper($lang) . " ({$label})")
+                                return Tabs\Tab::make(strtoupper($lang)." ({$label})")
                                     ->schema([
                                         TextInput::make("heading.{$lang}")
-                                            ->label(__('fields.heading') . ' (' . strtoupper($lang) . ')')
+                                            ->label(__('fields.heading').' ('.strtoupper($lang).')')
                                             ->placeholder(__('blog.latest_posts')),
 
                                         TextInput::make("subtitle.{$lang}")
-                                            ->label(__('fields.subtitle') . ' (' . strtoupper($lang) . ')'),
+                                            ->label(__('fields.subtitle').' ('.strtoupper($lang).')'),
                                     ]);
                             })
                             ->values()
@@ -44,6 +44,7 @@ class PostsBlock
                             ->placeholder(__('blog.all_categories'))
                             ->options(function (): array {
                                 $locale = app()->getLocale();
+
                                 return Category::query()
                                     ->get()
                                     ->mapWithKeys(fn (Category $cat) => [

@@ -2,17 +2,17 @@
 
 namespace Celios\Core\Filament\Resources\Newsletter\Campaigns;
 
+use BackedEnum;
 use Celios\Core\Filament\Resources\Newsletter\Campaigns\Pages\CreateNewsletterCampaign;
 use Celios\Core\Filament\Resources\Newsletter\Campaigns\Pages\EditNewsletterCampaign;
 use Celios\Core\Filament\Resources\Newsletter\Campaigns\Pages\ListNewsletterCampaigns;
 use Celios\Core\Filament\Resources\Newsletter\Campaigns\Pages\ViewNewsletterCampaign;
 use Celios\Core\Filament\Resources\Newsletter\Campaigns\Schemas\NewsletterCampaignForm;
 use Celios\Core\Filament\Resources\Newsletter\Campaigns\Tables\NewsletterCampaignsTable;
+use Celios\Core\Filament\Traits\HasModuleToggle;
 use Celios\Core\Models\NewsletterCampaign;
-use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
-use Celios\Core\Filament\Traits\HasModuleToggle;
 use Filament\Tables\Table;
 
 class NewsletterCampaignResource extends Resource

@@ -2,10 +2,8 @@
 
 namespace Celios\Core\Filament\Pages\Auth;
 
-use Celios\Core\Filament\Resources\Users\Schemas\UserForm;
 use Awcodes\Curator\Components\Forms\CuratorPicker;
 use Filament\Auth\Pages\EditProfile as BaseEditProfile;
-use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
@@ -13,6 +11,7 @@ use Filament\Schemas\Schema;
 class EditProfile extends BaseEditProfile
 {
     protected static ?string $slug = 'my-profile';
+
     protected function mutateFormDataBeforeSave(array $data): array
     {
         return $data;
@@ -22,6 +21,7 @@ class EditProfile extends BaseEditProfile
     {
         return '5xl';
     }
+
     public function schema(Schema $schema): Schema
     {
         return $schema
@@ -87,19 +87,19 @@ class EditProfile extends BaseEditProfile
     protected function getProfileFormComponents(): array
     {
         return [
-           TextInput::make('name')
+            TextInput::make('name')
                 ->required()
                 ->maxLength(255),
-           TextInput::make('username')
+            TextInput::make('username')
                 ->required()
                 ->unique(ignoreRecord: true)
                 ->maxLength(255),
-           TextInput::make('email')
+            TextInput::make('email')
                 ->email()
                 ->required()
                 ->unique(ignoreRecord: true)
                 ->maxLength(255),
-           TextInput::make('phone')
+            TextInput::make('phone')
                 ->tel()
                 ->maxLength(20),
         ];

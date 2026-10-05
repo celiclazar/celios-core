@@ -36,7 +36,7 @@ class SendSubscriptionConfirmationJob implements ShouldQueue
             $mail = new SubscriptionConfirmationMail($this->subscriber, $fromEmail, $fromName);
             $mailer->to($this->subscriber->email)->send($mail);
         } catch (\Throwable $e) {
-            Log::error("Failed to send newsletter confirmation email to {$this->subscriber->email}: " . $e->getMessage());
+            Log::error("Failed to send newsletter confirmation email to {$this->subscriber->email}: ".$e->getMessage());
             throw $e;
         }
     }

@@ -22,21 +22,21 @@ class PortfolioShowcaseBlock
                     ->tabs(
                         TranslatableTabs::make(fn ($lang) => [
                             TextInput::make("section_tag.{$lang}")
-                                ->label('Tag sekcije (' . strtoupper($lang) . ')')
+                                ->label('Tag sekcije ('.strtoupper($lang).')')
                                 ->default('Realizovani Projekti'),
 
                             TextInput::make("section_title.{$lang}")
-                                ->label('Naslov sekcije (' . strtoupper($lang) . ')')
+                                ->label('Naslov sekcije ('.strtoupper($lang).')')
                                 ->required($lang === 'sr')
                                 ->default('Izrađeno u Celios CMS-u'),
 
                             Textarea::make("section_desc.{$lang}")
-                                ->label('Opis sekcije (' . strtoupper($lang) . ')')
+                                ->label('Opis sekcije ('.strtoupper($lang).')')
                                 ->rows(2)
                                 ->default('Odabrani digitalni prostori, portfoliji i publikacije lansirani na našoj platformi.'),
 
                             TextInput::make("count_label.{$lang}")
-                                ->label('Oznaka broja projekata (' . strtoupper($lang) . ')')
+                                ->label('Oznaka broja projekata ('.strtoupper($lang).')')
                                 ->default('Prikazano: 4 od 28 projekata'),
                         ])
                     ),
@@ -65,15 +65,15 @@ class PortfolioShowcaseBlock
                             ->tabs(
                                 TranslatableTabs::make(fn ($lang) => [
                                     TextInput::make("title.{$lang}")
-                                        ->label('Naslov projekta (' . strtoupper($lang) . ')')
+                                        ->label('Naslov projekta ('.strtoupper($lang).')')
                                         ->required($lang === 'sr'),
 
                                     Textarea::make("description.{$lang}")
-                                        ->label('Kratak opis (' . strtoupper($lang) . ')')
+                                        ->label('Kratak opis ('.strtoupper($lang).')')
                                         ->rows(2),
 
                                     TextInput::make("case_study_note.{$lang}")
-                                        ->label('Poruka pri kliku na Case Study (' . strtoupper($lang) . ')')
+                                        ->label('Poruka pri kliku na Case Study ('.strtoupper($lang).')')
                                         ->default('100/100 Core Web Vitals i 0.2s prelaz stranica.'),
                                 ])
                             ),

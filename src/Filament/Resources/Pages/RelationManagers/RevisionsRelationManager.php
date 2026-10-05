@@ -43,7 +43,7 @@ class RevisionsRelationManager extends RelationManager
                     ->label(fn () => __('fields.blocks_count'))
                     ->badge()
                     ->color('info')
-                    ->formatStateUsing(fn (int $state): string => $state . ' ' . __('fields.blocks_unit')),
+                    ->formatStateUsing(fn (int $state): string => $state.' '.__('fields.blocks_unit')),
 
                 TextColumn::make('block_types')
                     ->label(fn () => __('fields.block_types'))

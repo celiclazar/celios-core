@@ -2,6 +2,7 @@
 
 namespace Celios\Core\Filament\Widgets;
 
+use Celios\Core\Filament\Resources\Activities\ActivityResource;
 use Filament\Widgets\Widget;
 use Spatie\Activitylog\Models\Activity;
 
@@ -24,14 +25,14 @@ class ActivityLogWidget extends Widget
             if ($dbActivities->isNotEmpty()) {
                 foreach ($dbActivities as $act) {
                     try {
-                        $url = \Celios\Core\Filament\Resources\Activities\ActivityResource::getUrl('view', ['record' => $act]);
+                        $url = ActivityResource::getUrl('view', ['record' => $act]);
                     } catch (\Throwable $e) {
                         $url = url('/admin/activities');
                     }
 
                     $activities[] = [
-                        'title' => ($act->causer->name ?? 'Korisnik') . ' ' . $act->description,
-                        'subtitle' => $act->created_at->format('H:i') . ' • ' . ($act->log_name ?? 'Sistem'),
+                        'title' => ($act->causer->name ?? 'Korisnik').' '.$act->description,
+                        'subtitle' => $act->created_at->format('H:i').' • '.($act->log_name ?? 'Sistem'),
                         'dot' => 'bg-[#4474bf]',
                         'url' => $url,
                     ];

@@ -31,10 +31,10 @@ class StatsBlock
                             ->tabs(
                                 TranslatableTabs::make(fn ($lang) => [
                                     TextInput::make("label.{$lang}")
-                                        ->label(fn () => __('blocks.stats_label') . ' (' . strtoupper($lang) . ')'),
+                                        ->label(fn () => __('blocks.stats_label').' ('.strtoupper($lang).')'),
 
                                     TextInput::make("note.{$lang}")
-                                        ->label(fn () => 'Napomena / Podopis (' . strtoupper($lang) . ')'),
+                                        ->label(fn () => 'Napomena / Podopis ('.strtoupper($lang).')'),
                                 ])
                             ),
                     ])
@@ -44,4 +44,3 @@ class StatsBlock
             ]);
     }
 }
-

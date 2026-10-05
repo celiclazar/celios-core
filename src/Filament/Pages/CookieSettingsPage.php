@@ -2,8 +2,8 @@
 
 namespace Celios\Core\Filament\Pages;
 
-use Celios\Core\Models\Setting;
 use BackedEnum;
+use Celios\Core\Models\Setting;
 use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
@@ -135,7 +135,7 @@ class CookieSettingsPage extends Page
                         // Necessary section notice
                         Placeholder::make('necessary_info')
                             ->label(__('cookies.cat_necessary'))
-                            ->content(__('cookies.cat_necessary_desc') . ' — (' . __('cookies.cat_necessary_always_active') . ')'),
+                            ->content(__('cookies.cat_necessary_desc').' — ('.__('cookies.cat_necessary_always_active').')'),
 
                         // Analytics
                         Toggle::make('cookie_cat_analytics_enabled')

@@ -8,7 +8,7 @@ return new class extends Migration
 {
     public function up(): void
     {
-        if (Schema::hasTable('activity_log') && !Schema::hasColumn('activity_log', 'batch_uuid')) {
+        if (Schema::hasTable('activity_log') && ! Schema::hasColumn('activity_log', 'batch_uuid')) {
             Schema::table('activity_log', function (Blueprint $table) {
                 $table->uuid('batch_uuid')->nullable()->after('properties');
             });

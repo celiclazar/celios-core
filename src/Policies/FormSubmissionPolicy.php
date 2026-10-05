@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Celios\Core\Policies;
 
 use Celios\Core\Models\FormSubmission;
-use Illuminate\Foundation\Auth\User as AuthUser;
 use Illuminate\Auth\Access\HandlesAuthorization;
+use Illuminate\Foundation\Auth\User as AuthUser;
 
 class FormSubmissionPolicy
 {
@@ -28,7 +28,7 @@ class FormSubmissionPolicy
 
     public function view(AuthUser $authUser, FormSubmission $formSubmission): bool
     {
-        if (!$authUser->can('View:FormSubmission')) {
+        if (! $authUser->can('View:FormSubmission')) {
             return false;
         }
 
@@ -52,7 +52,7 @@ class FormSubmissionPolicy
 
     public function delete(AuthUser $authUser, FormSubmission $formSubmission): bool
     {
-        if (!$authUser->can('Delete:FormSubmission')) {
+        if (! $authUser->can('Delete:FormSubmission')) {
             return false;
         }
 

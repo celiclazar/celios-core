@@ -2,16 +2,16 @@
 
 namespace Celios\Core\Filament\Resources\DocumentCategories;
 
+use BackedEnum;
 use Celios\Core\Filament\Resources\DocumentCategories\Pages\CreateDocumentCategory;
 use Celios\Core\Filament\Resources\DocumentCategories\Pages\EditDocumentCategory;
 use Celios\Core\Filament\Resources\DocumentCategories\Pages\ListDocumentCategories;
 use Celios\Core\Filament\Resources\DocumentCategories\Schemas\DocumentCategoryForm;
 use Celios\Core\Filament\Resources\DocumentCategories\Tables\DocumentCategoriesTable;
+use Celios\Core\Filament\Traits\HasModuleToggle;
 use Celios\Core\Models\DocumentCategory;
-use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
-use Celios\Core\Filament\Traits\HasModuleToggle;
 use Filament\Tables\Table;
 
 class DocumentCategoryResource extends Resource

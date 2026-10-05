@@ -2,11 +2,12 @@
 
 namespace Celios\Core\Http\Resources\V1;
 
+use Celios\Core\Models\Document;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
- * @mixin \Celios\Core\Models\Document
+ * @mixin Document
  */
 class DocumentResource extends JsonResource
 {

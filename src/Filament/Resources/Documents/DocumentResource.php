@@ -2,16 +2,16 @@
 
 namespace Celios\Core\Filament\Resources\Documents;
 
+use BackedEnum;
 use Celios\Core\Filament\Resources\Documents\Pages\CreateDocument;
 use Celios\Core\Filament\Resources\Documents\Pages\EditDocument;
 use Celios\Core\Filament\Resources\Documents\Pages\ListDocuments;
 use Celios\Core\Filament\Resources\Documents\Schemas\DocumentForm;
 use Celios\Core\Filament\Resources\Documents\Tables\DocumentsTable;
+use Celios\Core\Filament\Traits\HasModuleToggle;
 use Celios\Core\Models\Document;
-use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
-use Celios\Core\Filament\Traits\HasModuleToggle;
 use Filament\Tables\Table;
 
 class DocumentResource extends Resource

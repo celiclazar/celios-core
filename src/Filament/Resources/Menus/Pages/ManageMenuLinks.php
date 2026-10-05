@@ -48,16 +48,16 @@ class ManageMenuLinks extends ManageRelatedRecords
                             ->tabs(
                                 collect(config('locales.available', ['sr' => 'Srpski', 'en' => 'English', 'it' => 'Italiano']))
                                     ->map(function (string $label, string $locale) {
-                                        return Tabs\Tab::make(strtoupper($locale) . " ({$label})")
+                                        return Tabs\Tab::make(strtoupper($locale)." ({$label})")
                                             ->id($locale)
                                             ->schema([
                                                 TextInput::make("title.{$locale}")
-                                                    ->label(__('fields.link_title') . ' (' . strtoupper($locale) . ')')
+                                                    ->label(__('fields.link_title').' ('.strtoupper($locale).')')
                                                     ->placeholder(__('fields.link_title'))
                                                     ->required($locale === config('locales.default', 'sr')),
 
                                                 TextInput::make("custom_url.{$locale}")
-                                                    ->label(__('fields.custom_url') . ' (' . strtoupper($locale) . ')')
+                                                    ->label(__('fields.custom_url').' ('.strtoupper($locale).')')
                                                     ->placeholder('https://...'),
                                             ]);
                                     })
@@ -100,11 +100,11 @@ class ManageMenuLinks extends ManageRelatedRecords
 
                                         if (blank($title)) {
                                             $allTitles = $item->getTranslations('title');
-                                            $title = !empty($allTitles) ? reset($allTitles) : null;
+                                            $title = ! empty($allTitles) ? reset($allTitles) : null;
                                         }
 
                                         return [
-                                            $item->id => $title ?: (__('fields.no_title') . " (#{$item->id})"),
+                                            $item->id => $title ?: (__('fields.no_title')." (#{$item->id})"),
                                         ];
                                     })
                                     ->all();
@@ -118,9 +118,9 @@ class ManageMenuLinks extends ManageRelatedRecords
                             ->label(__('fields.target_module') ?? 'Target Type')
                             ->placeholder('Custom URL / External Link')
                             ->options([
-                                CmsPage::class => __('sidebar.pages') . ' (CMS Page)',
-                                BlogCategory::class => __('sidebar.categories') . ' (Blog Category)',
-                                BlogPost::class => __('sidebar.posts') . ' (Blog Post)',
+                                CmsPage::class => __('sidebar.pages').' (CMS Page)',
+                                BlogCategory::class => __('sidebar.categories').' (Blog Category)',
+                                BlogPost::class => __('sidebar.posts').' (Blog Post)',
                             ])
                             ->live()
                             ->afterStateUpdated(fn (callable $set) => $set('linkable_id', null)),
@@ -137,8 +137,9 @@ class ManageMenuLinks extends ManageRelatedRecords
                                     return CmsPage::query()->get()->mapWithKeys(function (CmsPage $p) use ($locale) {
                                         $title = $p->getTranslation('title', $locale, true) ?: __('fields.no_title');
                                         if ($p->isSystem()) {
-                                            $title .= ' [' . $p->type->label() . ']';
+                                            $title .= ' ['.$p->type->label().']';
                                         }
+
                                         return [$p->id => $title];
                                     })->all();
                                 }
@@ -179,8 +180,8 @@ class ManageMenuLinks extends ManageRelatedRecords
     {
         return $table
             ->recordTitle(fn (MenuItem $record): string => (
-            $record->getTranslation('title', app()->getLocale(), true)
-                ?: __('fields.no_title')
+                $record->getTranslation('title', app()->getLocale(), true)
+                    ?: __('fields.no_title')
             ))
             ->reorderable('order')
             ->defaultSort('order', 'asc')
@@ -189,6 +190,7 @@ class ManageMenuLinks extends ManageRelatedRecords
                     ->label(__('fields.title'))
                     ->state(function (MenuItem $record): string {
                         $title = $record->getTranslation('title', app()->getLocale(), true) ?: __('fields.no_title');
+
                         return $record->parent_id ? "↳ {$title}" : $title;
                     })
                     ->searchable(),

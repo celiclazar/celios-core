@@ -12,9 +12,7 @@ class FormSubmissionConfirmationNotification extends Notification implements Sho
 {
     use Queueable;
 
-    public function __construct(public FormSubmission $submission)
-    {
-    }
+    public function __construct(public FormSubmission $submission) {}
 
     public function via(object $notifiable): array
     {
@@ -47,7 +45,7 @@ class FormSubmissionConfirmationNotification extends Notification implements Sho
         }
 
         $mail->line('---');
-        $mail->line('**' . __('forms.submission_details') . ':**');
+        $mail->line('**'.__('forms.submission_details').':**');
 
         $data = $this->submission->data ?? [];
         $fields = $form?->fields ?? [];
@@ -65,7 +63,7 @@ class FormSubmissionConfirmationNotification extends Notification implements Sho
                 $val = implode(', ', $val);
             }
 
-            $mail->line("**{$label}**: " . ($val ?: '-'));
+            $mail->line("**{$label}**: ".($val ?: '-'));
         }
 
         return $mail;

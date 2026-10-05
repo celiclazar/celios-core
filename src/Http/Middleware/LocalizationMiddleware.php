@@ -18,7 +18,6 @@ class LocalizationMiddleware
     {
         $supportedLocales = ['sr', 'en', 'it'];
 
-
         $locale = $request->segment(1);
 
         if (in_array($locale, $supportedLocales)) {

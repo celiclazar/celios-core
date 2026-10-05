@@ -2,6 +2,8 @@
 
 namespace Celios\Core\Filament\Widgets;
 
+use Celios\Core\Models\Page;
+use Celios\Core\Models\Post;
 use Filament\Widgets\Widget;
 
 class LocalizationWidget extends Widget
@@ -18,8 +20,8 @@ class LocalizationWidget extends Widget
     protected function getViewData(): array
     {
         try {
-            $pages = \Celios\Core\Models\Page::all();
-            $posts = \Celios\Core\Models\Post::all();
+            $pages = Page::all();
+            $posts = Post::all();
             $total = $pages->count() + $posts->count();
 
             if ($total > 0) {
@@ -30,22 +32,26 @@ class LocalizationWidget extends Widget
                 foreach ($pages as $p) {
                     $hasSr = filled($p->getTranslation('title', 'sr', false));
                     $hasEn = filled($p->getTranslation('title', 'en', false));
-                    if ($hasSr) $srCount++;
+                    if ($hasSr) {
+                        $srCount++;
+                    }
                     if ($hasEn) {
                         $enCount++;
-                    } elseif (!$pendingTitle) {
-                        $pendingTitle = 'Stranica: "' . ($p->getTranslation('title', 'sr', false) ?: 'Stranica #' . $p->id) . '"';
+                    } elseif (! $pendingTitle) {
+                        $pendingTitle = 'Stranica: "'.($p->getTranslation('title', 'sr', false) ?: 'Stranica #'.$p->id).'"';
                     }
                 }
 
                 foreach ($posts as $p) {
                     $hasSr = filled($p->getTranslation('title', 'sr', false));
                     $hasEn = filled($p->getTranslation('title', 'en', false));
-                    if ($hasSr) $srCount++;
+                    if ($hasSr) {
+                        $srCount++;
+                    }
                     if ($hasEn) {
                         $enCount++;
-                    } elseif (!$pendingTitle) {
-                        $pendingTitle = 'Blog: "' . ($p->getTranslation('title', 'sr', false) ?: 'Objava #' . $p->id) . '"';
+                    } elseif (! $pendingTitle) {
+                        $pendingTitle = 'Blog: "'.($p->getTranslation('title', 'sr', false) ?: 'Objava #'.$p->id).'"';
                     }
                 }
 

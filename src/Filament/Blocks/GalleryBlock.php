@@ -2,8 +2,8 @@
 
 namespace Celios\Core\Filament\Blocks;
 
-use Celios\Core\Filament\Helpers\BlockLabelHelper;
 use Awcodes\Curator\Components\Forms\CuratorPicker;
+use Celios\Core\Filament\Helpers\BlockLabelHelper;
 use Filament\Forms\Components\Builder\Block;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Toggle;
@@ -44,4 +44,3 @@ class GalleryBlock
             ]);
     }
 }
-

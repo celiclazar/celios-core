@@ -9,7 +9,7 @@
     $showDate = $data['show_date'] ?? true;
     $showAuthor = $data['show_author'] ?? true;
 
-    $posts = \App\Models\Post::query()
+    $posts = \Celios\Core\Models\Post::query()
         ->published()
         ->when($categoryId, fn ($q) => $q->where('category_id', $categoryId))
         ->with(['category', 'author', 'featuredImage'])

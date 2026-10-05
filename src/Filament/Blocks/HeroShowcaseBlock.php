@@ -22,41 +22,41 @@ class HeroShowcaseBlock
                     ->tabs(
                         TranslatableTabs::make(fn ($lang) => [
                             TextInput::make("badge_text.{$lang}")
-                                ->label('Glavni bedž (' . strtoupper($lang) . ')')
+                                ->label('Glavni bedž ('.strtoupper($lang).')')
                                 ->default('Celios CMS • Laravel 11 + Filament v3'),
 
                             TextInput::make("badge_version.{$lang}")
-                                ->label('Verzija (' . strtoupper($lang) . ')')
+                                ->label('Verzija ('.strtoupper($lang).')')
                                 ->default('v3.4.2 Production Ready'),
 
                             TextInput::make("badge_build.{$lang}")
-                                ->label('Build oznaka (' . strtoupper($lang) . ')')
+                                ->label('Build oznaka ('.strtoupper($lang).')')
                                 ->default('build#8914-release'),
 
                             TextInput::make("heading.{$lang}")
-                                ->label('Glavni naslov (' . strtoupper($lang) . ')')
+                                ->label('Glavni naslov ('.strtoupper($lang).')')
                                 ->required($lang === 'sr')
                                 ->default('Modularni CMS kreiran za developere i dizajnere koji cene'),
 
                             TextInput::make("highlighted_text.{$lang}")
-                                ->label('Podvučeni/Akcentovani tekst (' . strtoupper($lang) . ')')
+                                ->label('Podvučeni/Akcentovani tekst ('.strtoupper($lang).')')
                                 ->default('brzinu, estetiku i kontrolu.'),
 
                             Textarea::make("subtitle.{$lang}")
-                                ->label('Opis / Podnaslov (' . strtoupper($lang) . ')')
+                                ->label('Opis / Podnaslov ('.strtoupper($lang).')')
                                 ->rows(3)
                                 ->default('Potpuna sloboda u kreiranju modernih portfolio sajtova, digitalnih arhiva i višejezičnih publikacija bez sporih pluginova. Izgrađen na temeljima Laravel i Filament v3 ekosistema.'),
 
                             TextInput::make("button_primary_text.{$lang}")
-                                ->label('Tekst primarnog dugmeta (' . strtoupper($lang) . ')')
+                                ->label('Tekst primarnog dugmeta ('.strtoupper($lang).')')
                                 ->default('Pokreni Test Mode (Admin Demo)'),
 
                             TextInput::make("button_secondary_text.{$lang}")
-                                ->label('Tekst sekundarnog dugmeta (' . strtoupper($lang) . ')')
+                                ->label('Tekst sekundarnog dugmeta ('.strtoupper($lang).')')
                                 ->default('Pregledaj Mogućnosti'),
 
                             TextInput::make("button_tertiary_text.{$lang}")
-                                ->label('Tekst tercijarnog dugmeta (' . strtoupper($lang) . ')')
+                                ->label('Tekst tercijarnog dugmeta ('.strtoupper($lang).')')
                                 ->default('Pogledaj Portfolio'),
                         ])
                     ),

@@ -34,18 +34,19 @@ class MakeModuleCommand extends Command
 
         if (File::exists($modulePath)) {
             $this->error("Module [{$studlyName}] already exists at {$modulePath}!");
+
             return self::FAILURE;
         }
 
         $directories = [
-            $modulePath . '/Config',
-            $modulePath . '/Database/Migrations',
-            $modulePath . '/Filament/Resources',
-            $modulePath . '/Filament/Pages',
-            $modulePath . '/Http/Controllers',
-            $modulePath . '/Models',
-            $modulePath . '/Resources/Views',
-            $modulePath . '/Routes',
+            $modulePath.'/Config',
+            $modulePath.'/Database/Migrations',
+            $modulePath.'/Filament/Resources',
+            $modulePath.'/Filament/Pages',
+            $modulePath.'/Http/Controllers',
+            $modulePath.'/Models',
+            $modulePath.'/Resources/Views',
+            $modulePath.'/Routes',
         ];
 
         foreach ($directories as $dir) {
@@ -76,7 +77,7 @@ class MakeModuleCommand extends Command
             ],
         ], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
 
-        File::put($modulePath . '/composer.json', $composerJson . PHP_EOL);
+        File::put($modulePath.'/composer.json', $composerJson.PHP_EOL);
 
         // 2. Service Provider
         $serviceProviderStub = <<<PHP
@@ -109,7 +110,7 @@ class {$studlyName}ServiceProvider extends ServiceProvider
     }
 }
 PHP;
-        File::put($modulePath . "/{$studlyName}ServiceProvider.php", $serviceProviderStub . PHP_EOL);
+        File::put($modulePath."/{$studlyName}ServiceProvider.php", $serviceProviderStub.PHP_EOL);
 
         // 3. Config
         $configStub = <<<PHP
@@ -120,17 +121,17 @@ return [
     'enabled' => true,
 ];
 PHP;
-        File::put($modulePath . "/Config/{$snakeName}.php", $configStub . PHP_EOL);
+        File::put($modulePath."/Config/{$snakeName}.php", $configStub.PHP_EOL);
 
         // 4. Routes
-        File::put($modulePath . '/Routes/web.php', "<?php\n\nuse Illuminate\Support\Facades\Route;\n\n// Module web routes\n");
-        File::put($modulePath . '/Routes/api.php', "<?php\n\nuse Illuminate\Support\Facades\Route;\n\n// Module API routes\n");
+        File::put($modulePath.'/Routes/web.php', "<?php\n\nuse Illuminate\Support\Facades\Route;\n\n// Module web routes\n");
+        File::put($modulePath.'/Routes/api.php', "<?php\n\nuse Illuminate\Support\Facades\Route;\n\n// Module API routes\n");
 
         $this->info("Module [{$studlyName}] successfully created at [{$modulePath}]!");
-        $this->comment("Next steps:");
+        $this->comment('Next steps:');
         $this->comment("1. Add '\"Modules\\\\{$studlyName}\\\\\": \"packages/{$kebabName}/\"' to root composer.json autoload.psr-4 if local");
         $this->comment("2. Register 'Modules\\{$studlyName}\\{$studlyName}ServiceProvider::class' in config/modules.php or bootstrap/providers.php");
-        $this->comment("3. Run: composer dump-autoload");
+        $this->comment('3. Run: composer dump-autoload');
 
         return self::SUCCESS;
     }

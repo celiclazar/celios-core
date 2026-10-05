@@ -20,22 +20,22 @@ class CTABlock
                     ->tabs(
                         TranslatableTabs::make(fn ($lang) => [
                             TextInput::make("status_pill.{$lang}")
-                                ->label(fn () => 'Status oznaka / Pill (' . strtoupper($lang) . ')'),
+                                ->label(fn () => 'Status oznaka / Pill ('.strtoupper($lang).')'),
 
                             TextInput::make("heading.{$lang}")
-                                ->label(fn () => __('blocks.heading') . ' (' . strtoupper($lang) . ')'),
+                                ->label(fn () => __('blocks.heading').' ('.strtoupper($lang).')'),
 
                             TextInput::make("text.{$lang}")
-                                ->label(fn () => __('blocks.text') . ' (' . strtoupper($lang) . ')'),
+                                ->label(fn () => __('blocks.text').' ('.strtoupper($lang).')'),
 
                             TextInput::make("button_text.{$lang}")
-                                ->label(fn () => __('blocks.button_text') . ' (' . strtoupper($lang) . ')'),
+                                ->label(fn () => __('blocks.button_text').' ('.strtoupper($lang).')'),
 
                             TextInput::make("footer_note_1.{$lang}")
-                                ->label(fn () => 'Napomena 1 (' . strtoupper($lang) . ')'),
+                                ->label(fn () => 'Napomena 1 ('.strtoupper($lang).')'),
 
                             TextInput::make("footer_note_2.{$lang}")
-                                ->label(fn () => 'Napomena 2 (' . strtoupper($lang) . ')'),
+                                ->label(fn () => 'Napomena 2 ('.strtoupper($lang).')'),
                         ])
                     ),
 
@@ -44,4 +44,3 @@ class CTABlock
             ]);
     }
 }
-

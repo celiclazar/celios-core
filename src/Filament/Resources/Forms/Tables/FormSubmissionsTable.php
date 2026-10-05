@@ -48,19 +48,20 @@ class FormSubmissionsTable
                             if (is_array($val)) {
                                 $val = implode(', ', $val);
                             }
-                            $snippets[] = str($key)->headline() . ': ' . str($val)->limit(30);
+                            $snippets[] = str($key)->headline().': '.str($val)->limit(30);
                             if (count($snippets) >= 2) {
                                 break;
                             }
                         }
-                        return !empty($snippets) ? implode(' | ', $snippets) : '-';
+
+                        return ! empty($snippets) ? implode(' | ', $snippets) : '-';
                     })
                     ->wrap()
                     ->limit(80),
 
                 IconColumn::make('has_files')
                     ->label(__('forms.files_attached'))
-                    ->state(fn (FormSubmission $record): bool => !empty($record->files))
+                    ->state(fn (FormSubmission $record): bool => ! empty($record->files))
                     ->boolean()
                     ->trueIcon('heroicon-o-paper-clip')
                     ->falseIcon('')
@@ -118,7 +119,7 @@ class FormSubmissionsTable
             ->recordActions([
                 ViewAction::make()
                     ->after(function (FormSubmission $record) {
-                        if (!$record->is_read) {
+                        if (! $record->is_read) {
                             $record->update(['is_read' => true]);
                         }
                     }),
@@ -142,28 +143,28 @@ class FormSubmissionsTable
                             $k = strtolower(str_replace(['-', '_'], '', $key));
                             $valStr = is_array($value) ? implode(', ', $value) : (string) $value;
 
-                            if (!$name && (str_contains($k, 'name') || str_contains($k, 'ime'))) {
+                            if (! $name && (str_contains($k, 'name') || str_contains($k, 'ime'))) {
                                 $name = $valStr;
-                            } elseif (!$email && (str_contains($k, 'email') || str_contains($k, 'mail'))) {
+                            } elseif (! $email && (str_contains($k, 'email') || str_contains($k, 'mail'))) {
                                 $email = $valStr;
-                            } elseif (!$phone && (str_contains($k, 'phone') || str_contains($k, 'tel') || str_contains($k, 'telefon'))) {
+                            } elseif (! $phone && (str_contains($k, 'phone') || str_contains($k, 'tel') || str_contains($k, 'telefon'))) {
                                 $phone = $valStr;
-                            } elseif (!$company && (str_contains($k, 'company') || str_contains($k, 'kompanija') || str_contains($k, 'firma'))) {
+                            } elseif (! $company && (str_contains($k, 'company') || str_contains($k, 'kompanija') || str_contains($k, 'firma'))) {
                                 $company = $valStr;
                             } else {
-                                $notes[] = str($key)->headline() . ': ' . $valStr;
+                                $notes[] = str($key)->headline().': '.$valStr;
                             }
                         }
 
                         return [
-                            'name' => $name ?: 'Lead #' . $record->id,
+                            'name' => $name ?: 'Lead #'.$record->id,
                             'email' => $email,
                             'phone' => $phone,
                             'company' => $company,
                             'stage' => 'lead',
                             'source' => 'form_submission',
                             'lead_value' => null,
-                            'notes' => !empty($notes) ? implode("\n", $notes) : null,
+                            'notes' => ! empty($notes) ? implode("\n", $notes) : null,
                         ];
                     })
                     ->form([
@@ -222,7 +223,7 @@ class FormSubmissionsTable
                             $contact->interactions()->create([
                                 'user_id' => auth()->id(),
                                 'type' => 'note',
-                                'content' => "Inquiry details from Form #{$record->form_id} Submission #{$record->id}:\n" . $data['notes'],
+                                'content' => "Inquiry details from Form #{$record->form_id} Submission #{$record->id}:\n".$data['notes'],
                             ]);
                         }
 
@@ -239,6 +240,7 @@ class FormSubmissionsTable
                     ->visible(fn (FormSubmission $record) => module_enabled('crm') && Contact::where('form_submission_id', $record->id)->exists())
                     ->url(function (FormSubmission $record): ?string {
                         $contact = Contact::where('form_submission_id', $record->id)->first();
+
                         return $contact ? ContactResource::getUrl('edit', ['record' => $contact]) : null;
                     }),
 
@@ -246,7 +248,7 @@ class FormSubmissionsTable
                     ->label(fn (FormSubmission $record) => $record->is_read ? __('forms.mark_as_unread') : __('forms.mark_as_read'))
                     ->icon(fn (FormSubmission $record) => $record->is_read ? 'heroicon-o-envelope' : 'heroicon-o-check-circle')
                     ->color(fn (FormSubmission $record) => $record->is_read ? 'warning' : 'success')
-                    ->action(fn (FormSubmission $record) => $record->update(['is_read' => !$record->is_read])),
+                    ->action(fn (FormSubmission $record) => $record->update(['is_read' => ! $record->is_read])),
 
                 DeleteAction::make(),
             ])

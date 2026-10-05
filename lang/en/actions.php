@@ -1,6 +1,5 @@
 <?php
 
-
 return [
     'add_new_item' => 'Add New Item',
     'bulk_actions' => 'Bulk Actions',

@@ -5,7 +5,6 @@ namespace Celios\Core\Http\Controllers\Api\V1;
 use Celios\Core\Http\Controllers\Controller;
 use Celios\Core\Http\Resources\V1\DocumentResource;
 use Celios\Core\Models\Document;
-use Celios\Core\Models\DocumentCategory;
 use Celios\Core\Models\DocumentDownloadLog;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;

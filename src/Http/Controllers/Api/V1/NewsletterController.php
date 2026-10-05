@@ -71,6 +71,7 @@ class NewsletterController extends Controller
         // 4. Send Double Opt-In Email if enabled
         if ($doubleOptIn) {
             dispatch(new SendSubscriptionConfirmationJob($subscriber));
+
             return response()->json([
                 'success' => true,
                 'message' => 'Please check your inbox to confirm your subscription.',

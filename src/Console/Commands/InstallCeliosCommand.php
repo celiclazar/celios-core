@@ -2,6 +2,7 @@
 
 namespace Celios\Core\Console\Commands;
 
+use Celios\Core\Models\User;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Schema;
@@ -38,6 +39,7 @@ class InstallCeliosCommand extends Command
                 '--tag' => 'celios-config',
                 '--force' => (bool) $this->option('force'),
             ]);
+
             return true;
         });
 
@@ -47,12 +49,14 @@ class InstallCeliosCommand extends Command
                 '--tag' => 'celios-theme',
                 '--force' => (bool) $this->option('force'),
             ]);
+
             return true;
         });
 
         // 3. Storage Symlink
         $this->components->task('Ensuring storage symlink exists', function () {
             $this->callSilent('storage:link');
+
             return true;
         });
 
@@ -62,12 +66,14 @@ class InstallCeliosCommand extends Command
         if ($shouldMigrate) {
             $this->components->task('Running migrations', function () {
                 $this->call('migrate', ['--force' => true]);
+
                 return true;
             });
 
             // Ensure core roles exist
             $this->components->task('Verifying system roles', function () {
                 $this->seedDefaultRoles();
+
                 return true;
             });
         }
@@ -80,7 +86,7 @@ class InstallCeliosCommand extends Command
         }
 
         $this->newLine();
-        $this->components->info('Celios CMS installation complete! Access your admin panel at: ' . url('/admin'));
+        $this->components->info('Celios CMS installation complete! Access your admin panel at: '.url('/admin'));
 
         return Command::SUCCESS;
     }
@@ -106,6 +112,7 @@ class InstallCeliosCommand extends Command
     {
         if (! Schema::hasTable('users') || ! Schema::hasTable('roles')) {
             $this->components->warn('Database tables not ready yet. Please run php artisan migrate first.');
+
             return;
         }
 
@@ -116,13 +123,14 @@ class InstallCeliosCommand extends Command
 
         if (empty($password)) {
             $this->components->error('Password cannot be empty. Superadmin creation skipped.');
+
             return;
         }
 
         // Resolve user model
-        $userModel = config('auth.providers.users.model', \Celios\Core\Models\User::class);
+        $userModel = config('auth.providers.users.model', User::class);
 
-        /** @var \Celios\Core\Models\User $user */
+        /** @var User $user */
         $user = $userModel::firstOrNew(['email' => $email]);
         $user->name = $name;
         $user->username = $username;

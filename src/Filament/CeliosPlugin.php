@@ -3,14 +3,17 @@
 namespace Celios\Core\Filament;
 
 use Filament\Contracts\Plugin;
-use Filament\Panel;
 use Filament\Navigation\NavigationGroup;
+use Filament\Panel;
 
 class CeliosPlugin implements Plugin
 {
     protected bool $hasContentGroup = true;
+
     protected bool $hasMarketingGroup = true;
+
     protected bool $hasPaymentsGroup = true;
+
     protected bool $hasSystemGroup = true;
 
     public static function make(): static
@@ -88,9 +91,9 @@ class CeliosPlugin implements Plugin
         }
 
         $panel->navigationGroups($navigationGroups)
-            ->discoverResources(in: __DIR__ . '/Resources', for: 'Celios\\Core\\Filament\\Resources')
-            ->discoverPages(in: __DIR__ . '/Pages', for: 'Celios\\Core\\Filament\\Pages')
-            ->discoverWidgets(in: __DIR__ . '/Widgets', for: 'Celios\\Core\\Filament\\Widgets');
+            ->discoverResources(in: __DIR__.'/Resources', for: 'Celios\\Core\\Filament\\Resources')
+            ->discoverPages(in: __DIR__.'/Pages', for: 'Celios\\Core\\Filament\\Pages')
+            ->discoverWidgets(in: __DIR__.'/Widgets', for: 'Celios\\Core\\Filament\\Widgets');
     }
 
     public function boot(Panel $panel): void

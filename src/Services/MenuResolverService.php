@@ -2,10 +2,8 @@
 
 namespace Celios\Core\Services;
 
-use Celios\Core\Models\Category;
 use Celios\Core\Models\Menu;
 use Celios\Core\Models\MenuItem;
-use Celios\Core\Models\Post;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Cache;
@@ -112,7 +110,7 @@ class MenuResolverService
                 $slug = $item->linkable->getTranslation('slug', $defaultLocale, false);
             }
 
-            return filled($slug) ? url("/{$locale}/" . ltrim($slug, '/')) : url("/{$locale}");
+            return filled($slug) ? url("/{$locale}/".ltrim($slug, '/')) : url("/{$locale}");
         }
 
         $customUrl = $item->getTranslation('custom_url', $locale, false);
@@ -158,12 +156,12 @@ class MenuResolverService
 
         // URLs starting with www.
         if (str_starts_with($url, 'www.')) {
-            return 'https://' . $url;
+            return 'https://'.$url;
         }
 
         // External domain names without protocol (e.g. example.com, google.com/test)
         if (preg_match('/^[a-zA-Z0-9-]+\.[a-zA-Z]{2,}(\/.*)?$/', $url)) {
-            return 'https://' . $url;
+            return 'https://'.$url;
         }
 
         // Absolute path from root (e.g. /sr/contact or /about)
@@ -177,11 +175,12 @@ class MenuResolverService
         $firstSegment = strtolower($segments[0]);
 
         if (in_array($firstSegment, $locales)) {
-            return url('/' . $url);
+            return url('/'.$url);
         }
 
         // Internal relative slug/path: prepend locale to create absolute URL
         $locale = $locale ?? app()->getLocale();
-        return url("/{$locale}/" . ltrim($url, '/'));
+
+        return url("/{$locale}/".ltrim($url, '/'));
     }
 }

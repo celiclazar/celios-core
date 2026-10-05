@@ -31,7 +31,7 @@ class SitemapController extends Controller
         $content .= "Allow: /\n";
 
         foreach ($excluded as $pattern) {
-            $cleaned = '/' . ltrim(rtrim($pattern, '*'), '/');
+            $cleaned = '/'.ltrim(rtrim($pattern, '*'), '/');
             $content .= "Disallow: {$cleaned}\n";
         }
 

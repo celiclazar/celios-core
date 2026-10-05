@@ -2,8 +2,8 @@
 
 namespace Celios\Core\Filament\Blocks;
 
-use Celios\Core\Filament\Helpers\BlockLabelHelper;
 use Awcodes\Curator\Components\Forms\CuratorPicker;
+use Celios\Core\Filament\Helpers\BlockLabelHelper;
 use Filament\Forms\Components\Builder\Block;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Components\Tabs;
@@ -26,10 +26,10 @@ class ImageBlock
                             return Tabs\Tab::make(strtoupper($code))
                                 ->schema([
                                     TextInput::make("caption.{$code}")
-                                        ->label(fn () => (__('blocks.image_caption')) . ' (' . strtoupper($code) . ')'),
+                                        ->label(fn () => (__('blocks.image_caption')).' ('.strtoupper($code).')'),
 
                                     TextInput::make("alt.{$code}")
-                                        ->label(fn () => (__('blocks.image_alt')) . ' (' . strtoupper($code) . ')'),
+                                        ->label(fn () => (__('blocks.image_alt')).' ('.strtoupper($code).')'),
                                 ]);
                         })->toArray()
                     ),

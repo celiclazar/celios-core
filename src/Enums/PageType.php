@@ -69,6 +69,7 @@ enum PageType: string
     public function standardSlug(string $locale): ?string
     {
         $slugs = $this->standardSlugs();
+
         return $slugs[$locale] ?? null;
     }
 
@@ -105,6 +106,7 @@ enum PageType: string
     public function defaultTitle(string $locale): ?string
     {
         $titles = $this->defaultTitles();
+
         return $titles[$locale] ?? null;
     }
 

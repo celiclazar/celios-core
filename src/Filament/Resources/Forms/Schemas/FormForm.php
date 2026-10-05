@@ -2,7 +2,6 @@
 
 namespace Celios\Core\Filament\Resources\Forms\Schemas;
 
-use Celios\Core\Models\Form;
 use Celios\Core\Models\Page;
 use Celios\Core\Models\User;
 use Filament\Forms\Components\Hidden;
@@ -33,13 +32,13 @@ class FormForm
                             ->tabs(
                                 collect(config('locales.available', ['sr' => 'Srpski', 'en' => 'English', 'it' => 'Italiano']))
                                     ->map(function (string $label, string $lang) {
-                                        return Tabs\Tab::make(strtoupper($lang) . " ({$label})")
+                                        return Tabs\Tab::make(strtoupper($lang)." ({$label})")
                                             ->id($lang)
                                             ->schema([
                                                 Grid::make(2)
                                                     ->schema([
                                                         TextInput::make("title.{$lang}")
-                                                            ->label(__('forms.form_title') . ' (' . strtoupper($lang) . ')')
+                                                            ->label(__('forms.form_title').' ('.strtoupper($lang).')')
                                                             ->required($lang === config('locales.default', 'sr'))
                                                             ->live(onBlur: true)
                                                             ->afterStateUpdated(function ($state, callable $set) use ($lang) {
@@ -56,17 +55,17 @@ class FormForm
                                                     ]),
 
                                                 Textarea::make("description.{$lang}")
-                                                    ->label(__('forms.form_description') . ' (' . strtoupper($lang) . ')')
+                                                    ->label(__('forms.form_description').' ('.strtoupper($lang).')')
                                                     ->rows(2),
 
                                                 Grid::make(2)
                                                     ->schema([
                                                         TextInput::make("submit_button_text.{$lang}")
-                                                            ->label(__('forms.submit_button_text') . ' (' . strtoupper($lang) . ')')
+                                                            ->label(__('forms.submit_button_text').' ('.strtoupper($lang).')')
                                                             ->placeholder(__('forms.submit')),
 
                                                         TextInput::make("success_message.{$lang}")
-                                                            ->label(__('forms.success_message') . ' (' . strtoupper($lang) . ')')
+                                                            ->label(__('forms.success_message').' ('.strtoupper($lang).')')
                                                             ->placeholder(__('forms.submission_successful')),
                                                     ]),
                                             ]);
@@ -89,7 +88,7 @@ class FormForm
                             ->reorderableWithButtons()
                             ->schema([
                                 Hidden::make('key')
-                                    ->default(fn () => 'field_' . Str::lower(Str::random(6)))
+                                    ->default(fn () => 'field_'.Str::lower(Str::random(6)))
                                     ->dehydrated(),
 
                                 Grid::make(2)
@@ -126,12 +125,12 @@ class FormForm
                                     ->tabs(
                                         collect(config('locales.available', ['sr' => 'Srpski', 'en' => 'English', 'it' => 'Italiano']))
                                             ->map(function (string $label, string $lang) {
-                                                return Tabs\Tab::make(strtoupper($lang) . " ({$label})")
+                                                return Tabs\Tab::make(strtoupper($lang)." ({$label})")
                                                     ->schema([
                                                         Grid::make(2)
                                                             ->schema([
                                                                 TextInput::make("label.{$lang}")
-                                                                    ->label(__('forms.field_label') . ' (' . strtoupper($lang) . ')')
+                                                                    ->label(__('forms.field_label').' ('.strtoupper($lang).')')
                                                                     ->required($lang === config('locales.default', 'sr'))
                                                                     ->live(onBlur: true)
                                                                     ->afterStateUpdated(function ($state, callable $set, callable $get) use ($lang) {
@@ -140,14 +139,14 @@ class FormForm
                                                                             if (blank($currentKey) || str_starts_with($currentKey, 'field_')) {
                                                                                 $slug = (string) str($state)->slug('_');
                                                                                 if (filled($slug)) {
-                                                                                    $set('key', $slug . '_' . Str::lower(Str::random(4)));
+                                                                                    $set('key', $slug.'_'.Str::lower(Str::random(4)));
                                                                                 }
                                                                             }
                                                                         }
                                                                     }),
 
                                                                 TextInput::make("placeholder.{$lang}")
-                                                                    ->label(__('forms.field_placeholder') . ' (' . strtoupper($lang) . ')'),
+                                                                    ->label(__('forms.field_placeholder').' ('.strtoupper($lang).')'),
                                                             ]),
                                                     ]);
                                             })
@@ -228,16 +227,16 @@ class FormForm
                                     ->tabs(
                                         collect(config('locales.available', ['sr' => 'Srpski', 'en' => 'English', 'it' => 'Italiano']))
                                             ->map(function (string $label, string $lang) {
-                                                return Tabs\Tab::make(strtoupper($lang) . " ({$label})")
+                                                return Tabs\Tab::make(strtoupper($lang)." ({$label})")
                                                     ->schema([
                                                         Grid::make(1)
                                                             ->schema([
                                                                 TextInput::make("confirmation_email_subject.{$lang}")
-                                                                    ->label(__('forms.confirmation_email_subject') . ' (' . strtoupper($lang) . ')')
+                                                                    ->label(__('forms.confirmation_email_subject').' ('.strtoupper($lang).')')
                                                                     ->placeholder(__('forms.confirmation_email_default_subject', ['form' => '...'])),
 
                                                                 Textarea::make("confirmation_email_body.{$lang}")
-                                                                    ->label(__('forms.confirmation_email_body') . ' (' . strtoupper($lang) . ')')
+                                                                    ->label(__('forms.confirmation_email_body').' ('.strtoupper($lang).')')
                                                                     ->placeholder(__('forms.confirmation_email_default_body', ['form' => '...']))
                                                                     ->rows(3),
                                                             ]),
@@ -265,10 +264,11 @@ class FormForm
                                     ->label(__('forms.redirect_select_page'))
                                     ->options(function () {
                                         $locale = app()->getLocale();
+
                                         return Page::query()
                                             ->get()
                                             ->mapWithKeys(fn (Page $p) => [
-                                                $p->id => ($p->getTranslation('title', $locale, true) ?: $p->getTranslation('title', 'sr', true)) . ' (' . ($p->getTranslation('slug', $locale, true) ?: 'page') . ')',
+                                                $p->id => ($p->getTranslation('title', $locale, true) ?: $p->getTranslation('title', 'sr', true)).' ('.($p->getTranslation('slug', $locale, true) ?: 'page').')',
                                             ])
                                             ->all();
                                     })

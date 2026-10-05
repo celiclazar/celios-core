@@ -93,8 +93,10 @@ class SitemapManager extends Page implements HasTable
         return $table
             ->records(function (): Collection {
                 $urls = app(SitemapGenerator::class)->getUrls();
+
                 return $urls->map(function ($item, $index) {
                     $item['id'] = $index + 1;
+
                     return $item;
                 });
             })

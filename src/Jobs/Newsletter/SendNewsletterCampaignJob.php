@@ -30,7 +30,7 @@ class SendNewsletterCampaignJob implements ShouldQueue
         $query = NewsletterSubscriber::query()->active();
 
         $targetLocales = $this->campaign->target_locales ?? [];
-        if (!empty($targetLocales) && !in_array('all', $targetLocales)) {
+        if (! empty($targetLocales) && ! in_array('all', $targetLocales)) {
             $query->whereIn('locale', $targetLocales);
         }
 
@@ -42,6 +42,7 @@ class SendNewsletterCampaignJob implements ShouldQueue
                 'sent_at' => now(),
                 'recipients_count' => 0,
             ]);
+
             return;
         }
 
@@ -84,7 +85,7 @@ class SendNewsletterCampaignJob implements ShouldQueue
                 ]);
             })
             ->catch(function ($batch, \Throwable $e) use ($campaignId) {
-                Log::error("Error in newsletter campaign batch #{$campaignId}: " . $e->getMessage());
+                Log::error("Error in newsletter campaign batch #{$campaignId}: ".$e->getMessage());
             })
             ->finally(function () use ($campaignId) {
                 $campaign = NewsletterCampaign::find($campaignId);

@@ -56,7 +56,7 @@ class Post extends Model
         return $query->where('is_published', true)
             ->where(function ($q) {
                 $q->whereNull('published_at')
-                  ->orWhere('published_at', '<=', now());
+                    ->orWhere('published_at', '<=', now());
             });
     }
 
@@ -72,6 +72,7 @@ class Post extends Model
         $locale = app()->getLocale();
         $text = strip_tags($this->getTranslation('body', $locale, false) ?: '');
         $wordCount = str_word_count($text);
+
         return max(1, (int) ceil($wordCount / 200));
     }
 
@@ -86,7 +87,7 @@ class Post extends Model
         }
 
         return filled($slug)
-            ? url("/{$locale}/blog/" . ltrim($slug, '/'))
+            ? url("/{$locale}/blog/".ltrim($slug, '/'))
             : url("/{$locale}/blog");
     }
 }

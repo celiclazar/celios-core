@@ -2,13 +2,13 @@
 
 namespace Celios\Core\Filament\Resources\Users;
 
+use BackedEnum;
 use Celios\Core\Filament\Resources\Users\Pages\CreateUser;
 use Celios\Core\Filament\Resources\Users\Pages\EditUser;
 use Celios\Core\Filament\Resources\Users\Pages\ListUsers;
 use Celios\Core\Filament\Resources\Users\Schemas\UserForm;
 use Celios\Core\Filament\Resources\Users\Tables\UsersTable;
 use Celios\Core\Models\User;
-use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;

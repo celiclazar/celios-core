@@ -3,6 +3,7 @@
 namespace Celios\Core\Filament\Resources\Categories\Tables;
 
 use Celios\Core\Models\Category;
+use Filament\Actions\Action;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
@@ -53,7 +54,7 @@ class CategoriesTable
             ])
             ->recordActions([
                 EditAction::make(),
-                \Filament\Actions\Action::make('view_on_site')
+                Action::make('view_on_site')
                     ->label(__('actions.view'))
                     ->icon('heroicon-o-arrow-top-right-on-square')
                     ->color('gray')

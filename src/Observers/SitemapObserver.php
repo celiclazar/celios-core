@@ -45,7 +45,7 @@ class SitemapObserver
                 $generator->writeToFile();
             }
         } catch (\Throwable $e) {
-            Log::warning('Failed to automatically regenerate sitemap: ' . $e->getMessage());
+            Log::warning('Failed to automatically regenerate sitemap: '.$e->getMessage());
         }
     }
 }

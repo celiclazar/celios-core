@@ -2,11 +2,12 @@
 
 namespace Celios\Core\Http\Resources\V1;
 
+use Celios\Core\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
- * @mixin \Celios\Core\Models\Post
+ * @mixin Post
  */
 class PostResource extends JsonResource
 {
@@ -32,6 +33,7 @@ class PostResource extends JsonResource
                 if (! $this->featuredImage) {
                     return null;
                 }
+
                 return [
                     'id' => $this->featuredImage->id,
                     'name' => $this->featuredImage->name ?? null,

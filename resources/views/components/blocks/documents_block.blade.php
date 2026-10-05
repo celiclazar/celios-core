@@ -12,7 +12,7 @@
     $showDate = $data['show_date'] ?? true;
     $showDownloads = $data['show_downloads'] ?? false;
 
-    $query = \App\Models\Document::query()
+    $query = \Celios\Core\Models\Document::query()
         ->published()
         ->visibleToUser(auth()->user())
         ->with('category');
