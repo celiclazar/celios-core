@@ -2,10 +2,10 @@
 
 namespace Celios\Core\Filament\Resources\Forms\Tables;
 
-use Celios\Core\Filament\Resources\Contacts\ContactResource;
-use Celios\Core\Models\Contact;
 use Celios\Core\Models\Form;
 use Celios\Core\Models\FormSubmission;
+use Modules\Crm\Filament\Resources\Contacts\ContactResource;
+use Modules\Crm\Models\Contact;
 use Filament\Actions\Action;
 use Filament\Actions\BulkAction;
 use Filament\Actions\BulkActionGroup;

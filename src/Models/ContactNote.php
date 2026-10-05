@@ -2,38 +2,12 @@
 
 namespace Celios\Core\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Modules\Crm\Models\ContactNote as BaseContactNote;
 
-class ContactNote extends Model
+/**
+ * @deprecated Use Modules\Crm\Models\ContactNote instead.
+ */
+class ContactNote extends BaseContactNote
 {
-    use HasFactory;
-
-    protected $fillable = [
-        'contact_id',
-        'user_id',
-        'type',
-        'content',
-    ];
-
-    public function contact(): BelongsTo
-    {
-        return $this->belongsTo(Contact::class);
-    }
-
-    public function user(): BelongsTo
-    {
-        return $this->belongsTo(User::class);
-    }
-
-    public static function getTypes(): array
-    {
-        return [
-            'note' => 'Internal Note',
-            'call' => 'Phone Call',
-            'meeting' => 'Meeting',
-            'email' => 'Email',
-        ];
-    }
+    // Backward compatibility proxy class
 }

@@ -2,9 +2,9 @@
 
 namespace Celios\Core\Filament\Resources\Forms\Pages;
 
-use Celios\Core\Filament\Resources\Contacts\ContactResource;
 use Celios\Core\Filament\Resources\Forms\FormSubmissionResource;
-use Celios\Core\Models\Contact;
+use Modules\Crm\Filament\Resources\Contacts\ContactResource;
+use Modules\Crm\Models\Contact;
 use Filament\Actions\Action;
 use Filament\Actions\DeleteAction;
 use Filament\Forms\Components\Select;
