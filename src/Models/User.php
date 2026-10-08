@@ -15,6 +15,9 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Laravel\Passkeys\Contracts\PasskeyUser;
+use Laravel\Passkeys\PasskeyAuthenticatable;
 use Laravel\Sanctum\HasApiTokens;
 use Modules\Payment\Traits\HasPayments;
 use Spatie\Activitylog\LogOptions;
@@ -25,9 +28,14 @@ use Spatie\Permission\Traits\HasRoles;
 
 #[Fillable(['name', 'email', 'password'])]
 #[Hidden(['password', 'remember_token'])]
-class User extends Authenticatable implements FilamentUser, HasMedia
+class User extends Authenticatable implements FilamentUser, HasMedia, PasskeyUser
 {
-    use HasApiTokens, HasFactory, HasPanelShield, HasPayments, HasRoles, InteractsWithMedia, LogsActivity, Notifiable;
+    use HasApiTokens, HasFactory, HasPanelShield, HasPayments, HasRoles, InteractsWithMedia, LogsActivity, Notifiable, PasskeyAuthenticatable;
+
+    public function socialAccounts(): HasMany
+    {
+        return $this->hasMany(SocialAccount::class);
+    }
 
     protected static function newFactory()
     {

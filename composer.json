@@ -24,7 +24,9 @@
         "spatie/cpu-load-health-check": "^1.0",
         "spatie/laravel-backup": "^10.2",
         "dedoc/scramble": "^0.13.43",
-        "laravel/sanctum": "^4.0"
+        "laravel/sanctum": "^4.0",
+        "laravel/socialite": "^5.16",
+        "laravel/passkeys": "^0.2.1"
     },
     "autoload": {
         "psr-4": {

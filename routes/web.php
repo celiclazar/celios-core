@@ -161,7 +161,17 @@ Route::middleware('module:documents')->group(function () {
 });
 
 // ==========================================
-// 7. CMS PAGES & FALLBACK
+// 7. SOCIAL OAUTH AUTHENTICATION
+// ==========================================
+Route::middleware('web')->group(function () {
+    Route::get('/auth/{provider}/redirect', [\Celios\Core\Http\Controllers\SocialAuthController::class, 'redirect'])
+        ->name('auth.social.redirect');
+    Route::get('/auth/{provider}/callback', [\Celios\Core\Http\Controllers\SocialAuthController::class, 'callback'])
+        ->name('auth.social.callback');
+});
+
+// ==========================================
+// 8. CMS PAGES & FALLBACK
 // ==========================================
 Route::get('/', [CmsPageController::class, 'home'])->name('cms.home');
 Route::get('/{locale}/{slug?}', [CmsPageController::class, 'render'])
