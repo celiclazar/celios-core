@@ -43,7 +43,14 @@ class PageResource extends Resource
         return 'gray';
     }
 
-    protected static ?string $recordTitleAttribute = 'Pages';
+    public static function getRecordTitle(?\Illuminate\Database\Eloquent\Model $record): string|\Illuminate\Contracts\Support\Htmlable|null
+    {
+        if (! $record instanceof Page) {
+            return null;
+        }
+
+        return $record->displayTitle();
+    }
 
     public static function form(Schema $schema): Schema
     {

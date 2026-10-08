@@ -26,18 +26,12 @@ class PagesTable
             ->columns([
                 TextColumn::make('title')
                     ->label(fn () => __('fields.title'))
-                    ->state(fn (Page $record): string => (
-                        $record->getTranslation('title', app()->getLocale(), true)
-                            ?: __('fields.no_title')
-                    ))
+                    ->state(fn (Page $record): string => $record->displayTitle())
                     ->searchable(),
 
                 TextColumn::make('slug')
                     ->label(fn () => __('fields.url_slug'))
-                    ->state(fn (Page $record): string => (
-                        $record->getTranslation('slug', app()->getLocale(), true)
-                            ?: ''
-                    ))
+                    ->state(fn (Page $record): string => $record->displaySlug())
                     ->searchable(),
 
                 TextColumn::make('type')

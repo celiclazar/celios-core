@@ -5,8 +5,8 @@
 
     if ($imageId) {
         $mediaClass = config('curator.model', \Awcodes\Curator\Models\Media::class);
-        $media = is_numeric($imageId) ? $mediaClass::find($imageId) : null;
-        $imageUrl = $media?->url ?? (is_string($imageId) ? \Illuminate\Support\Facades\Storage::url($imageId) : null);
+        $media = $mediaClass::find($imageId);
+        $imageUrl = $media?->url ?? (is_string($imageId) && (str_starts_with($imageId, 'http') || str_starts_with($imageId, '/')) ? $imageId : null);
     }
 
     $caption = is_array($data['caption'] ?? null) 

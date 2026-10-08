@@ -23,16 +23,20 @@
             {{-- Swiper slajdovi (Slike) --}}
             <div class="swiper-wrapper">
                 @foreach($images as $imagePath)
-                    @if(is_string($imagePath) && !empty($imagePath))
+                    @if(!empty($imagePath))
                         @php
-                            $imgSrc = str_starts_with($imagePath, 'http') || str_starts_with($imagePath, '/') ? $imagePath : \Illuminate\Support\Facades\Storage::url($imagePath);
+                            $mediaClass = config('curator.model', \Awcodes\Curator\Models\Media::class);
+                            $media = (is_string($imagePath) || is_numeric($imagePath)) ? $mediaClass::find($imagePath) : null;
+                            $imgSrc = $media?->url ?? (is_string($imagePath) && (str_starts_with($imagePath, 'http') || str_starts_with($imagePath, '/')) ? $imagePath : (is_string($imagePath) ? \Illuminate\Support\Facades\Storage::url($imagePath) : ''));
                         @endphp
-                        <div class="swiper-slide relative bg-surface-container">
-                            <img src="{{ $imgSrc }}"
-                                 class="w-full h-full object-cover"
-                                 alt="{{ $title ?? 'Slider image' }}">
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent"></div>
-                        </div>
+                        @if(!empty($imgSrc))
+                            <div class="swiper-slide relative bg-surface-container">
+                                <img src="{{ $imgSrc }}"
+                                     class="w-full h-full object-cover"
+                                     alt="{{ $title ?? 'Slider image' }}">
+                                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent"></div>
+                            </div>
+                        @endif
                     @endif
                 @endforeach
             </div>

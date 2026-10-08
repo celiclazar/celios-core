@@ -9,6 +9,8 @@ use Filament\Forms\Components\Builder;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
+use Filament\Schemas\Components\Grid;
+use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Tabs;
 use Filament\Schemas\Schema;
 
@@ -25,6 +27,7 @@ class PageForm
                     ]))
                     ->default(PageType::STANDARD->value)
                     ->required()
+                    ->visible(fn (string $operation) => $operation === 'create')
                     ->live()
                     ->disableOptionWhen(function (string $value, ?Page $record) {
                         if ($value === PageType::STANDARD->value) {
@@ -55,12 +58,18 @@ class PageForm
                     ->label(fn () => __('fields.visible_on_site'))
                     ->default(true),
 
-                Tabs::make(fn () => __('fields.title_localization'))
-                    ->tabs([
-                        self::getLocaleTab('sr', 'Srpski'),
-                        self::getLocaleTab('en', 'English'),
-                        self::getLocaleTab('it', 'Italiano'),
-                    ])->columnSpanFull(),
+                Section::make(__('fields.translations'))
+                    ->icon('heroicon-o-language')
+                    ->columnSpanFull()
+                    ->schema([
+                        Tabs::make('translations_tabs')
+                            ->tabs(
+                                collect(config('locales.available', ['sr' => 'Srpski', 'en' => 'English', 'it' => 'Italiano']))
+                                    ->map(fn (string $label, string $lang) => self::getLocaleTab($lang, $label))
+                                    ->values()
+                                    ->all()
+                            ),
+                    ]),
 
                 Builder::make('draft_content')
                     ->label(fn () => __('fields.page_content_blocks'))
@@ -70,50 +79,50 @@ class PageForm
                     ->blockIcons()
                     ->blockPickerColumns(['default' => 1, 'sm' => 2, 'lg' => 3])
                     ->columnSpanFull(),
-
             ]);
     }
 
     protected static function getLocaleTab(string $lang, string $label): Tabs\Tab
     {
-        return Tabs\Tab::make($label)
+        return Tabs\Tab::make(strtoupper($lang)." ({$label})")
+            ->id($lang)
             ->schema([
-                TextInput::make("title.{$lang}")
-                    ->label(fn () => __('fields.page_title').' ('.strtoupper($lang).')')
-                    ->required($lang === 'sr')
-                    ->live(onBlur: true)
-                    ->afterStateUpdated(function ($state, callable $set, callable $get) use ($lang) {
-                        $typeVal = $get('type');
-                        $pageType = $typeVal instanceof PageType ? $typeVal : PageType::tryFrom((string) $typeVal);
-                        if (! $pageType || ! $pageType->isSystem()) {
-                            $set("slug.{$lang}", str($state)->slug());
-                        }
-                    }),
+                Grid::make(2)
+                    ->schema([
+                        TextInput::make("title.{$lang}")
+                            ->label(__('fields.title').' ('.strtoupper($lang).')')
+                            ->required($lang === config('locales.default', 'sr'))
+                            ->live(onBlur: true)
+                            ->afterStateUpdated(function ($state, callable $set, callable $get, ?Page $record, string $operation) use ($lang) {
+                                $pageType = $record?->type ?? (PageType::tryFrom((string) $get('type')));
+                                if ($operation === 'create' && (! $pageType || ! $pageType->isSystem())) {
+                                    $set("slug.{$lang}", str($state)->slug());
+                                }
+                            }),
 
-                TextInput::make("slug.{$lang}")
-                    ->label(fn () => __('fields.url_slug').' ('.strtoupper($lang).')')
-                    ->required($lang === 'sr')
-                    ->disabled(function (callable $get) {
-                        $typeVal = $get('type');
-                        $pageType = $typeVal instanceof PageType ? $typeVal : PageType::tryFrom((string) $typeVal);
+                        TextInput::make("slug.{$lang}")
+                            ->label(__('fields.url_slug').' ('.strtoupper($lang).')')
+                            ->required($lang === config('locales.default', 'sr'))
+                            ->disabled(function (?Page $record, callable $get) {
+                                $pageType = $record?->type ?? (PageType::tryFrom((string) $get('type')));
 
-                        return $pageType?->isSystem() ?? false;
-                    })
-                    ->dehydrated()
-                    ->unique(
-                        table: 'pages',
-                        column: "slug->{$lang}",
-                        ignoreRecord: true
-                    )
-                    ->helperText(function (callable $get) {
-                        $typeVal = $get('type');
-                        $pageType = $typeVal instanceof PageType ? $typeVal : PageType::tryFrom((string) $typeVal);
-                        if ($pageType && $pageType->isSystem()) {
-                            return __('fields.system_page_slug_locked');
-                        }
+                                return $pageType?->isSystem() ?? false;
+                            })
+                            ->dehydrated()
+                            ->unique(
+                                table: 'pages',
+                                column: "slug->{$lang}",
+                                ignoreRecord: true
+                            )
+                            ->helperText(function (?Page $record, callable $get) {
+                                $pageType = $record?->type ?? (PageType::tryFrom((string) $get('type')));
+                                if ($pageType && $pageType->isSystem()) {
+                                    return __('fields.system_page_slug_locked');
+                                }
 
-                        return __('fields.slug_helper');
-                    }),
+                                return __('fields.slug_helper');
+                            }),
+                    ]),
             ]);
     }
 }

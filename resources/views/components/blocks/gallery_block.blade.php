@@ -9,7 +9,7 @@
     $resolvedImages = [];
     if (!empty($images) && is_array($images)) {
         foreach ($images as $img) {
-            if (is_numeric($img)) {
+            if (is_string($img) || is_numeric($img)) {
                 $m = $mediaClass::find($img);
                 if ($m) {
                     $resolvedImages[] = [
@@ -17,13 +17,13 @@
                         'alt' => $m->alt ?? $m->title ?? 'Gallery image',
                         'caption' => $m->caption ?? '',
                     ];
+                } elseif (is_string($img) && (str_starts_with($img, 'http') || str_starts_with($img, '/'))) {
+                    $resolvedImages[] = [
+                        'url' => $img,
+                        'alt' => 'Gallery image',
+                        'caption' => '',
+                    ];
                 }
-            } elseif (is_string($img)) {
-                $resolvedImages[] = [
-                    'url' => str_starts_with($img, 'http') || str_starts_with($img, '/') ? $img : \Illuminate\Support\Facades\Storage::url($img),
-                    'alt' => 'Gallery image',
-                    'caption' => '',
-                ];
             } elseif (is_array($img) && isset($img['url'])) {
                 $resolvedImages[] = $img;
             }
