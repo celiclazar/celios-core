@@ -3,6 +3,7 @@
 namespace Celios\Core\Filament\Resources\Forms\Pages;
 
 use Celios\Core\Filament\Resources\Forms\FormSubmissionResource;
+use Celios\Core\Models\User;
 use Modules\Crm\Filament\Resources\Contacts\ContactResource;
 use Modules\Crm\Models\Contact;
 use Filament\Actions\Action;
@@ -91,9 +92,10 @@ class ViewFormSubmission extends ViewRecord
                         ->prefix('€'),
                     Select::make('assigned_to_user_id')
                         ->label(__('crm.assigned_to'))
-                        ->relationship('assignedUser', 'name')
+                        ->options(fn () => User::query()->pluck('name', 'id')->toArray())
                         ->searchable()
-                        ->preload(),
+                        ->preload()
+                        ->nullable(),
                     Textarea::make('notes')
                         ->label(__('crm.notes'))
                         ->rows(3),
@@ -133,7 +135,7 @@ class ViewFormSubmission extends ViewRecord
 
             Action::make('view_lead')
                 ->label(__('crm.contact_single'))
-                ->icon('heroicon-o-user-check')
+                ->icon('heroicon-o-check-badge')
                 ->color('success')
                 ->visible(fn () => module_enabled('crm') && Contact::where('form_submission_id', $this->record->id)->exists())
                 ->url(function (): ?string {

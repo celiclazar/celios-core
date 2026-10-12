@@ -46,7 +46,6 @@ class UserForm
                             ->imageCropAspectRatio('1:1')
                             ->imageResizeTargetWidth('500')
                             ->imageResizeTargetHeight('500')
-                            ->relationship('avatar', 'id')
                             ->columnSpanFull(),
                     ])->columns(2),
 
@@ -73,11 +72,9 @@ class UserForm
                     ->schema([
                         Toggle::make('status')
                             ->label(fn () => __('fields.status_active'))
-                            ->trueValue('active')
-                            ->falseValue('inactive')
                             ->onColor('success')
                             ->offColor('danger')
-                            ->default('active'),
+                            ->default(true),
 
                         DateTimePicker::make('email_verified_at')
                             ->label(fn () => __('fields.verified_at'))

@@ -72,17 +72,17 @@ class NewsletterSettingsPage extends Page
             ->statePath('data')
             ->columns(1)
             ->components([
-                Section::make('Mailing Transport & Hosting Flexibility')
-                    ->description('Choose whether to send newsletters via your hosting server / custom SMTP or via a dedicated cloud service (Amazon SES, Resend, etc.).')
+                Section::make(__('newsletter.settings_section_transport'))
+                    ->description(__('newsletter.settings_section_transport_desc'))
                     ->schema([
                         Select::make('newsletter_mailer_type')
-                            ->label('Mail Transport Provider')
+                            ->label(__('newsletter.settings_mailer_type'))
                             ->options([
-                                'app_default' => 'Application Default (uses Laravel .env configuration)',
-                                'custom_smtp' => 'Custom SMTP (Hosting Server / cPanel / Plesk)',
-                                'ses' => 'Amazon SES (AWS)',
-                                'resend' => 'Resend (API/SMTP)',
-                                'mailgun' => 'Mailgun',
+                                'app_default' => __('newsletter.settings_mailer_app_default'),
+                                'custom_smtp' => __('newsletter.settings_mailer_custom_smtp'),
+                                'ses' => __('newsletter.settings_mailer_ses'),
+                                'resend' => __('newsletter.settings_mailer_resend'),
+                                'mailgun' => __('newsletter.settings_mailer_mailgun'),
                             ])
                             ->required()
                             ->live(),
@@ -91,75 +91,75 @@ class NewsletterSettingsPage extends Page
                             ->visible(fn ($get) => $get('newsletter_mailer_type') === 'custom_smtp')
                             ->schema([
                                 TextInput::make('newsletter_smtp_host')
-                                    ->label('SMTP Host')
+                                    ->label(__('newsletter.settings_smtp_host'))
                                     ->placeholder('mail.yourdomain.com')
                                     ->columnSpan(2),
 
                                 TextInput::make('newsletter_smtp_port')
-                                    ->label('SMTP Port')
+                                    ->label(__('newsletter.settings_smtp_port'))
                                     ->numeric()
                                     ->placeholder('587 or 465')
                                     ->columnSpan(1),
 
                                 TextInput::make('newsletter_smtp_username')
-                                    ->label('SMTP Username')
+                                    ->label(__('newsletter.settings_smtp_username'))
                                     ->placeholder('newsletter@yourdomain.com')
                                     ->columnSpan(1),
 
                                 TextInput::make('newsletter_smtp_password')
-                                    ->label('SMTP Password')
+                                    ->label(__('newsletter.settings_smtp_password'))
                                     ->password()
                                     ->revealable()
                                     ->columnSpan(1),
 
                                 Select::make('newsletter_smtp_encryption')
-                                    ->label('Encryption')
+                                    ->label(__('newsletter.settings_smtp_encryption'))
                                     ->options([
-                                        'tls' => 'TLS (STARTTLS)',
-                                        'ssl' => 'SSL',
-                                        'null' => 'None',
+                                        'tls' => __('newsletter.settings_encryption_tls'),
+                                        'ssl' => __('newsletter.settings_encryption_ssl'),
+                                        'null' => __('newsletter.settings_encryption_none'),
                                     ])
                                     ->columnSpan(1),
                             ]),
                     ]),
 
-                Section::make('Sending Rate Limiting & Throttling')
-                    ->description('Protect your hosting server or email provider from being rate-limited or blacklisted.')
+                Section::make(__('newsletter.settings_section_rate_limit'))
+                    ->description(__('newsletter.settings_section_rate_limit_desc'))
                     ->schema([
                         TextInput::make('newsletter_rate_limit')
-                            ->label('Max Emails Per Minute')
+                            ->label(__('newsletter.settings_rate_limit'))
                             ->numeric()
                             ->default(0)
-                            ->helperText('Recommended for shared hosting / cPanel: 20-30 emails/min. Set to 0 for unlimited / fast sending (Amazon SES, Resend, VPS).'),
+                            ->helperText(__('newsletter.settings_rate_limit_helper')),
                     ]),
 
-                Section::make('Sender Identity')
-                    ->description('Default from address and display name for all outgoing newsletters.')
+                Section::make(__('newsletter.settings_section_sender'))
+                    ->description(__('newsletter.settings_section_sender_desc'))
                     ->schema([
                         Grid::make(2)->schema([
                             TextInput::make('newsletter_from_email')
-                                ->label('Sender Email Address')
+                                ->label(__('newsletter.settings_from_email'))
                                 ->email()
                                 ->placeholder('newsletter@yourdomain.com'),
 
                             TextInput::make('newsletter_from_name')
-                                ->label('Sender Display Name')
+                                ->label(__('newsletter.settings_from_name'))
                                 ->placeholder('Celios CMS Updates'),
                         ]),
                     ]),
 
-                Section::make('Compliance & Legal (GDPR & CAN-SPAM)')
+                Section::make(__('newsletter.settings_section_compliance'))
                     ->schema([
                         Toggle::make('newsletter_double_opt_in')
-                            ->label('Enable Double Opt-In (Verification Email)')
-                            ->helperText('When enabled, subscribers must click a verification link sent to their inbox before receiving campaigns (strongly recommended for GDPR).')
+                            ->label(__('newsletter.settings_double_opt_in'))
+                            ->helperText(__('newsletter.settings_double_opt_in_helper'))
                             ->default(true),
 
                         Textarea::make('newsletter_company_address')
-                            ->label('Physical Postal Address')
+                            ->label(__('newsletter.settings_company_address'))
                             ->placeholder("Celios CMS Inc.\n123 Business Boulevard, Belgrade, Serbia")
                             ->rows(3)
-                            ->helperText('Physical postal address shown in the footer of all marketing emails (legally required by CAN-SPAM and international standards).'),
+                            ->helperText(__('newsletter.settings_company_address_helper')),
                     ]),
             ]);
     }
@@ -168,12 +168,12 @@ class NewsletterSettingsPage extends Page
     {
         return [
             Action::make('testConnection')
-                ->label('Test Mailer Connection')
+                ->label(__('newsletter.settings_test_connection'))
                 ->icon('heroicon-o-paper-airplane')
                 ->color('gray')
                 ->form([
                     TextInput::make('test_email')
-                        ->label('Recipient Email')
+                        ->label(__('newsletter.settings_recipient_email'))
                         ->email()
                         ->default(fn () => auth()->user()?->email)
                         ->required(),
@@ -183,12 +183,12 @@ class NewsletterSettingsPage extends Page
                         $mailerService->testConnection($data['test_email']);
                         Notification::make()
                             ->title(__('newsletter.test_connection_success'))
-                            ->body('A test email was delivered to '.$data['test_email'])
+                            ->body(__('newsletter.settings_test_delivered', ['email' => $data['test_email']]))
                             ->success()
                             ->send();
                     } catch (\Throwable $e) {
                         Notification::make()
-                            ->title('Mailer Connection Failed')
+                            ->title(__('newsletter.settings_test_failed'))
                             ->body($e->getMessage())
                             ->danger()
                             ->send();
@@ -211,7 +211,7 @@ class NewsletterSettingsPage extends Page
         }
 
         Notification::make()
-            ->title('Settings saved successfully!')
+            ->title(__('newsletter.settings_saved_success'))
             ->success()
             ->send();
     }
