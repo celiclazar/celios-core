@@ -4,7 +4,6 @@ namespace Celios\Core\Filament\Blocks;
 
 use Celios\Core\Filament\Helpers\BlockLabelHelper;
 use Celios\Core\Filament\Helpers\TranslatableTabs;
-use Celios\Core\Support\Translations;
 use Filament\Forms\Components\Builder\Block;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Textarea;
@@ -45,10 +44,10 @@ class FeaturesBlock
                             ->tabs(
                                 TranslatableTabs::make(fn ($lang) => [
                                     TextInput::make("title.{$lang}")
-                                        ->label(Translations::get($lang, 'title')),
+                                        ->label(fn () => __('fields.title').' ('.strtoupper($lang).')'),
 
                                     Textarea::make("description.{$lang}")
-                                        ->label(Translations::get($lang, 'description'))
+                                        ->label(fn () => __('fields.description').' ('.strtoupper($lang).')')
                                         ->rows(3),
 
                                     Textarea::make("checklist.{$lang}")

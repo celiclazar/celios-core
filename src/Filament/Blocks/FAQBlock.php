@@ -4,7 +4,6 @@ namespace Celios\Core\Filament\Blocks;
 
 use Celios\Core\Filament\Helpers\BlockLabelHelper;
 use Celios\Core\Filament\Helpers\TranslatableTabs;
-use Celios\Core\Support\Translations;
 use Filament\Forms\Components\Builder\Block;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Textarea;
@@ -41,13 +40,13 @@ class FAQBlock
                             ->tabs(
                                 TranslatableTabs::make(fn ($lang) => [
                                     TextInput::make("question.{$lang}")
-                                        ->label(Translations::get($lang, 'question'))
-                                        ->required($lang === 'sr'),
+                                        ->label(fn () => 'Pitanje ('.strtoupper($lang).')')
+                                        ->required($lang === config('locales.default', 'sr')),
 
                                     Textarea::make("answer.{$lang}")
-                                        ->label(Translations::get($lang, 'answer'))
+                                        ->label(fn () => 'Odgovor ('.strtoupper($lang).')')
                                         ->rows(3)
-                                        ->required($lang === 'sr'),
+                                        ->required($lang === config('locales.default', 'sr')),
                                 ])
                             ),
                     ])
