@@ -2,13 +2,14 @@
 
 namespace Celios\Core\Models;
 
+use Celios\Core\Traits\HasLocalizedDisplay;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Spatie\Translatable\HasTranslations;
 
 class Post extends Model
 {
-    use HasTranslations;
+    use HasLocalizedDisplay, HasTranslations;
 
     protected $fillable = [
         'category_id',

@@ -21,7 +21,7 @@ class FormsTable
             ->columns([
                 TextColumn::make('title')
                     ->label(__('forms.form_title'))
-                    ->state(fn (Form $record): string => $record->getTranslation('title', app()->getLocale(), true) ?: __('fields.no_title'))
+                    ->state(fn (Form $record): string => $record->displayTitle())
                     ->searchable(),
 
                 TextColumn::make('slug')

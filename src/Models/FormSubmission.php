@@ -45,4 +45,11 @@ class FormSubmission extends Model
                 default => $eventName,
             });
     }
+
+    public function displayTitle(?string $locale = null): string
+    {
+        $formTitle = $this->form ? $this->form->displayTitle($locale) : __('forms.form_single');
+
+        return "{$formTitle} #{$this->id}";
+    }
 }

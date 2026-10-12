@@ -2,13 +2,14 @@
 
 namespace Celios\Core\Models;
 
+use Celios\Core\Traits\HasLocalizedDisplay;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Spatie\Translatable\HasTranslations;
 
 class NewsletterCampaign extends Model
 {
-    use HasTranslations;
+    use HasLocalizedDisplay, HasTranslations;
 
     protected $fillable = [
         'title',
@@ -85,5 +86,19 @@ class NewsletterCampaign extends Model
         }
 
         return round(($this->click_count / $this->sent_count) * 100, 1);
+    }
+
+    public function displayTitle(?string $locale = null, string $fallback = ''): string
+    {
+        if (filled($this->title)) {
+            return (string) $this->title;
+        }
+
+        $subject = $this->displayTranslatedAttribute('subject', $locale, '');
+        if (filled($subject)) {
+            return $subject;
+        }
+
+        return $fallback ?: __('newsletter.unnamed_campaign');
     }
 }

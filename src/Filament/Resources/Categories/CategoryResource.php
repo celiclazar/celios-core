@@ -64,4 +64,9 @@ class CategoryResource extends Resource
     {
         return __('sidebar.category_single');
     }
+
+    public static function getRecordTitle(?\Illuminate\Database\Eloquent\Model $record): ?string
+    {
+        return $record instanceof Category ? $record->displayTitle() : null;
+    }
 }

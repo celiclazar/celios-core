@@ -44,6 +44,22 @@ class FormController extends Controller
             ]);
         }
 
+        // 2.1 Bot & Spam Captcha Verification (Turnstile / reCAPTCHA)
+        $captchaService = app(\Celios\Core\Services\Security\CaptchaService::class);
+        if ($captchaService->isEnabled()) {
+            $token = $request->input('cf-turnstile-response')
+                ?: $request->input('g-recaptcha-response')
+                ?: $request->input('_captcha_token');
+
+            if (! $captchaService->verify($token, $request->ip())) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Spam verification failed. Please try again.',
+                    'errors' => ['captcha' => ['Spam verification failed. Please try again.']],
+                ], 422);
+            }
+        }
+
         // 3. Build Dynamic Validation Rules
         $fields = $form->fields ?? [];
         $rules = [];
@@ -130,12 +146,31 @@ class FormController extends Controller
         // 4. Process Uploaded Files in Private Submissions Disk
         $uploadedFiles = [];
         $processedData = $request->except(['_token', '_hp_name', '_hp_time']);
+        $scanner = app(\Celios\Core\Services\Security\FileScannerInterface::class);
 
         foreach ($fields as $field) {
             $key = $field['key'] ?? null;
             if ($key && ($field['type'] ?? '') === 'file' && $request->hasFile($key)) {
                 $file = $request->file($key);
                 if ($file && $file->isValid()) {
+                    // Antivirus & Malware scanning pipeline
+                    try {
+                        $scanner->scan($file);
+                    } catch (\Celios\Core\Exceptions\MalwareDetectedException $e) {
+                        \Illuminate\Support\Facades\Log::alert('[SECURITY_AUDIT] Malware blocked in API form submission', [
+                            'field' => $key,
+                            'filename' => $file->getClientOriginalName(),
+                            'virus' => $e->getVirusName() ?: $e->getMessage(),
+                            'ip' => $request->ip(),
+                        ]);
+
+                        return response()->json([
+                            'success' => false,
+                            'message' => 'The uploaded file failed security scanning (malware detected).',
+                            'errors' => [$key => ['The uploaded file failed security scanning (malware detected).']],
+                        ], 422);
+                    }
+
                     $ext = strtolower($file->getClientOriginalExtension() ?: 'bin');
                     $storedName = \Illuminate\Support\Str::uuid().'.'.$ext;
                     $path = $file->storeAs('submissions/'.date('Y/m'), $storedName, 'submissions');

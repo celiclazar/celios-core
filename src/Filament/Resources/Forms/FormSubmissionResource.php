@@ -115,4 +115,9 @@ class FormSubmissionResource extends Resource
     {
         return __('forms.submission_single');
     }
+
+    public static function getRecordTitle(?\Illuminate\Database\Eloquent\Model $record): ?string
+    {
+        return $record instanceof FormSubmission ? $record->displayTitle() : null;
+    }
 }

@@ -27,7 +27,7 @@ class MenuResource extends Resource
         return __('sidebar.group_content');
     }
 
-    protected static ?string $recordTitleAttribute = 'Menus';
+    protected static ?string $recordTitleAttribute = 'name';
 
     public static function form(Schema $schema): Schema
     {

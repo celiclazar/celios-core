@@ -20,13 +20,13 @@ class PostsTable
             ->columns([
                 TextColumn::make('title')
                     ->label(__('fields.title'))
-                    ->state(fn (Post $record): string => $record->getTranslation('title', app()->getLocale(), true) ?: __('fields.no_title'))
+                    ->state(fn (Post $record): string => $record->displayTitle())
                     ->searchable(),
 
                 TextColumn::make('category.title')
                     ->label(__('blog.category'))
                     ->state(fn (Post $record): string => $record->category
-                        ? ($record->category->getTranslation('title', app()->getLocale(), true) ?: __('fields.no_title'))
+                        ? $record->category->displayTitle()
                         : '-'
                     )
                     ->badge()

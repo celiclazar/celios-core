@@ -20,18 +20,18 @@ class CategoriesTable
             ->columns([
                 TextColumn::make('title')
                     ->label(__('fields.title'))
-                    ->state(fn (Category $record): string => $record->getTranslation('title', app()->getLocale(), true) ?: __('fields.no_title'))
+                    ->state(fn (Category $record): string => $record->displayTitle())
                     ->searchable(),
 
                 TextColumn::make('slug')
                     ->label(__('fields.url_slug'))
-                    ->state(fn (Category $record): string => $record->getTranslation('slug', app()->getLocale(), true) ?: '')
+                    ->state(fn (Category $record): string => $record->displaySlug())
                     ->searchable(),
 
                 TextColumn::make('parent.title')
                     ->label(__('fields.parent_item'))
                     ->state(fn (Category $record): string => $record->parent
-                        ? ($record->parent->getTranslation('title', app()->getLocale(), true) ?: __('fields.no_title'))
+                        ? $record->parent->displayTitle()
                         : __('fields.root_level')
                     )
                     ->badge()

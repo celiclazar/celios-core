@@ -2,6 +2,7 @@
 
 namespace Celios\Core\Models;
 
+use Celios\Core\Traits\HasLocalizedDisplay;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -9,7 +10,7 @@ use Spatie\Translatable\HasTranslations;
 
 class Category extends Model
 {
-    use HasTranslations;
+    use HasLocalizedDisplay, HasTranslations;
 
     protected $fillable = [
         'parent_id',

@@ -38,6 +38,24 @@ class CeliosServiceProvider extends ServiceProvider
             $this->mergeConfigFrom(__DIR__.'/../config/sitemap.php', 'sitemap');
         }
 
+        if (file_exists(__DIR__.'/../config/security.php')) {
+            $this->mergeConfigFrom(__DIR__.'/../config/security.php', 'security');
+        }
+
+        // Register Security Services
+        $this->app->singleton(\Celios\Core\Services\Security\CaptchaService::class);
+        $this->app->bind(
+            \Celios\Core\Services\Security\FileScannerInterface::class,
+            function () {
+                $driver = config('security.scanner.driver', 'null');
+
+                return match ($driver) {
+                    'clamav' => new \Celios\Core\Services\Security\ClamAvFileScanner,
+                    default => new \Celios\Core\Services\Security\NullFileScanner,
+                };
+            }
+        );
+
         // 2. Load Core helpers
         if (file_exists(__DIR__.'/Helpers/settings.php')) {
             require_once __DIR__.'/Helpers/settings.php';
@@ -45,6 +63,10 @@ class CeliosServiceProvider extends ServiceProvider
 
         if (file_exists(__DIR__.'/Helpers/pages.php')) {
             require_once __DIR__.'/Helpers/pages.php';
+        }
+
+        if (file_exists(__DIR__.'/Helpers/security.php')) {
+            require_once __DIR__.'/Helpers/security.php';
         }
 
         // 3. Register Module Service Provider
@@ -169,7 +191,12 @@ class CeliosServiceProvider extends ServiceProvider
             return \Illuminate\Cache\RateLimiting\Limit::perMinute(20)->by($request->ip());
         });
 
-        // 4. Publishable assets, views, translations, and configs
+        // 9. Blade Directives
+        \Illuminate\Support\Facades\Blade::directive('nonce', function () {
+            return '<?php echo app()->has("csp-nonce") ? \'nonce="\' . e(app("csp-nonce")) . \'"\' : ""; ?>';
+        });
+
+        // 10. Publishable assets, views, translations, and configs
         if ($this->app->runningInConsole()) {
             $this->commands([
                 InstallCeliosCommand::class,
@@ -181,6 +208,7 @@ class CeliosServiceProvider extends ServiceProvider
                 __DIR__.'/../config/modules.php' => config_path('modules.php'),
                 __DIR__.'/../config/locales.php' => config_path('locales.php'),
                 __DIR__.'/../config/sitemap.php' => config_path('sitemap.php'),
+                __DIR__.'/../config/security.php' => config_path('security.php'),
             ], 'celios-config');
 
             $this->publishes([

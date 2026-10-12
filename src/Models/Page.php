@@ -3,13 +3,14 @@
 namespace Celios\Core\Models;
 
 use Celios\Core\Enums\PageType;
+use Celios\Core\Traits\HasLocalizedDisplay;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Spatie\Translatable\HasTranslations;
 
 class Page extends Model
 {
-    use HasTranslations;
+    use HasLocalizedDisplay, HasTranslations;
 
     protected $fillable = [
         'title',
@@ -184,47 +185,6 @@ class Page extends Model
         $val = $type instanceof PageType ? $type->value : $type;
 
         return static::where('type', $val)->first();
-    }
-
-    public function displayTitle(?string $locale = null): string
-    {
-        $locale = $locale ?? app()->getLocale();
-        $defaultLocale = config('locales.default', 'sr');
-
-        $title = $this->getTranslation('title', $locale, false);
-        if (filled($title)) {
-            return $title;
-        }
-
-        $fallbackTitle = $this->getTranslation('title', $defaultLocale, false);
-        if (filled($fallbackTitle)) {
-            return $fallbackTitle;
-        }
-
-        $firstAvailable = collect($this->getTranslations('title'))->filter()->first();
-        if (filled($firstAvailable)) {
-            return $firstAvailable;
-        }
-
-        return __('fields.no_title');
-    }
-
-    public function displaySlug(?string $locale = null): string
-    {
-        $locale = $locale ?? app()->getLocale();
-        $defaultLocale = config('locales.default', 'sr');
-
-        $slug = $this->getTranslation('slug', $locale, false);
-        if (filled($slug)) {
-            return $slug;
-        }
-
-        $fallbackSlug = $this->getTranslation('slug', $defaultLocale, false);
-        if (filled($fallbackSlug)) {
-            return $fallbackSlug;
-        }
-
-        return collect($this->getTranslations('slug'))->filter()->first() ?: '';
     }
 
     public static function urlForType(PageType|string $type, ?string $locale = null): ?string

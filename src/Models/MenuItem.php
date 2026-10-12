@@ -3,6 +3,7 @@
 namespace Celios\Core\Models;
 
 use Celios\Core\Services\MenuResolverService;
+use Celios\Core\Traits\HasLocalizedDisplay;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -11,7 +12,7 @@ use Spatie\Translatable\HasTranslations;
 
 class MenuItem extends Model
 {
-    use HasTranslations;
+    use HasLocalizedDisplay, HasTranslations;
 
     protected $fillable = [
         'menu_id',
@@ -95,5 +96,36 @@ class MenuItem extends Model
         }
 
         return app(MenuResolverService::class)->formatCustomUrl($customUrl, $locale);
+    }
+
+    public function displayTitle(?string $locale = null, string $fallback = ''): string
+    {
+        $title = $this->displayTranslatedAttribute('title', $locale, '');
+        if (filled($title)) {
+            return $title;
+        }
+
+        if ($this->linkable && method_exists($this->linkable, 'displayTitle')) {
+            return $this->linkable->displayTitle($locale, $fallback);
+        }
+
+        return $fallback ?: __('fields.no_title');
+    }
+
+    protected static function booted(): void
+    {
+        static::saved(function (MenuItem $item) {
+            $menu = $item->menu ?? ($item->menu_id ? Menu::find($item->menu_id) : null);
+            if ($menu) {
+                app(MenuResolverService::class)->clearCache($menu->key);
+            }
+        });
+
+        static::deleted(function (MenuItem $item) {
+            $menu = $item->menu ?? ($item->menu_id ? Menu::find($item->menu_id) : null);
+            if ($menu) {
+                app(MenuResolverService::class)->clearCache($menu->key);
+            }
+        });
     }
 }

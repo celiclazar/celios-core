@@ -60,6 +60,30 @@ class FormSubmissionController extends Controller
             }
         }
 
+        // 3.1 Bot & Spam Captcha Verification (Turnstile / reCAPTCHA)
+        $captchaService = app(\Celios\Core\Services\Security\CaptchaService::class);
+        if ($captchaService->isEnabled()) {
+            $token = $request->input('cf-turnstile-response')
+                ?: $request->input('g-recaptcha-response')
+                ?: $request->input('_captcha_token');
+
+            if (! $captchaService->verify($token, $request->ip())) {
+                $captchaError = __('forms.captcha_failed', [], 'Spam verification failed. Please try again.');
+
+                if ($request->expectsJson() || $request->ajax()) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => $captchaError,
+                        'errors' => ['captcha' => [$captchaError]],
+                    ], 422);
+                }
+
+                return redirect()->back()
+                    ->withErrors(['captcha' => $captchaError])
+                    ->withInput();
+            }
+        }
+
         // 4. Build Dynamic Validation Rules
         $fields = $form->fields ?? [];
         $rules = [];
@@ -151,8 +175,10 @@ class FormSubmissionController extends Controller
             return redirect()->back()->withErrors($validator)->withInput();
         }
 
-        // 5. Process and Store Files in Private Quarantine Disk
+        // 5. Scan and Store Files in Private Quarantine Disk
         $uploadedFiles = [];
+        $scanner = app(\Celios\Core\Services\Security\FileScannerInterface::class);
+
         foreach ($fields as $field) {
             $key = $field['key'] ?? null;
             $type = $field['type'] ?? 'text';
@@ -160,6 +186,32 @@ class FormSubmissionController extends Controller
             if ($type === 'file' && $request->hasFile($key)) {
                 $file = $request->file($key);
                 if ($file && $file->isValid()) {
+                    // Antivirus & Malware scanning pipeline
+                    try {
+                        $scanner->scan($file);
+                    } catch (\Celios\Core\Exceptions\MalwareDetectedException $e) {
+                        \Illuminate\Support\Facades\Log::alert('[SECURITY_AUDIT] Malware blocked in form submission', [
+                            'field' => $key,
+                            'filename' => $file->getClientOriginalName(),
+                            'virus' => $e->getVirusName() ?: $e->getMessage(),
+                            'ip' => $request->ip(),
+                        ]);
+
+                        $malwareError = __('forms.malware_detected', [], 'The uploaded file failed security scanning (malware detected).');
+
+                        if ($request->expectsJson() || $request->ajax()) {
+                            return response()->json([
+                                'success' => false,
+                                'message' => $malwareError,
+                                'errors' => [$key => [$malwareError]],
+                            ], 422);
+                        }
+
+                        return redirect()->back()
+                            ->withErrors([$key => $malwareError])
+                            ->withInput();
+                    }
+
                     $ext = strtolower($file->getClientOriginalExtension() ?: 'bin');
                     $storedName = \Illuminate\Support\Str::uuid().'.'.$ext;
                     $path = $file->storeAs('submissions/'.date('Y/m'), $storedName, 'submissions');

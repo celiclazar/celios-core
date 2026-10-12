@@ -80,4 +80,9 @@ class PostResource extends Resource
     {
         return __('sidebar.post_single');
     }
+
+    public static function getRecordTitle(?\Illuminate\Database\Eloquent\Model $record): ?string
+    {
+        return $record instanceof Post ? $record->displayTitle() : null;
+    }
 }

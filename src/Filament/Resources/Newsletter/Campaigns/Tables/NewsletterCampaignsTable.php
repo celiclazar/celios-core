@@ -26,7 +26,8 @@ class NewsletterCampaignsTable
         return $table
             ->columns([
                 TextColumn::make('title')
-                    ->label('Campaign Title')
+                    ->label(__('fields.title'))
+                    ->state(fn (NewsletterCampaign $record): string => $record->displayTitle())
                     ->searchable()
                     ->sortable()
                     ->weight('bold'),

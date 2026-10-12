@@ -74,4 +74,9 @@ class FormResource extends Resource
             static::getRouteBaseName().'.view',
         ];
     }
+
+    public static function getRecordTitle(?\Illuminate\Database\Eloquent\Model $record): ?string
+    {
+        return $record instanceof Form ? $record->displayTitle() : null;
+    }
 }

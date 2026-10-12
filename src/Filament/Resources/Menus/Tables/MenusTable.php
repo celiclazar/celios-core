@@ -6,10 +6,12 @@ use Celios\Core\Filament\Resources\Menus\MenuResource;
 use Celios\Core\Models\Menu;
 use Filament\Actions\Action;
 use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Collection;
 
 class MenusTable
 {
@@ -19,6 +21,9 @@ class MenusTable
             ->columns([
                 TextColumn::make('key')
                     ->label(__('fields.key'))
+                    ->badge()
+                    ->color(fn (Menu $record): string => $record->isSystem() ? 'warning' : 'gray')
+                    ->icon(fn (Menu $record): ?string => $record->isSystem() ? 'heroicon-o-lock-closed' : null)
                     ->searchable(),
                 TextColumn::make('name')
                     ->label(__('fields.value'))
@@ -44,11 +49,18 @@ class MenusTable
                     ->icon('heroicon-o-rectangle-group')
                     ->color('success')
                     ->url(fn (Menu $record): string => MenuResource::getUrl('manage', ['record' => $record])),
+                DeleteAction::make()
+                    ->label(__('actions.delete'))
+                    ->hidden(fn (Menu $record): bool => $record->isSystem()),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([
-                    DeleteBulkAction::make(),
-                ]),
+                    DeleteBulkAction::make()
+                        ->label(__('actions.delete_selected'))
+                        ->action(function (Collection $records) {
+                            $records->reject(fn (Menu $menu) => $menu->isSystem())->each->delete();
+                        }),
+                ])->label(__('actions.bulk_actions')),
             ]);
     }
 }

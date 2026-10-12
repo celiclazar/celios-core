@@ -2,6 +2,7 @@
 
 namespace Celios\Core\Models;
 
+use Celios\Core\Traits\HasLocalizedDisplay;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -9,7 +10,7 @@ use Spatie\Translatable\HasTranslations;
 
 class DocumentCategory extends Model
 {
-    use HasTranslations;
+    use HasLocalizedDisplay, HasTranslations;
 
     protected $fillable = [
         'parent_id',
@@ -107,5 +108,15 @@ class DocumentCategory extends Model
         return filled($slug)
             ? url('/'.($locale ?? app()->getLocale()).'/documents/category/'.ltrim($slug, '/'))
             : url('/'.($locale ?? app()->getLocale()).'/documents');
+    }
+
+    public function displayTitle(?string $locale = null, string $fallback = ''): string
+    {
+        return $this->getLocalizedTitle($locale);
+    }
+
+    public function displaySlug(?string $locale = null, string $fallback = ''): string
+    {
+        return $this->getLocalizedSlug($locale);
     }
 }

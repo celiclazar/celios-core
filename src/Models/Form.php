@@ -2,6 +2,7 @@
 
 namespace Celios\Core\Models;
 
+use Celios\Core\Traits\HasLocalizedDisplay;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -10,7 +11,7 @@ use Spatie\Translatable\HasTranslations;
 
 class Form extends Model
 {
-    use HasFactory, HasTranslations;
+    use HasFactory, HasLocalizedDisplay, HasTranslations;
 
     protected $fillable = [
         'title',

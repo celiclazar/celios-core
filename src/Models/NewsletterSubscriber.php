@@ -93,4 +93,9 @@ class NewsletterSubscriber extends Model
 
         return $name ?: $this->email;
     }
+
+    public function displayTitle(): string
+    {
+        return $this->full_name;
+    }
 }

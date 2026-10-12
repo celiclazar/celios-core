@@ -68,4 +68,9 @@ class NewsletterCampaignResource extends Resource
     {
         return __('sidebar.campaign_single');
     }
+
+    public static function getRecordTitle(?\Illuminate\Database\Eloquent\Model $record): ?string
+    {
+        return $record instanceof NewsletterCampaign ? $record->displayTitle() : null;
+    }
 }

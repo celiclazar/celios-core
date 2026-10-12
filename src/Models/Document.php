@@ -3,6 +3,7 @@
 namespace Celios\Core\Models;
 
 use Celios\Core\Enums\DocumentAccessLevel;
+use Celios\Core\Traits\HasLocalizedDisplay;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -11,7 +12,7 @@ use Spatie\Translatable\HasTranslations;
 
 class Document extends Model
 {
-    use HasTranslations;
+    use HasLocalizedDisplay, HasTranslations;
 
     protected $fillable = [
         'category_id',
@@ -217,6 +218,16 @@ class Document extends Model
         }
 
         return $slug ?: '';
+    }
+
+    public function displayTitle(?string $locale = null, string $fallback = ''): string
+    {
+        return $this->getLocalizedTitle($locale);
+    }
+
+    public function displaySlug(?string $locale = null, string $fallback = ''): string
+    {
+        return $this->getLocalizedSlug($locale);
     }
 
     public function getDownloadUrl(?string $locale = null): string

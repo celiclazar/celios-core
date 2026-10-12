@@ -32,7 +32,7 @@ class FormSubmissionsTable
                 TextColumn::make('form.title')
                     ->label(__('forms.form_single'))
                     ->state(fn (FormSubmission $record): string => $record->form
-                        ? ($record->form->getTranslation('title', app()->getLocale(), true) ?: __('fields.no_title'))
+                        ? $record->form->displayTitle()
                         : '-'
                     )
                     ->badge()

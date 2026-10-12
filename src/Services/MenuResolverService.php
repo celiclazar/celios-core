@@ -20,34 +20,42 @@ class MenuResolverService
         $locale = $locale ?? App::getLocale();
         $cacheKey = "navigation_menu_{$key}_{$locale}";
 
-        $data = Cache::remember($cacheKey, now()->addDay(), function () use ($key, $locale) {
-            $menu = Menu::query()
-                ->whereRaw('LOWER(`key`) = ?', [$key])
-                ->with(['menuItems' => function ($query) {
-                    $query->where('is_visible', true)
-                        ->with('linkable')
-                        ->orderBy('order', 'asc');
-                }])
-                ->first();
-
-            if (! $menu) {
-                return [];
+        if (Cache::has($cacheKey)) {
+            $cached = Cache::get($cacheKey);
+            if (is_array($cached)) {
+                return collect($this->buildTree($cached));
             }
+        }
 
-            return $menu->menuItems->map(function (MenuItem $item) use ($locale) {
-                return [
-                    'id' => $item->id,
-                    'parent_id' => $item->parent_id,
-                    'target' => $item->target ?? '_self',
-                    'title' => $this->resolveTitle($item, $locale),
-                    'url' => $this->resolveUrl($item, $locale),
-                ];
-            })->toArray();
-        });
+        $menu = Menu::query()
+            ->where(function ($query) use ($key) {
+                $query->where('key', $key)
+                    ->orWhereRaw('LOWER(key) = ?', [$key]);
+            })
+            ->with(['menuItems' => function ($query) {
+                $query->where('is_visible', true)
+                    ->with('linkable')
+                    ->orderBy('order', 'asc');
+            }])
+            ->first();
 
-        $tree = $this->buildTree($data);
+        if (! $menu) {
+            return collect([]);
+        }
 
-        return collect($tree);
+        $data = $menu->menuItems->map(function (MenuItem $item) use ($locale) {
+            return [
+                'id' => $item->id,
+                'parent_id' => $item->parent_id,
+                'target' => $item->target ?? '_self',
+                'title' => $this->resolveTitle($item, $locale),
+                'url' => $this->resolveUrl($item, $locale),
+            ];
+        })->toArray();
+
+        Cache::put($cacheKey, $data, now()->addDay());
+
+        return collect($this->buildTree($data));
     }
 
     /**
@@ -74,26 +82,21 @@ class MenuResolverService
     public function clearCache(string $key): void
     {
         $key = Str::lower($key);
-        $availableLocales = array_keys(config('locales.available', ['sr' => 'Srpski', 'en' => 'English', 'it' => 'Italiano']));
+        $availableLocales = array_unique(array_filter(array_merge(
+            array_keys(config('locales.available', ['sr' => 'Srpski', 'en' => 'English', 'it' => 'Italiano'])),
+            [config('locales.default', 'sr'), 'sr', 'en', 'it', App::getLocale()]
+        )));
 
         foreach ($availableLocales as $locale) {
             Cache::forget("navigation_menu_{$key}_{$locale}");
         }
+
+        Cache::forget("navigation_menu_{$key}");
     }
 
     private function resolveTitle(MenuItem $item, string $locale): string
     {
-        $title = $item->getTranslation('title', $locale, false);
-        if (blank($title) && $item->linkable) {
-            $title = $item->linkable->getTranslation('title', $locale, false);
-        }
-
-        if (blank($title)) {
-            $defaultLocale = config('locales.default', 'sr');
-            $title = $item->getTranslation('title', $defaultLocale, false);
-        }
-
-        return $title ?? '';
+        return $item->displayTitle($locale);
     }
 
     private function resolveUrl(MenuItem $item, string $locale): string

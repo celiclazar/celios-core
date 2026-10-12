@@ -13,6 +13,14 @@ class SecurityHeadersMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
+        // 1. Generate and bind dynamic CSP nonce before processing request
+        $nonce = base64_encode(random_bytes(16));
+        app()->instance('csp-nonce', $nonce);
+
+        if (class_exists(\Illuminate\Support\Facades\Vite::class)) {
+            \Illuminate\Support\Facades\Vite::useCspNonce($nonce);
+        }
+
         $response = $next($request);
 
         $response->headers->set('X-Content-Type-Options', 'nosniff');
@@ -24,12 +32,15 @@ class SecurityHeadersMiddleware
             $response->headers->set('Strict-Transport-Security', 'max-age=31536000; includeSubDomains; preload');
         }
 
-        // Add Content-Security-Policy header if not already present
+        // 2. Add Content-Security-Policy header if not already present
         if (! $response->headers->has('Content-Security-Policy')) {
+            $useNonce = config('security.csp.enable_nonce', true);
+            $nonceToken = $useNonce ? " 'nonce-{$nonce}'" : '';
+
             $csp = [
                 "default-src 'self'",
-                "script-src 'self' 'unsafe-inline' 'unsafe-eval' https:",
-                "style-src 'self' 'unsafe-inline' https: https://fonts.googleapis.com",
+                "script-src 'self'{$nonceToken} 'unsafe-inline' 'unsafe-eval' https:",
+                "style-src 'self'{$nonceToken} 'unsafe-inline' https: https://fonts.googleapis.com",
                 "font-src 'self' data: https: https://fonts.gstatic.com",
                 "img-src 'self' data: https: blob:",
                 "connect-src 'self' https: wss:",

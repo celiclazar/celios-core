@@ -7,6 +7,7 @@ use Celios\Core\Models\Category as BlogCategory;
 use Celios\Core\Models\MenuItem;
 use Celios\Core\Models\Page as CmsPage;
 use Celios\Core\Models\Post as BlogPost;
+use Celios\Core\Services\MenuResolverService;
 use Filament\Actions\CreateAction;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\EditAction;
@@ -33,6 +34,15 @@ class ManageMenuLinks extends ManageRelatedRecords
         return __('menus.manage_links_for', [
             'menu' => $this->getRecord()->name,
         ]);
+    }
+
+    public function reorderTable(array $order, int | string | null $draggedRecordKey = null): void
+    {
+        parent::reorderTable($order, $draggedRecordKey);
+
+        if ($menu = $this->getRecord()) {
+            app(MenuResolverService::class)->clearCache($menu->key);
+        }
     }
 
     public function form(Schema $schema): Schema
@@ -87,24 +97,8 @@ class ManageMenuLinks extends ManageRelatedRecords
                                     ->with('linkable')
                                     ->get()
                                     ->mapWithKeys(function (MenuItem $item) use ($locale) {
-                                        $title = $item->getTranslation('title', $locale, false);
-
-                                        if (blank($title) && $item->linkable) {
-                                            $title = $item->linkable->getTranslation('title', $locale, false);
-                                        }
-
-                                        if (blank($title)) {
-                                            $defaultLocale = config('locales.default', 'sr');
-                                            $title = $item->getTranslation('title', $defaultLocale, false);
-                                        }
-
-                                        if (blank($title)) {
-                                            $allTitles = $item->getTranslations('title');
-                                            $title = ! empty($allTitles) ? reset($allTitles) : null;
-                                        }
-
                                         return [
-                                            $item->id => $title ?: (__('fields.no_title')." (#{$item->id})"),
+                                            $item->id => $item->displayTitle($locale)." (#{$item->id})",
                                         ];
                                     })
                                     ->all();
@@ -135,7 +129,7 @@ class ManageMenuLinks extends ManageRelatedRecords
 
                                 if ($type === CmsPage::class) {
                                     return CmsPage::query()->get()->mapWithKeys(function (CmsPage $p) use ($locale) {
-                                        $title = $p->getTranslation('title', $locale, true) ?: __('fields.no_title');
+                                        $title = $p->displayTitle($locale);
                                         if ($p->isSystem()) {
                                             $title .= ' ['.$p->type->label().']';
                                         }
@@ -146,13 +140,13 @@ class ManageMenuLinks extends ManageRelatedRecords
 
                                 if ($type === BlogCategory::class) {
                                     return BlogCategory::query()->get()->mapWithKeys(fn (BlogCategory $c) => [
-                                        $c->id => $c->getTranslation('title', $locale, true) ?: __('fields.no_title'),
+                                        $c->id => $c->displayTitle($locale),
                                     ])->all();
                                 }
 
                                 if ($type === BlogPost::class) {
                                     return BlogPost::query()->published()->get()->mapWithKeys(fn (BlogPost $p) => [
-                                        $p->id => $p->getTranslation('title', $locale, true) ?: __('fields.no_title'),
+                                        $p->id => $p->displayTitle($locale),
                                     ])->all();
                                 }
 
@@ -179,17 +173,14 @@ class ManageMenuLinks extends ManageRelatedRecords
     public function table(Table $table): Table
     {
         return $table
-            ->recordTitle(fn (MenuItem $record): string => (
-                $record->getTranslation('title', app()->getLocale(), true)
-                    ?: __('fields.no_title')
-            ))
+            ->recordTitle(fn (MenuItem $record): string => $record->displayTitle())
             ->reorderable('order')
             ->defaultSort('order', 'asc')
             ->columns([
                 TextColumn::make('title')
                     ->label(__('fields.title'))
                     ->state(function (MenuItem $record): string {
-                        $title = $record->getTranslation('title', app()->getLocale(), true) ?: __('fields.no_title');
+                        $title = $record->displayTitle();
 
                         return $record->parent_id ? "↳ {$title}" : $title;
                     })
@@ -198,7 +189,7 @@ class ManageMenuLinks extends ManageRelatedRecords
                 TextColumn::make('parent.title')
                     ->label(__('fields.parent_item'))
                     ->state(fn (MenuItem $record): string => $record->parent
-                        ? ($record->parent->getTranslation('title', app()->getLocale(), true) ?: __('fields.no_title'))
+                        ? $record->parent->displayTitle()
                         : __('fields.root_level')
                     )
                     ->badge()

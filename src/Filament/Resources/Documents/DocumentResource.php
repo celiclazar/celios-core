@@ -64,4 +64,9 @@ class DocumentResource extends Resource
     {
         return __('sidebar.document_single');
     }
+
+    public static function getRecordTitle(?\Illuminate\Database\Eloquent\Model $record): ?string
+    {
+        return $record instanceof Document ? $record->displayTitle() : null;
+    }
 }

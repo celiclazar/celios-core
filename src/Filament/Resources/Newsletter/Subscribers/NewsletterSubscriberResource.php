@@ -66,4 +66,9 @@ class NewsletterSubscriberResource extends Resource
     {
         return __('sidebar.subscriber_single');
     }
+
+    public static function getRecordTitle(?\Illuminate\Database\Eloquent\Model $record): ?string
+    {
+        return $record instanceof NewsletterSubscriber ? $record->displayTitle() : null;
+    }
 }
