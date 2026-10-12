@@ -132,6 +132,38 @@ class DocumentController extends Controller
         return $disk->download($document->file_path, $fileName);
     }
 
+    public function signedDownload(Request $request, Document $document)
+    {
+        if (! $request->hasValidSignature()) {
+            abort(401, 'Invalid or expired download signature.');
+        }
+
+        $user = auth()->user();
+        if (! $document->canAccess($user)) {
+            abort(403, __('documents.unauthorized'));
+        }
+
+        $disk = Storage::disk('documents');
+        if (! $disk->exists($document->file_path)) {
+            abort(404, 'File not found');
+        }
+
+        $document->increment('downloads_count');
+
+        DocumentDownloadLog::create([
+            'document_id' => $document->id,
+            'user_id' => $user?->id,
+            'ip_address' => $request->ip(),
+            'user_agent' => substr((string) $request->userAgent(), 0, 500),
+            'locale' => $request->query('locale', app()->getLocale()),
+            'downloaded_at' => now(),
+        ]);
+
+        $fileName = $document->file_name ?: basename($document->file_path);
+
+        return $disk->download($document->file_path, $fileName);
+    }
+
     public function preview(Request $request, ?string $locale = null, ?string $slug = null)
     {
         if ($slug === null && $locale !== null) {

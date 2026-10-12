@@ -229,6 +229,20 @@ class Document extends Model
             : url("/{$targetLocale}/documents");
     }
 
+    public function getSignedDownloadUrl(int $expirationMinutes = 15, ?string $locale = null): string
+    {
+        $targetLocale = $locale ?? app()->getLocale();
+
+        return \Illuminate\Support\Facades\URL::temporarySignedRoute(
+            'documents.download.signed',
+            now()->addMinutes($expirationMinutes),
+            [
+                'document' => $this->id,
+                'locale' => $targetLocale,
+            ]
+        );
+    }
+
     public function getPreviewUrl(?string $locale = null): string
     {
         $targetLocale = $locale ?? app()->getLocale();

@@ -148,6 +148,27 @@ class CeliosServiceProvider extends ServiceProvider
             return null;
         });
 
+        // 7. Security Event Auditing Subscriber
+        \Illuminate\Support\Facades\Event::subscribe(\Celios\Core\Listeners\SecurityEventSubscriber::class);
+
+        // 8. Security Rate Limiters
+        \Illuminate\Support\Facades\RateLimiter::for('api-login', function (\Illuminate\Http\Request $request) {
+            $email = (string) $request->input('email');
+            return \Illuminate\Cache\RateLimiting\Limit::perMinute(5)->by($request->ip().'|'.strtolower($email));
+        });
+
+        \Illuminate\Support\Facades\RateLimiter::for('form-submissions', function (\Illuminate\Http\Request $request) {
+            return \Illuminate\Cache\RateLimiting\Limit::perMinute(10)->by($request->ip());
+        });
+
+        \Illuminate\Support\Facades\RateLimiter::for('newsletter-subscribe', function (\Illuminate\Http\Request $request) {
+            return \Illuminate\Cache\RateLimiting\Limit::perMinute(5)->by($request->ip());
+        });
+
+        \Illuminate\Support\Facades\RateLimiter::for('passkeys-options', function (\Illuminate\Http\Request $request) {
+            return \Illuminate\Cache\RateLimiting\Limit::perMinute(20)->by($request->ip());
+        });
+
         // 4. Publishable assets, views, translations, and configs
         if ($this->app->runningInConsole()) {
             $this->commands([

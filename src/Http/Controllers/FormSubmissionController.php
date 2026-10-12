@@ -3,6 +3,7 @@
 namespace Celios\Core\Http\Controllers;
 
 use Celios\Core\Models\Form;
+use Celios\Core\Models\FormSubmission;
 use Celios\Core\Models\User;
 use Celios\Core\Notifications\FormSubmissionConfirmationNotification;
 use Celios\Core\Notifications\NewFormSubmissionNotification;
@@ -11,6 +12,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 class FormSubmissionController extends Controller
@@ -108,7 +110,20 @@ class FormSubmissionController extends Controller
                         if (! empty($extensions)) {
                             $fieldRules[] = 'mimes:'.implode(',', $extensions);
                         }
+                    } else {
+                        // Enforce safe default whitelist when form creator did not specify extensions
+                        $fieldRules[] = 'mimes:pdf,doc,docx,xls,xlsx,ppt,pptx,txt,csv,jpg,jpeg,png,webp,zip';
                     }
+                    // Explicitly reject dangerous executable and script file extensions
+                    $fieldRules[] = function ($attribute, $value, $fail) {
+                        if ($value instanceof \Illuminate\Http\UploadedFile) {
+                            $ext = strtolower($value->getClientOriginalExtension());
+                            $dangerous = ['php', 'phtml', 'phar', 'exe', 'bat', 'sh', 'svg', 'html', 'htm', 'js', 'cmd', 'cgi', 'pl', 'py'];
+                            if (in_array($ext, $dangerous, true)) {
+                                $fail("Files with extension [{$ext}] are forbidden for security reasons.");
+                            }
+                        }
+                    };
                     break;
                 case 'textarea':
                 case 'text':
@@ -136,7 +151,7 @@ class FormSubmissionController extends Controller
             return redirect()->back()->withErrors($validator)->withInput();
         }
 
-        // 5. Process and Store Files
+        // 5. Process and Store Files in Private Quarantine Disk
         $uploadedFiles = [];
         foreach ($fields as $field) {
             $key = $field['key'] ?? null;
@@ -145,8 +160,16 @@ class FormSubmissionController extends Controller
             if ($type === 'file' && $request->hasFile($key)) {
                 $file = $request->file($key);
                 if ($file && $file->isValid()) {
-                    $path = $file->store('forms/submissions/'.date('Y/m'), 'public');
-                    $uploadedFiles[$key] = $path;
+                    $ext = strtolower($file->getClientOriginalExtension() ?: 'bin');
+                    $storedName = \Illuminate\Support\Str::uuid().'.'.$ext;
+                    $path = $file->storeAs('submissions/'.date('Y/m'), $storedName, 'submissions');
+                    $uploadedFiles[$key] = [
+                        'path' => $path,
+                        'original_name' => $file->getClientOriginalName(),
+                        'disk' => 'submissions',
+                        'size' => $file->getSize(),
+                        'mime_type' => $file->getMimeType(),
+                    ];
                 }
             }
         }
@@ -162,7 +185,7 @@ class FormSubmissionController extends Controller
 
             if ($field['type'] === 'file') {
                 if (isset($uploadedFiles[$key])) {
-                    $data[$key] = basename($uploadedFiles[$key]);
+                    $data[$key] = $uploadedFiles[$key]['original_name'] ?? basename($uploadedFiles[$key]['path'] ?? '');
                 }
             } else {
                 $data[$key] = $request->input($key);
@@ -269,5 +292,45 @@ class FormSubmissionController extends Controller
         }
 
         return redirect()->back()->with('success', $message);
+    }
+
+    /**
+     * Securely stream uploaded submission attachment to authorized staff/admin.
+     */
+    public function adminDownload(Request $request, int $id, string $key)
+    {
+        $user = auth()->user();
+        if (! $user || ! ($user->hasAnyRole(['super_admin', 'super-admin', 'admin', 'panel_user']) || $user->can('View:FormSubmission'))) {
+            abort(403, 'Unauthorized access to submission attachment.');
+        }
+
+        $submission = FormSubmission::findOrFail($id);
+        $files = $submission->files ?? [];
+
+        if (! isset($files[$key])) {
+            abort(404, 'File not found in submission.');
+        }
+
+        $fileData = $files[$key];
+        $filePath = is_array($fileData) ? ($fileData['path'] ?? null) : $fileData;
+        $originalName = is_array($fileData) ? ($fileData['original_name'] ?? basename($filePath)) : basename($filePath);
+
+        if (! $filePath) {
+            abort(404, 'File path is missing.');
+        }
+
+        $diskName = is_array($fileData) && isset($fileData['disk']) ? $fileData['disk'] : 'submissions';
+        $disk = Storage::disk($diskName);
+
+        // Fallback for legacy submissions stored on public disk
+        if (! $disk->exists($filePath) && Storage::disk('public')->exists($filePath)) {
+            $disk = Storage::disk('public');
+        }
+
+        if (! $disk->exists($filePath)) {
+            abort(404, 'File does not exist on storage disk.');
+        }
+
+        return $disk->download($filePath, $originalName);
     }
 }

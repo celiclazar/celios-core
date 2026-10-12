@@ -92,7 +92,18 @@ class FormController extends Controller
                         if (! empty($extensions)) {
                             $fieldRules[] = 'mimes:'.implode(',', $extensions);
                         }
+                    } else {
+                        $fieldRules[] = 'mimes:pdf,doc,docx,xls,xlsx,ppt,pptx,txt,csv,jpg,jpeg,png,webp,zip';
                     }
+                    $fieldRules[] = function ($attribute, $value, $fail) {
+                        if ($value instanceof \Illuminate\Http\UploadedFile) {
+                            $ext = strtolower($value->getClientOriginalExtension());
+                            $dangerous = ['php', 'phtml', 'phar', 'exe', 'bat', 'sh', 'svg', 'html', 'htm', 'js', 'cmd', 'cgi', 'pl', 'py'];
+                            if (in_array($ext, $dangerous, true)) {
+                                $fail("Files with extension [{$ext}] are forbidden for security reasons.");
+                            }
+                        }
+                    };
                     break;
                 case 'textarea':
                 case 'text':
@@ -116,7 +127,7 @@ class FormController extends Controller
             ], 422);
         }
 
-        // 4. Process Uploaded Files
+        // 4. Process Uploaded Files in Private Submissions Disk
         $uploadedFiles = [];
         $processedData = $request->except(['_token', '_hp_name', '_hp_time']);
 
@@ -124,15 +135,20 @@ class FormController extends Controller
             $key = $field['key'] ?? null;
             if ($key && ($field['type'] ?? '') === 'file' && $request->hasFile($key)) {
                 $file = $request->file($key);
-                $path = $file->store('form-attachments/'.date('Y/m'), 'private');
-                $uploadedFiles[] = [
-                    'field' => $key,
-                    'original_name' => $file->getClientOriginalName(),
-                    'path' => $path,
-                    'size' => $file->getSize(),
-                    'mime_type' => $file->getMimeType(),
-                ];
-                $processedData[$key] = $file->getClientOriginalName();
+                if ($file && $file->isValid()) {
+                    $ext = strtolower($file->getClientOriginalExtension() ?: 'bin');
+                    $storedName = \Illuminate\Support\Str::uuid().'.'.$ext;
+                    $path = $file->storeAs('submissions/'.date('Y/m'), $storedName, 'submissions');
+                    $uploadedFiles[$key] = [
+                        'field' => $key,
+                        'original_name' => $file->getClientOriginalName(),
+                        'path' => $path,
+                        'size' => $file->getSize(),
+                        'mime_type' => $file->getMimeType(),
+                        'disk' => 'submissions',
+                    ];
+                    $processedData[$key] = $file->getClientOriginalName();
+                }
             }
         }
 

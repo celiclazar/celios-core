@@ -223,6 +223,19 @@ class NewsletterController extends Controller
             return redirect()->to('/');
         }
 
+        // Open redirect mitigation: validate target host against allowlist
+        $targetHost = strtolower((string) parse_url($target, PHP_URL_HOST));
+        $appHost = strtolower((string) parse_url(config('app.url', 'http://localhost'), PHP_URL_HOST));
+
+        $allowedHosts = array_filter(array_merge(
+            [$appHost, 'localhost', '127.0.0.1'],
+            (array) config('newsletter.allowed_redirect_hosts', [])
+        ));
+
+        if (! in_array($targetHost, $allowedHosts, true)) {
+            return redirect()->to('/');
+        }
+
         return redirect()->away($target);
     }
 

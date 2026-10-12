@@ -144,8 +144,13 @@ class MenuResolverService
             return $url;
         }
 
-        // Action schemes (mailto:, tel:, javascript:)
-        if (preg_match('/^(mailto:|tel:|javascript:)/i', $url)) {
+        // Block dangerous scripting and data action schemes
+        if (preg_match('/^(javascript:|data:|vbscript:)/i', trim($url))) {
+            return '#';
+        }
+
+        // Action schemes (mailto:, tel:)
+        if (preg_match('/^(mailto:|tel:)/i', $url)) {
             return $url;
         }
 

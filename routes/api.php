@@ -22,7 +22,8 @@ Route::prefix('v1')->group(function () {
     // AUTHENTICATION
     // ==========================================
     Route::prefix('auth')->group(function () {
-        Route::post('/login', [AuthController::class, 'login']);
+        Route::post('/login', [AuthController::class, 'login'])
+            ->middleware('throttle:api-login');
 
         Route::middleware('auth:sanctum')->group(function () {
             Route::get('/me', [AuthController::class, 'me']);
@@ -60,14 +61,16 @@ Route::prefix('v1')->group(function () {
     // FORMS
     // ==========================================
     Route::middleware('module:forms')->group(function () {
-        Route::post('/forms/{slug}/submit', [FormController::class, 'submit']);
+        Route::post('/forms/{slug}/submit', [FormController::class, 'submit'])
+            ->middleware('throttle:form-submissions');
     });
 
     // ==========================================
     // NEWSLETTER
     // ==========================================
     Route::middleware('module:newsletter')->group(function () {
-        Route::post('/newsletter/subscribe', [NewsletterController::class, 'subscribe']);
+        Route::post('/newsletter/subscribe', [NewsletterController::class, 'subscribe'])
+            ->middleware('throttle:newsletter-subscribe');
     });
 
 });

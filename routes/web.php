@@ -84,10 +84,16 @@ Route::get('/robots.txt', [SitemapController::class, 'robots'])->name('sitemap.r
 Route::middleware('module:forms')->group(function () {
     Route::post('/{locale}/forms/{slug}/submit', [FormSubmissionController::class, 'submit'])
         ->where('locale', 'sr|en|it')
+        ->middleware('throttle:form-submissions')
         ->name('forms.submit.localized');
 
     Route::post('/forms/{slug}/submit', [FormSubmissionController::class, 'submit'])
+        ->middleware('throttle:form-submissions')
         ->name('forms.submit');
+
+    Route::get('/admin/form-submissions/{id}/download/{key}', [FormSubmissionController::class, 'adminDownload'])
+        ->middleware(['web', 'auth'])
+        ->name('admin.form-submissions.download');
 });
 
 // ==========================================
@@ -96,9 +102,11 @@ Route::middleware('module:forms')->group(function () {
 Route::middleware('module:newsletter')->group(function () {
     Route::post('/{locale}/newsletter/subscribe', [NewsletterController::class, 'subscribe'])
         ->where('locale', 'sr|en|it')
+        ->middleware('throttle:newsletter-subscribe')
         ->name('newsletter.subscribe.localized');
 
     Route::post('/newsletter/subscribe', [NewsletterController::class, 'subscribe'])
+        ->middleware('throttle:newsletter-subscribe')
         ->name('newsletter.subscribe');
 
     Route::get('/{locale}/newsletter/verify/{token}', [NewsletterController::class, 'verify'])
@@ -140,6 +148,10 @@ Route::middleware('module:documents')->group(function () {
     Route::get('/{locale}/documents/{slug}/download', [DocumentController::class, 'download'])
         ->where('locale', 'sr|en|it')
         ->name('documents.download.localized');
+
+    Route::get('/documents/{document}/download-signed', [DocumentController::class, 'signedDownload'])
+        ->middleware(['web', 'signed'])
+        ->name('documents.download.signed');
 
     Route::get('/{locale}/documents/{slug}/preview', [DocumentController::class, 'preview'])
         ->where('locale', 'sr|en|it')
