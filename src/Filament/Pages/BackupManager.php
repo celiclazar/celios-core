@@ -110,8 +110,12 @@ class BackupManager extends Page implements HasTable
                 $sizeMb = round($sizeInBytes / 1024 / 1024, 2);
                 $sizeFormatted = $sizeMb >= 1 ? $sizeMb.' MB' : round($sizeInBytes / 1024, 1).' KB';
 
+                $key = md5($path);
+
                 return [
-                    'id' => md5($path),
+                    '__key' => $key,
+                    'key' => $key,
+                    'id' => $key,
                     'name' => basename($path),
                     'size' => $sizeFormatted,
                     'size_bytes' => $sizeInBytes,
@@ -123,7 +127,7 @@ class BackupManager extends Page implements HasTable
                 ];
             })
             ->sortByDesc('raw_date')
-            ->values()
+            ->keyBy('id')
             ->toArray();
     }
 
@@ -134,7 +138,8 @@ class BackupManager extends Page implements HasTable
         $totalMb = round($totalBytes / 1024 / 1024, 2);
         $totalSizeFormatted = $totalMb >= 1 ? $totalMb.' MB' : round($totalBytes / 1024, 1).' KB';
 
-        $latestBackup = ! empty($this->backups) ? ($this->backups[0]['time_ago'] ?? $this->backups[0]['date']) : 'Nema kopija';
+        $firstBackup = ! empty($this->backups) ? reset($this->backups) : null;
+        $latestBackup = $firstBackup ? ($firstBackup['time_ago'] ?? $firstBackup['date']) : 'Nema kopija';
 
         return [
             'total_count' => $totalBackups,
