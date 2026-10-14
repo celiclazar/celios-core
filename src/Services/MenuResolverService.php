@@ -29,8 +29,9 @@ class MenuResolverService
 
         $menu = Menu::query()
             ->where(function ($query) use ($key) {
+                $wrappedKey = $query->getGrammar()->wrap('key');
                 $query->where('key', $key)
-                    ->orWhereRaw('LOWER(key) = ?', [$key]);
+                    ->orWhereRaw("LOWER({$wrappedKey}) = ?", [$key]);
             })
             ->with(['menuItems' => function ($query) {
                 $query->where('is_visible', true)
