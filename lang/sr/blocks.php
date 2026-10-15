@@ -45,4 +45,7 @@ return [
     'author_bio_title' => 'Author Bio & Story (O autoru i motivaciji)',
     'cta_sandbox_title' => 'CTA Sandbox Banner (Poziv na testiranje demo admina)',
     'color_system_title' => 'Color System Teaser (Simulator adaptivnih boja)',
+    'button_block_title' => 'Dugme / Link (Button)',
+    'custom_section_title' => 'Sekcija / Prilagođeni raspored',
+    'section_reference_title' => 'Sekcija iz biblioteke',
 ];

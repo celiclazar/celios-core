@@ -22,24 +22,13 @@ class BlockLabelHelper
         $previewText = null;
 
         foreach ($fieldKeys as $key) {
-            if (empty($state[$key])) {
+            if (! isset($state[$key])) {
                 continue;
             }
 
-            $val = $state[$key];
+            $previewText = self::resolveStringValue($state[$key]);
 
-            if (is_array($val)) {
-                $locale = app()->getLocale();
-                $previewText = $val[$locale]
-                    ?? $val['sr']
-                    ?? $val['en']
-                    ?? $val['it']
-                    ?? collect($val)->first(fn ($item) => ! empty($item) && is_string($item));
-            } elseif (is_string($val)) {
-                $previewText = $val;
-            }
-
-            if (! empty($previewText)) {
+            if ($previewText !== null) {
                 break;
             }
         }
@@ -48,7 +37,7 @@ class BlockLabelHelper
             return $baseLabel;
         }
 
-        $cleanText = trim(preg_replace('/\s+/', ' ', strip_tags((string) $previewText)));
+        $cleanText = trim(preg_replace('/\s+/', ' ', strip_tags($previewText)));
 
         if (empty($cleanText)) {
             return $baseLabel;
@@ -80,13 +69,13 @@ class BlockLabelHelper
         // Try heading/title first if available
         $headingPreview = null;
         foreach (['heading', 'title', 'name'] as $key) {
-            if (! empty($state[$key])) {
-                $val = $state[$key];
-                $locale = app()->getLocale();
-                $headingPreview = is_array($val) ? ($val[$locale] ?? $val['sr'] ?? $val['en'] ?? null) : $val;
-                if (! empty($headingPreview)) {
-                    break;
-                }
+            if (! isset($state[$key])) {
+                continue;
+            }
+
+            $headingPreview = self::resolveStringValue($state[$key]);
+            if ($headingPreview !== null) {
+                break;
             }
         }
 
@@ -95,10 +84,12 @@ class BlockLabelHelper
         $countText = $count === 1 ? "1 {$singularUnit}" : "{$count} {$pluralUnit}";
 
         if (! empty($headingPreview)) {
-            $cleanHeading = trim(preg_replace('/\s+/', ' ', strip_tags((string) $headingPreview)));
-            $truncated = mb_strlen($cleanHeading) > 35 ? mb_substr($cleanHeading, 0, 35).'...' : $cleanHeading;
+            $cleanHeading = trim(preg_replace('/\s+/', ' ', strip_tags($headingPreview)));
+            if (! empty($cleanHeading)) {
+                $truncated = mb_strlen($cleanHeading) > 35 ? mb_substr($cleanHeading, 0, 35).'...' : $cleanHeading;
 
-            return "{$baseLabel}: {$truncated} ({$countText})";
+                return "{$baseLabel}: {$truncated} ({$countText})";
+            }
         }
 
         if ($count > 0) {
@@ -106,5 +97,53 @@ class BlockLabelHelper
         }
 
         return $baseLabel;
+    }
+
+    /**
+     * Safely and recursively extracts a scalar string preview from any value, localized or nested.
+     */
+    public static function resolveStringValue(mixed $value): ?string
+    {
+        if ($value === null) {
+            return null;
+        }
+
+        if (is_string($value) || is_numeric($value)) {
+            $trimmed = trim((string) $value);
+
+            return $trimmed !== '' ? $trimmed : null;
+        }
+
+        if (is_array($value)) {
+            $locale = app()->getLocale();
+
+            // Try current locale first
+            if (isset($value[$locale])) {
+                $candidate = self::resolveStringValue($value[$locale]);
+                if ($candidate !== null) {
+                    return $candidate;
+                }
+            }
+
+            // Fallback locales
+            foreach (['sr', 'en', 'it'] as $lang) {
+                if (isset($value[$lang])) {
+                    $candidate = self::resolveStringValue($value[$lang]);
+                    if ($candidate !== null) {
+                        return $candidate;
+                    }
+                }
+            }
+
+            // Fallback to first scalar in array
+            foreach ($value as $item) {
+                $candidate = self::resolveStringValue($item);
+                if ($candidate !== null) {
+                    return $candidate;
+                }
+            }
+        }
+
+        return null;
     }
 }

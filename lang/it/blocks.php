@@ -38,4 +38,7 @@ return [
     'text_block_title' => 'Blocco di Testo (Rich Editor)',
     'translations' => 'Traduzioni',
     'form_block_title' => 'Modulo / Form di contatto',
+    'button_block_title' => 'Pulsante / Azione (Button)',
+    'custom_section_title' => 'Sezione / Layout Personalizzato',
+    'section_reference_title' => 'Sezione dalla Libreria',
 ];

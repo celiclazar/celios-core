@@ -25,6 +25,8 @@ return [
     'notifications' => 'Obaveštenja',
     'page_single' => 'Stranica',
     'pages' => 'Stranice',
+    'section_single' => 'Sekcija',
+    'sections' => 'Sekcije',
     'post_single' => 'Članak',
     'posts' => 'Članci',
     'sitemap_manager' => 'Mapa sajta',

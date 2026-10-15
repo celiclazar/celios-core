@@ -19,6 +19,7 @@ return [
     'media' => 'Media',
     'notifications' => 'Notifications',
     'pages' => 'Pages',
+    'sections' => 'Sections',
     'posts' => 'Posts',
     'users' => 'Users',
 
@@ -31,6 +32,7 @@ return [
     'category_single' => 'Category',
     'notification_single' => 'Notification',
     'page_single' => 'Page',
+    'section_single' => 'Section',
     'post_single' => 'Post',
     'user_single' => 'User',
 

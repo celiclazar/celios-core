@@ -42,6 +42,11 @@ class CeliosServiceProvider extends ServiceProvider
             $this->mergeConfigFrom(__DIR__.'/../config/security.php', 'security');
         }
 
+        // Ensure Livewire payload nesting depth accommodates nested Filament section/column builders
+        if ((int) config('livewire.payload.max_nesting_depth', 10) < 30) {
+            config(['livewire.payload.max_nesting_depth' => 30]);
+        }
+
         // Register Security Services
         $this->app->singleton(\Celios\Core\Services\Security\CaptchaService::class);
         $this->app->bind(

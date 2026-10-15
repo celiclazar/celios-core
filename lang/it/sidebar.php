@@ -25,6 +25,8 @@ return [
     'notifications' => 'Notifiche',
     'page_single' => 'Pagina',
     'pages' => 'Pagine',
+    'section_single' => 'Sezione',
+    'sections' => 'Sezioni',
     'post_single' => 'Articolo',
     'posts' => 'Articoli',
     'sitemap_manager' => 'Mappa del sito',

@@ -3,6 +3,7 @@
 namespace Celios\Core\Services;
 
 use Celios\Core\Filament\Blocks\AuthorBioBlock;
+use Celios\Core\Filament\Blocks\ButtonBlock;
 use Celios\Core\Filament\Blocks\ColorSystemBlock;
 use Celios\Core\Filament\Blocks\CTABlock;
 use Celios\Core\Filament\Blocks\CtaSandboxBlock;
@@ -19,6 +20,8 @@ use Celios\Core\Filament\Blocks\InteractiveShowcaseBlock;
 use Celios\Core\Filament\Blocks\NewsletterBlock;
 use Celios\Core\Filament\Blocks\PortfolioShowcaseBlock;
 use Celios\Core\Filament\Blocks\PostsBlock;
+use Celios\Core\Filament\Blocks\SectionBlock;
+use Celios\Core\Filament\Blocks\SectionReferenceBlock;
 use Celios\Core\Filament\Blocks\SliderBlock;
 use Celios\Core\Filament\Blocks\StatsBlock;
 use Celios\Core\Filament\Blocks\TextBlock;
@@ -152,6 +155,8 @@ class ModuleManager
     public static function getAvailablePageBlocks(): array
     {
         $blocks = [
+            SectionBlock::make(),
+            SectionReferenceBlock::make(),
             HeroBlock::make(),
             HeroShowcaseBlock::make(),
             FeaturesCardsBlock::make(),
@@ -161,6 +166,7 @@ class ModuleManager
             CtaSandboxBlock::make(),
             ColorSystemBlock::make(),
             TextBlock::make(),
+            ButtonBlock::make(),
             ImageBlock::make(),
             GalleryBlock::make(),
             CTABlock::make(),

@@ -45,4 +45,7 @@ return [
     'author_bio_title' => 'Author Bio & Story (About the Creator)',
     'cta_sandbox_title' => 'CTA Sandbox Banner (Admin Demo Callout)',
     'color_system_title' => 'Color System Teaser (Adaptive Theme Preview)',
+    'button_block_title' => 'Button / Action (Button Block)',
+    'custom_section_title' => 'Custom Section Layout',
+    'section_reference_title' => 'Section from Library',
 ];
