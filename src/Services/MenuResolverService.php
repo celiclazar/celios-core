@@ -60,6 +60,66 @@ class MenuResolverService
     }
 
     /**
+     * Resolves a menu assigned to a specific theme location/slot (e.g. 'primary', 'footer').
+     * If no menu is explicitly assigned, falls back to legacy matching keys ('header', 'footer').
+     */
+    public function getMenuForLocation(string $location, ?string $locale = null): Collection
+    {
+        $location = Str::lower($location);
+        $locale = $locale ?? App::getLocale();
+        $cacheKey = "navigation_menu_location_{$location}_{$locale}";
+
+        if (Cache::has($cacheKey)) {
+            $cached = Cache::get($cacheKey);
+            if (is_array($cached)) {
+                return collect($this->buildTree($cached));
+            }
+        }
+
+        $locations = setting('theme_menu_locations', []);
+        if (is_string($locations)) {
+            $locations = json_decode($locations, true) ?: [];
+        }
+
+        $menuId = $locations[$location] ?? null;
+        $menu = null;
+
+        if ($menuId) {
+            $menu = Menu::where('id', $menuId)
+                ->with(['menuItems' => function ($query) {
+                    $query->where('is_visible', true)
+                        ->with('linkable')
+                        ->orderBy('order', 'asc');
+                }])
+                ->first();
+        }
+
+        // Backward compatibility fallback: check legacy system keys
+        if (! $menu) {
+            $fallbackKey = match ($location) {
+                'primary', 'header_navigation' => 'header',
+                default => $location,
+            };
+
+            return $this->getMenu($fallbackKey, $locale);
+        }
+
+        $data = $menu->menuItems->map(function (MenuItem $item) use ($locale) {
+            return [
+                'id' => $item->id,
+                'parent_id' => $item->parent_id,
+                'target' => $item->target ?? '_self',
+                'title' => $this->resolveTitle($item, $locale),
+                'url' => $this->resolveUrl($item, $locale),
+            ];
+        })->toArray();
+
+        Cache::put($cacheKey, $data, now()->addDay());
+
+        return collect($this->buildTree($data));
+    }
+
+    /**
      * Rekurzivno formira hijerarhijsko stablo stavki
      */
     public function buildTree(array $items, ?int $parentId = null): array
@@ -93,6 +153,35 @@ class MenuResolverService
         }
 
         Cache::forget("navigation_menu_{$key}");
+    }
+
+    /**
+     * Briše keš za specifičnu lokaciju menija na svim jezicima
+     */
+    public function clearLocationCache(string $location): void
+    {
+        $location = Str::lower($location);
+        $availableLocales = array_unique(array_filter(array_merge(
+            array_keys(config('locales.available', ['sr' => 'Srpski', 'en' => 'English', 'it' => 'Italiano'])),
+            [config('locales.default', 'sr'), 'sr', 'en', 'it', App::getLocale()]
+        )));
+
+        foreach ($availableLocales as $locale) {
+            Cache::forget("navigation_menu_location_{$location}_{$locale}");
+        }
+
+        Cache::forget("navigation_menu_location_{$location}");
+    }
+
+    /**
+     * Briše keš za sve poznate lokacije menija
+     */
+    public function clearAllLocationCaches(): void
+    {
+        $locations = ['primary', 'header', 'footer', 'footer_main', 'footer_legal', 'mobile', 'sidebar'];
+        foreach ($locations as $loc) {
+            $this->clearLocationCache($loc);
+        }
     }
 
     private function resolveTitle(MenuItem $item, string $locale): string

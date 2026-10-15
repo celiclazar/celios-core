@@ -1,7 +1,7 @@
 @inject('menuResolver', 'App\Services\MenuResolverService')
 
 @php
-    $footerItems = $menuResolver->getMenu('footer') ?? [];
+    $footerItems = $menuResolver->getMenuForLocation('footer') ?? [];
     $locale = app()->getLocale();
 @endphp
 

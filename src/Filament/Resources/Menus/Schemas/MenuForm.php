@@ -3,9 +3,11 @@
 namespace Celios\Core\Filament\Resources\Menus\Schemas;
 
 use Celios\Core\Models\Menu;
+use Celios\Core\Services\ThemeManager;
+use Filament\Forms\Components\CheckboxList;
 use Filament\Forms\Components\TextInput;
+use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
-use Illuminate\Support\Str;
 
 class MenuForm
 {
@@ -13,30 +15,28 @@ class MenuForm
     {
         return $schema
             ->components([
-                TextInput::make('key')
-                    ->label(__('fields.key') ?? 'Menu Key / Location')
-                    ->placeholder('e.g. header, footer, sidebar')
-                    ->helperText(function (?Menu $record): string {
-                        if ($record?->isSystem()) {
-                            return 'System menu key (protected, cannot be changed).';
-                        }
-                        if ($record) {
-                            return 'Menu key is locked after creation to protect theme bindings.';
-                        }
+                Section::make(__('menus.general_settings') ?? 'General Menu Details')
+                    ->schema([
+                        TextInput::make('name')
+                            ->label(__('fields.name') ?? 'Menu Name')
+                            ->placeholder('e.g. Main Header Navigation')
+                            ->helperText('A recognizable name for this menu in the admin dashboard.')
+                            ->required(),
 
-                        return 'Unique identifier key used in theme templates (e.g. header, footer).';
-                    })
-                    ->datalist(['header', 'footer', 'sidebar', 'mobile'])
-                    ->dehydrateStateUsing(fn (?string $state) => Str::slug((string) $state, '_'))
-                    ->disabled(fn (?Menu $record) => $record !== null)
-                    ->dehydrated(fn (?Menu $record) => $record === null)
-                    ->unique(Menu::class, 'key', ignoreRecord: true)
-                    ->required(),
-
-                TextInput::make('name')
-                    ->label(__('fields.name') ?? 'Menu Name')
-                    ->placeholder('e.g. Main Header Navigation')
-                    ->required(),
+                        CheckboxList::make('theme_locations')
+                            ->label(__('menus.display_locations') ?? 'Theme Display Locations')
+                            ->helperText('Select which theme navigation slots should display this menu on the frontend.')
+                            ->options(function () {
+                                return app(ThemeManager::class)->getMenuLocations();
+                            })
+                            ->afterStateHydrated(function ($component, ?Menu $record) {
+                                if ($record) {
+                                    $component->state($record->getAssignedLocations());
+                                }
+                            })
+                            ->dehydrated(false),
+                    ]),
             ]);
     }
 }
+

@@ -19,15 +19,31 @@ class MenusTable
     {
         return $table
             ->columns([
+                TextColumn::make('name')
+                    ->label(__('fields.name') ?? 'Menu Name')
+                    ->weight('bold')
+                    ->searchable(),
+                TextColumn::make('locations')
+                    ->label(__('menus.locations') ?? 'Display Locations')
+                    ->state(function (Menu $record): array {
+                        $assigned = $record->getAssignedLocations();
+                        $themeLocations = app(\Celios\Core\Services\ThemeManager::class)->getMenuLocations();
+
+                        return array_values(array_map(fn ($key) => $themeLocations[$key] ?? ucfirst(str_replace('_', ' ', $key)), $assigned));
+                    })
+                    ->badge()
+                    ->color('info')
+                    ->placeholder('—'),
+                TextColumn::make('menu_items_count')
+                    ->label(__('menus.items_count') ?? 'Links Count')
+                    ->counts('menuItems')
+                    ->badge()
+                    ->color('gray'),
                 TextColumn::make('key')
                     ->label(__('fields.key'))
                     ->badge()
-                    ->color(fn (Menu $record): string => $record->isSystem() ? 'warning' : 'gray')
-                    ->icon(fn (Menu $record): ?string => $record->isSystem() ? 'heroicon-o-lock-closed' : null)
-                    ->searchable(),
-                TextColumn::make('name')
-                    ->label(__('fields.value'))
-                    ->searchable(),
+                    ->color('gray')
+                    ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('created_at')
                     ->label(__('fields.created_at'))
                     ->dateTime()

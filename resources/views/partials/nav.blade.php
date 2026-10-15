@@ -1,7 +1,7 @@
 @inject('menuResolver', 'App\Services\MenuResolverService')
 
 @php
-    $headerItems = $menuResolver->getMenu('header') ?? [];
+    $headerItems = $menuResolver->getMenuForLocation('primary') ?? [];
     $locale = app()->getLocale();
 @endphp
 

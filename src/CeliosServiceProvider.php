@@ -61,6 +61,10 @@ class CeliosServiceProvider extends ServiceProvider
             }
         );
 
+        // Register Theme Engine Services
+        $this->app->singleton(\Celios\Core\Services\ThemeManager::class);
+        $this->app->singleton(\Celios\Core\Services\ThemeInstallerService::class);
+
         // 2. Load Core helpers
         if (file_exists(__DIR__.'/Helpers/settings.php')) {
             require_once __DIR__.'/Helpers/settings.php';
@@ -143,6 +147,9 @@ class CeliosServiceProvider extends ServiceProvider
                 $this->loadViewsFrom(__DIR__.'/../resources/views/vendor/filament-panels', 'filament-panels');
             }
         }
+
+        // 2b. Boot Active Custom Theme (Prepends Theme View Path to Cascade)
+        $this->app->make(\Celios\Core\Services\ThemeManager::class)->boot();
 
         // 3. Load Core Translations
         if (is_dir(__DIR__.'/../lang')) {
