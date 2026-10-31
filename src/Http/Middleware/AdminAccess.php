@@ -15,11 +15,17 @@ class AdminAccess
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (! auth()->check()) {
+        $user = $request->user();
+
+        if (! $user) {
+            if ($request->expectsJson() || $request->is('api/*')) {
+                abort(401, 'Unauthenticated.');
+            }
+
             return redirect('/login');
         }
 
-        if (auth()->user()->hasAnyRole(['super_admin', 'super-admin', 'admin', 'panel_user'])) {
+        if ($user->hasAnyRole(['super_admin', 'super-admin', 'admin', 'panel_user'])) {
             return $next($request);
         }
 

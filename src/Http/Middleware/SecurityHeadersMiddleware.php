@@ -34,7 +34,7 @@ class SecurityHeadersMiddleware
 
         // 2. Add Content-Security-Policy header if not already present
         if (! $response->headers->has('Content-Security-Policy')) {
-            $useNonce = config('security.csp.enable_nonce', true);
+            $useNonce = config('security.csp.enable_nonce', true) && ! $request->is('docs/*');
             $nonceToken = $useNonce ? " 'nonce-{$nonce}'" : '';
 
             $csp = [

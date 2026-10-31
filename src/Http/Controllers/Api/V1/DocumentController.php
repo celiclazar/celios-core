@@ -105,4 +105,100 @@ class DocumentController extends Controller
 
         return $disk->download($document->file_path, $fileName);
     }
+
+    /**
+     * Stream inline preview of the document file.
+     */
+    public function preview(Request $request, Document $document): StreamedResponse|JsonResponse
+    {
+        $user = $request->user('sanctum');
+
+        if (! $document->is_published || ! $document->canAccess($user)) {
+            return response()->json([
+                'message' => 'Unauthorized or document unavailable.',
+            ], 403);
+        }
+
+        $disk = Storage::disk('documents');
+        if (! $disk->exists($document->file_path)) {
+            return response()->json([
+                'message' => 'File not found on storage disk.',
+            ], 404);
+        }
+
+        $fileName = $document->file_name ?: basename($document->file_path);
+
+        return $disk->response($document->file_path, $fileName, [
+            'Content-Disposition' => 'inline; filename="'.$fileName.'"',
+        ]);
+    }
+
+    /**
+     * Upload and create a new document (Admin).
+     */
+    public function store(Request $request): DocumentResource
+    {
+        $validated = $request->validate([
+            'category_id' => ['nullable', 'integer', 'exists:document_categories,id'],
+            'title' => ['required', 'array'],
+            'slug' => ['required', 'array'],
+            'description' => ['nullable', 'array'],
+            'file' => ['required_without:file_path', 'file', 'max:51200'],
+            'file_path' => ['required_without:file', 'string'],
+            'version' => ['nullable', 'string', 'max:50'],
+            'access_level' => ['nullable', 'string', 'in:public,authenticated,role_based'],
+            'allowed_roles' => ['nullable', 'array'],
+            'is_published' => ['boolean'],
+            'published_at' => ['nullable', 'date'],
+        ]);
+
+        if ($request->hasFile('file')) {
+            $uploaded = $request->file('file');
+            $validated['file_path'] = $uploaded->store('uploads/' . date('Y/m'), 'documents');
+            $validated['file_name'] = $uploaded->getClientOriginalName();
+            $validated['file_size'] = $uploaded->getSize();
+            $validated['file_type'] = strtolower($uploaded->getClientOriginalExtension());
+        }
+
+        unset($validated['file']);
+        $validated['uploaded_by'] = $request->user()?->id;
+
+        $document = Document::create($validated);
+
+        return new DocumentResource($document->load('category'));
+    }
+
+    /**
+     * Update an existing document (Admin).
+     */
+    public function update(Request $request, Document $document): DocumentResource
+    {
+        $validated = $request->validate([
+            'category_id' => ['nullable', 'integer', 'exists:document_categories,id'],
+            'title' => ['sometimes', 'required', 'array'],
+            'slug' => ['sometimes', 'required', 'array'],
+            'description' => ['nullable', 'array'],
+            'version' => ['nullable', 'string', 'max:50'],
+            'access_level' => ['nullable', 'string', 'in:public,authenticated,role_based'],
+            'allowed_roles' => ['nullable', 'array'],
+            'is_published' => ['boolean'],
+            'published_at' => ['nullable', 'date'],
+        ]);
+
+        $document->update($validated);
+
+        return new DocumentResource($document->load('category'));
+    }
+
+    /**
+     * Delete a document (Admin).
+     */
+    public function destroy(Document $document): JsonResponse
+    {
+        $document->delete();
+
+        return response()->json([
+            'message' => 'Document deleted successfully.',
+        ]);
+    }
 }

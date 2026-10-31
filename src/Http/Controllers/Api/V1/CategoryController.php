@@ -55,4 +55,54 @@ class CategoryController extends Controller
             'posts' => PostResource::collection($posts)->response()->getData(true),
         ]);
     }
+
+    /**
+     * Create a new blog category (Admin).
+     */
+    public function store(Request $request): CategoryResource
+    {
+        $validated = $request->validate([
+            'parent_id' => ['nullable', 'integer', 'exists:categories,id'],
+            'title' => ['required', 'array'],
+            'slug' => ['required', 'array'],
+            'description' => ['nullable', 'array'],
+            'order' => ['integer'],
+            'is_visible' => ['boolean'],
+        ]);
+
+        $category = Category::create($validated);
+
+        return new CategoryResource($category);
+    }
+
+    /**
+     * Update an existing blog category (Admin).
+     */
+    public function update(Request $request, Category $category): CategoryResource
+    {
+        $validated = $request->validate([
+            'parent_id' => ['nullable', 'integer', 'exists:categories,id'],
+            'title' => ['sometimes', 'required', 'array'],
+            'slug' => ['sometimes', 'required', 'array'],
+            'description' => ['nullable', 'array'],
+            'order' => ['integer'],
+            'is_visible' => ['boolean'],
+        ]);
+
+        $category->update($validated);
+
+        return new CategoryResource($category);
+    }
+
+    /**
+     * Delete a blog category (Admin).
+     */
+    public function destroy(Category $category): JsonResponse
+    {
+        $category->delete();
+
+        return response()->json([
+            'message' => 'Category deleted successfully.',
+        ]);
+    }
 }

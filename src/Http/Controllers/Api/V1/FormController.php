@@ -3,17 +3,36 @@
 namespace Celios\Core\Http\Controllers\Api\V1;
 
 use Celios\Core\Http\Controllers\Controller;
+use Celios\Core\Http\Resources\V1\FormResource;
+use Celios\Core\Http\Resources\V1\FormSubmissionResource;
 use Celios\Core\Models\Form;
 use Celios\Core\Models\FormSubmission;
 use Celios\Core\Notifications\FormSubmissionConfirmationNotification;
 use Celios\Core\Notifications\NewFormSubmissionNotification;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 class FormController extends Controller
 {
+    /**
+     * Get active form schema and field definitions by slug or ID.
+     */
+    public function show(string $slug): FormResource
+    {
+        $form = Form::where('is_active', true)
+            ->where(function ($query) use ($slug) {
+                $query->where('slug', $slug)
+                    ->orWhere('id', is_numeric($slug) ? (int) $slug : 0);
+            })
+            ->firstOrFail();
+
+        return new FormResource($form);
+    }
+
     /**
      * Submit an active form by slug or ID.
      */
@@ -40,7 +59,7 @@ class FormController extends Controller
         if ($request->filled('_hp_name')) {
             return response()->json([
                 'success' => true,
-                'message' => $form->getTranslation('confirmation_message', $currentLocale, false) ?: 'Thank you for your submission.',
+                'message' => $form->getTranslation('success_message', $currentLocale, false) ?: 'Thank you for your submission.',
             ]);
         }
 
@@ -153,7 +172,6 @@ class FormController extends Controller
             if ($key && ($field['type'] ?? '') === 'file' && $request->hasFile($key)) {
                 $file = $request->file($key);
                 if ($file && $file->isValid()) {
-                    // Antivirus & Malware scanning pipeline
                     try {
                         $scanner->scan($file);
                     } catch (\Celios\Core\Exceptions\MalwareDetectedException $e) {
@@ -194,20 +212,17 @@ class FormController extends Controller
             'files' => $uploadedFiles,
             'ip_address' => $request->ip(),
             'user_agent' => substr((string) $request->userAgent(), 0, 500),
-            'status' => 'new',
-            'locale' => $currentLocale,
+            'is_read' => false,
         ]);
 
         // 6. Notifications
         try {
-            // Admin notification
-            $recipients = $form->recipients ?? [];
+            $recipients = $form->recipient_emails ?? [];
             if (! empty($recipients)) {
                 Notification::route('mail', $recipients)
                     ->notify(new NewFormSubmissionNotification($submission));
             }
 
-            // Auto-responder confirmation to submitter
             $senderEmail = null;
             foreach ($fields as $field) {
                 if (($field['type'] ?? '') === 'email' && ! empty($processedData[$field['key']])) {
@@ -224,12 +239,123 @@ class FormController extends Controller
             report($e);
         }
 
-        $confirmationMessage = $form->getTranslation('confirmation_message', $currentLocale, false) ?: 'Thank you for your submission.';
+        $confirmationMessage = $form->getTranslation('success_message', $currentLocale, false) ?: 'Thank you for your submission.';
 
         return response()->json([
             'success' => true,
             'message' => $confirmationMessage,
             'submission_id' => $submission->id,
         ], 201);
+    }
+
+    /**
+     * List all forms with submission counts (Admin).
+     */
+    public function index(): AnonymousResourceCollection
+    {
+        $forms = Form::query()
+            ->withCount('submissions')
+            ->latest('id')
+            ->get();
+
+        return FormResource::collection($forms);
+    }
+
+    /**
+     * Create a new dynamic form (Admin).
+     */
+    public function store(Request $request): FormResource
+    {
+        $validated = $request->validate([
+            'title' => ['required', 'array'],
+            'slug' => ['required', 'string', 'max:255', 'unique:forms,slug'],
+            'description' => ['nullable', 'array'],
+            'fields' => ['required', 'array'],
+            'recipient_emails' => ['nullable', 'array'],
+            'send_confirmation_email' => ['boolean'],
+            'confirmation_email_subject' => ['nullable', 'array'],
+            'confirmation_email_body' => ['nullable', 'array'],
+            'success_message' => ['nullable', 'array'],
+            'submit_button_text' => ['nullable', 'array'],
+            'is_active' => ['boolean'],
+        ]);
+
+        $form = Form::create($validated);
+
+        return new FormResource($form);
+    }
+
+    /**
+     * Update an existing dynamic form (Admin).
+     */
+    public function update(Request $request, Form $form): FormResource
+    {
+        $validated = $request->validate([
+            'title' => ['sometimes', 'required', 'array'],
+            'slug' => ['sometimes', 'required', 'string', 'max:255', Rule::unique('forms', 'slug')->ignore($form->id)],
+            'description' => ['nullable', 'array'],
+            'fields' => ['sometimes', 'required', 'array'],
+            'recipient_emails' => ['nullable', 'array'],
+            'send_confirmation_email' => ['boolean'],
+            'confirmation_email_subject' => ['nullable', 'array'],
+            'confirmation_email_body' => ['nullable', 'array'],
+            'success_message' => ['nullable', 'array'],
+            'submit_button_text' => ['nullable', 'array'],
+            'is_active' => ['boolean'],
+        ]);
+
+        $form->update($validated);
+
+        return new FormResource($form);
+    }
+
+    /**
+     * Delete a dynamic form (Admin).
+     */
+    public function destroy(Form $form): JsonResponse
+    {
+        $form->delete();
+
+        return response()->json([
+            'message' => 'Form deleted successfully.',
+        ]);
+    }
+
+    /**
+     * List paginated submissions for a form (Admin).
+     */
+    public function submissions(Request $request, Form $form): AnonymousResourceCollection
+    {
+        $perPage = min(max($request->integer('per_page', 15), 1), 50);
+
+        $submissions = $form->submissions()
+            ->paginate($perPage)
+            ->withQueryString();
+
+        return FormSubmissionResource::collection($submissions);
+    }
+
+    /**
+     * Mark a form submission as read/unread (Admin).
+     */
+    public function markSubmissionRead(Request $request, FormSubmission $submission): FormSubmissionResource
+    {
+        $submission->update([
+            'is_read' => $request->boolean('is_read', true),
+        ]);
+
+        return new FormSubmissionResource($submission);
+    }
+
+    /**
+     * Delete a form submission (Admin).
+     */
+    public function destroySubmission(FormSubmission $submission): JsonResponse
+    {
+        $submission->delete();
+
+        return response()->json([
+            'message' => 'Submission deleted successfully.',
+        ]);
     }
 }

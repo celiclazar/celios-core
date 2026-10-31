@@ -32,9 +32,10 @@ class DocumentResource extends JsonResource
             'access_level' => $this->access_level?->value ?? $this->access_level,
             'downloads_count' => $this->downloads_count ?? 0,
             'download_url' => url("/api/v1/documents/{$this->id}/download"),
+            'preview_url' => url("/api/v1/documents/{$this->id}/preview"),
             'category' => $this->whenLoaded('category', fn () => [
                 'id' => $this->category?->id,
-                'name' => $this->category?->getTranslation('name', $locale, false) ?: $this->category?->name,
+                'title' => $this->category?->getTranslation('title', $locale, false) ?: $this->category?->title,
                 'slug' => $this->category?->getTranslation('slug', $locale, false) ?: $this->category?->slug,
             ]),
             'published_at' => $this->published_at?->toIso8601String(),
