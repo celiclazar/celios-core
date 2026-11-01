@@ -5,6 +5,8 @@ namespace Celios\Core\Filament;
 use Filament\Contracts\Plugin;
 use Filament\Navigation\NavigationGroup;
 use Filament\Panel;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Str;
 
 class CeliosPlugin implements Plugin
 {
@@ -94,6 +96,42 @@ class CeliosPlugin implements Plugin
             ->discoverResources(in: __DIR__.'/Resources', for: 'Celios\\Core\\Filament\\Resources')
             ->discoverPages(in: __DIR__.'/Pages', for: 'Celios\\Core\\Filament\\Pages')
             ->discoverWidgets(in: __DIR__.'/Widgets', for: 'Celios\\Core\\Filament\\Widgets');
+
+        $discoveredModules = [];
+
+        foreach ([base_path('packages'), base_path('Modules'), base_path('vendor/celios')] as $parentPath) {
+            if (! File::exists($parentPath)) {
+                continue;
+            }
+
+            foreach (File::directories($parentPath) as $moduleDir) {
+                $dirName = basename($moduleDir);
+                if ($dirName === 'core') {
+                    continue;
+                }
+
+                $studlyName = Str::studly($dirName);
+                if (isset($discoveredModules[$studlyName])) {
+                    continue;
+                }
+                $discoveredModules[$studlyName] = true;
+
+                $resPath = $moduleDir.'/Filament/Resources';
+                if (File::exists($resPath)) {
+                    $panel->discoverResources(in: $resPath, for: "Modules\\{$studlyName}\\Filament\\Resources");
+                }
+
+                $pagesPath = $moduleDir.'/Filament/Pages';
+                if (File::exists($pagesPath)) {
+                    $panel->discoverPages(in: $pagesPath, for: "Modules\\{$studlyName}\\Filament\\Pages");
+                }
+
+                $widgetsPath = $moduleDir.'/Filament/Widgets';
+                if (File::exists($widgetsPath)) {
+                    $panel->discoverWidgets(in: $widgetsPath, for: "Modules\\{$studlyName}\\Filament\\Widgets");
+                }
+            }
+        }
     }
 
     public function boot(Panel $panel): void

@@ -5,6 +5,8 @@ namespace Celios\Core;
 use Celios\Core\Console\Commands\GenerateSitemapCommand;
 use Celios\Core\Console\Commands\InstallCeliosCommand;
 use Celios\Core\Console\Commands\MakeModuleCommand;
+use Celios\Core\Console\Commands\ReleaseCeliosCommand;
+use Celios\Core\Console\Commands\UpdateCeliosCommand;
 use Celios\Core\Enums\DocumentAccessLevel;
 use Celios\Core\Enums\PageType;
 use Celios\Core\Filament\Traits\HasModuleToggle;
@@ -212,6 +214,8 @@ class CeliosServiceProvider extends ServiceProvider
         if ($this->app->runningInConsole()) {
             $this->commands([
                 InstallCeliosCommand::class,
+                UpdateCeliosCommand::class,
+                ReleaseCeliosCommand::class,
                 GenerateSitemapCommand::class,
                 MakeModuleCommand::class,
             ]);

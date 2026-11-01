@@ -9,7 +9,6 @@ use Celios\Core\Filament\Pages\NewsletterSettingsPage;
 use Celios\Core\Filament\Pages\QueueManager;
 use Celios\Core\Filament\Resources\Activities\ActivityResource;
 use Celios\Core\Filament\Resources\Categories\CategoryResource;
-use Celios\Core\Filament\Resources\Contacts\ContactResource;
 use Celios\Core\Filament\Resources\DocumentCategories\DocumentCategoryResource;
 use Celios\Core\Filament\Resources\Documents\DocumentResource;
 use Celios\Core\Filament\Resources\Forms\FormResource;
@@ -17,6 +16,7 @@ use Celios\Core\Filament\Resources\Forms\FormSubmissionResource;
 use Celios\Core\Filament\Resources\Newsletter\Campaigns\NewsletterCampaignResource;
 use Celios\Core\Filament\Resources\Newsletter\Subscribers\NewsletterSubscriberResource;
 use Celios\Core\Filament\Resources\Posts\PostResource;
+use Modules\Crm\Filament\Resources\Contacts\ContactResource;
 use Modules\Payment\Filament\Resources\PaymentGatewayResource;
 use Modules\Payment\Filament\Resources\PaymentResource;
 

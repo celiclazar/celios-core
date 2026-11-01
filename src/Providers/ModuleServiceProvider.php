@@ -12,18 +12,22 @@ class ModuleServiceProvider extends ServiceProvider
     protected function getModulePaths(): array
     {
         $paths = [];
-        foreach ([base_path('packages'), base_path('Modules')] as $parent) {
+        foreach ([base_path('packages'), base_path('Modules'), base_path('vendor/celios')] as $parent) {
             if (File::exists($parent)) {
                 foreach (File::directories($parent) as $dir) {
-                    if (basename($dir) === 'core') {
+                    $dirName = basename($dir);
+                    if ($dirName === 'core') {
                         continue;
                     }
-                    $paths[] = $dir;
+                    $studlyName = Str::studly($dirName);
+                    if (! isset($paths[$studlyName])) {
+                        $paths[$studlyName] = $dir;
+                    }
                 }
             }
         }
 
-        return $paths;
+        return array_values($paths);
     }
 
     public function boot(): void
