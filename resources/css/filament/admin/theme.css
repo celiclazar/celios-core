@@ -126,7 +126,6 @@
 [data-admin-theme="midnight"] .fi-modal-footer,
 [data-admin-theme="midnight"] .fi-widget,
 [data-admin-theme="midnight"] .fi-tabs,
-[data-admin-theme="midnight"] .fi-tabs-item,
 [data-admin-theme="midnight"] .bg-white,
 [data-admin-theme="obsidian"] .fi-section,
 [data-admin-theme="obsidian"] .fi-section-content-ctn,
@@ -154,11 +153,35 @@
 [data-admin-theme="obsidian"] .fi-modal-footer,
 [data-admin-theme="obsidian"] .fi-widget,
 [data-admin-theme="obsidian"] .fi-tabs,
-[data-admin-theme="obsidian"] .fi-tabs-item,
 [data-admin-theme="obsidian"] .bg-white {
     background-color: var(--brand-surface-card) !important;
     color: #f4f4f5 !important;
     border-color: var(--brand-surface-container) !important;
+}
+
+.fi-tabs > .fi-sc-tabs-tablist {
+    display: contents !important;
+}
+
+[data-admin-theme="midnight"] .fi-tabs-item:not(.fi-active) .fi-tabs-item-label,
+[data-admin-theme="obsidian"] .fi-tabs-item:not(.fi-active) .fi-tabs-item-label {
+    color: #a1a1aa !important;
+}
+
+[data-admin-theme="midnight"] .fi-tabs-item:not(.fi-active):hover,
+[data-admin-theme="obsidian"] .fi-tabs-item:not(.fi-active):hover {
+    background-color: var(--brand-surface-low) !important;
+}
+
+[data-admin-theme="midnight"] .fi-tabs-item.fi-active,
+[data-admin-theme="obsidian"] .fi-tabs-item.fi-active {
+    background-color: var(--brand-surface-container) !important;
+}
+
+[data-admin-theme="midnight"] .fi-tabs-item.fi-active .fi-tabs-item-label,
+[data-admin-theme="obsidian"] .fi-tabs-item.fi-active .fi-tabs-item-label {
+    color: #ffffff !important;
+    font-weight: 600 !important;
 }
 
 [data-admin-theme="midnight"] input,

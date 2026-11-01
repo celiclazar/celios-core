@@ -36,6 +36,9 @@
 
     // Izvlačenje slike iz Awcodes Curator-a
     $imageId = $data['background_image_id'] ?? null;
+    if (is_array($imageId)) {
+        $imageId = $imageId[0] ?? null;
+    }
     $bgImageUrl = null;
 
     if ($imageId) {

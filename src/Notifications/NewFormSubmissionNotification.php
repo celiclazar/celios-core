@@ -40,6 +40,10 @@ class NewFormSubmissionNotification extends Notification implements ShouldQueue
         $data = $this->submission->data ?? [];
         $fields = $form?->fields ?? [];
 
+        if (! empty($data['email']) && filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
+            $mail->replyTo($data['email'], $data['name'] ?? null);
+        }
+
         foreach ($data as $key => $val) {
             $fieldDef = collect($fields)->firstWhere('key', $key);
             $label = $key;

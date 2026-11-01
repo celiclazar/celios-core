@@ -44,7 +44,8 @@ class HeroBlock
                     ->label(fn () => __('blocks.button_url')),
 
                 CuratorPicker::make('background_image_id')
-                    ->label(fn () => __('blocks.background_image')),
+                    ->label(fn () => __('blocks.background_image'))
+                    ->multiple(),
             ]);
     }
 }
