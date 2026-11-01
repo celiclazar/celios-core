@@ -264,10 +264,10 @@ class FormSubmissionController extends Controller
 
     protected function sendNotifications(Form $form, $submission, array $data = []): void
     {
-        try {
-            $adminNotification = new NewFormSubmissionNotification($submission);
+        $adminNotification = new NewFormSubmissionNotification($submission);
 
-            // A. Send email notifications to assigned system users
+        // A. Send email notifications to assigned system users and legacy recipient_emails
+        try {
             $recipientUserIds = $form->recipient_user_ids ?? [];
             if (is_array($recipientUserIds) && ! empty($recipientUserIds)) {
                 $users = User::whereIn('id', $recipientUserIds)->get();
@@ -278,7 +278,6 @@ class FormSubmissionController extends Controller
                 }
             }
 
-            // Legacy support for direct recipient_emails if present
             $legacyEmails = $form->recipient_emails ?? [];
             if (is_array($legacyEmails)) {
                 foreach ($legacyEmails as $email) {
@@ -287,8 +286,12 @@ class FormSubmissionController extends Controller
                     }
                 }
             }
+        } catch (\Throwable $e) {
+            report($e);
+        }
 
-            // B. Send in-app database notification to authorized users / super admins
+        // B. Send in-app database notification to authorized users / super admins
+        try {
             $usersToNotify = User::query()
                 ->where('status', 'active')
                 ->get()
@@ -297,9 +300,13 @@ class FormSubmissionController extends Controller
             if ($usersToNotify->isNotEmpty()) {
                 Notification::send($usersToNotify, $adminNotification);
             }
+        } catch (\Throwable $e) {
+            report($e);
+        }
 
-            // C. Send Auto-Responder confirmation email to submitter if enabled
-            if ($form->send_confirmation_email) {
+        // C. Send Auto-Responder confirmation email to submitter if enabled
+        if ($form->send_confirmation_email) {
+            try {
                 $submitterEmail = null;
                 foreach ($form->fields ?? [] as $f) {
                     if (($f['type'] ?? '') === 'email' && ! empty($data[$f['key']])) {
@@ -321,9 +328,9 @@ class FormSubmissionController extends Controller
                     Notification::route('mail', trim($submitterEmail))
                         ->notify(new FormSubmissionConfirmationNotification($submission));
                 }
+            } catch (\Throwable $e) {
+                report($e);
             }
-        } catch (\Throwable $e) {
-            report($e);
         }
     }
 

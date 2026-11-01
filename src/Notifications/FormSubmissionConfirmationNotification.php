@@ -39,7 +39,7 @@ class FormSubmissionConfirmationNotification extends Notification implements Sho
             ->greeting($greeting);
 
         if (filled($customBody)) {
-            $mail->line($customBody);
+            $mail->line(new \Illuminate\Support\HtmlString($customBody));
         } else {
             $mail->line(__('forms.confirmation_email_default_body', ['form' => $formTitle]));
         }

@@ -19,7 +19,11 @@ class NewFormSubmissionNotification extends Notification implements ShouldQueue
 
     public function via(object $notifiable): array
     {
-        return ['mail', 'database'];
+        if ($notifiable instanceof \Illuminate\Notifications\AnonymousNotifiable) {
+            return ['mail'];
+        }
+
+        return ['database'];
     }
 
     public function toMail(object $notifiable): MailMessage

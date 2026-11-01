@@ -66,7 +66,7 @@ class UpdateCeliosCommand extends Command
                 });
             } else {
                 $this->components->task('Updating celios/* packages via Composer', function () {
-                    return $this->runShellCommand('composer update celios/* --with-all-dependencies --no-interaction');
+                    return $this->runShellCommand('composer update "celios/*" --no-interaction');
                 });
             }
 

@@ -162,6 +162,15 @@ class CeliosServiceProvider extends ServiceProvider
             }
         }
 
+        // 3b. Register Core Middleware Aliases
+        $router = $this->app['router'];
+        $router->aliasMiddleware('module', \Celios\Core\Http\Middleware\EnsureModuleEnabled::class);
+        $router->aliasMiddleware('admin.access', \Celios\Core\Http\Middleware\AdminAccess::class);
+        if (class_exists(\Spatie\Permission\Middleware\RoleMiddleware::class)) {
+            $router->aliasMiddleware('role', \Spatie\Permission\Middleware\RoleMiddleware::class);
+            $router->aliasMiddleware('permission', \Spatie\Permission\Middleware\PermissionMiddleware::class);
+        }
+
         // 4. Load Core API Routes
         if (file_exists(__DIR__.'/../routes/api.php')) {
             Route::prefix('api')
