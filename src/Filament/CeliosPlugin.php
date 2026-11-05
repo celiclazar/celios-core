@@ -92,6 +92,10 @@ class CeliosPlugin implements Plugin
                 ->collapsed();
         }
 
+        $navigationGroups[] = NavigationGroup::make(fn () => __('sidebar.group_appointments'))
+            ->icon('heroicon-o-calendar-days')
+            ->collapsible();
+
         $panel->navigationGroups($navigationGroups)
             ->discoverResources(in: __DIR__.'/Resources', for: 'Celios\\Core\\Filament\\Resources')
             ->discoverPages(in: __DIR__.'/Pages', for: 'Celios\\Core\\Filament\\Pages')

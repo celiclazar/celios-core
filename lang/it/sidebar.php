@@ -5,7 +5,16 @@ return [
     'group_content' => 'Contenuto',
     'group_marketing' => 'CRM & Marketing',
     'group_payments' => 'Pagamenti',
+    'group_appointments' => 'Appuntamenti',
     'group_system' => 'Sistema & Accesso',
+
+    // Appointments
+    'appointments' => 'Appuntamenti',
+    'appointment_single' => 'Appuntamento',
+    'calendar_preview' => 'Anteprima calendario',
+    'my_schedule' => 'I miei orari e calendario',
+    'appointment_types' => 'Tipi di appuntamento',
+    'appointment_type_single' => 'Tipo di appuntamento',
 
     // CRM
     'crm' => 'CRM & Contatti',

@@ -137,6 +137,23 @@ return [
             'description' => 'Interactive full-screen visual drag-and-drop page builder with live multi-device preview.',
             'icon' => 'heroicon-o-paint-brush',
         ],
+
+        'appointments' => [
+            'name' => 'Appointments & Bookings',
+            'description' => 'Schedule appointments, manage availability, calendar preview, and sync with Google Calendar.',
+            'icon' => 'heroicon-o-calendar-days',
+            'resources' => [
+                \Modules\Appointments\Filament\Resources\Appointments\AppointmentResource::class,
+                \Modules\Appointments\Filament\Resources\AppointmentTypes\AppointmentTypeResource::class,
+            ],
+            'pages' => [
+                \Modules\Appointments\Filament\Pages\AppointmentCalendarPage::class,
+                \Modules\Appointments\Filament\Pages\MySchedulePage::class,
+            ],
+            'blocks' => [
+                \Modules\Appointments\Filament\Blocks\AppointmentBookingBlock::class,
+            ],
+        ],
     ],
 
     /*
@@ -163,14 +180,14 @@ return [
         'business' => [
             'name' => 'Business Plan',
             'badge' => 'Growth',
-            'description' => 'Pro + Document Library + Newsletter + Payments + CRM + Visual Designer.',
-            'modules' => ['blog', 'forms', 'documents', 'newsletter', 'payment', 'crm', 'visual_builder'],
+            'description' => 'Pro + Document Library + Newsletter + Payments + CRM + Visual Designer + Appointments.',
+            'modules' => ['blog', 'forms', 'documents', 'newsletter', 'payment', 'crm', 'visual_builder', 'appointments'],
         ],
         'enterprise' => [
             'name' => 'Enterprise / Agency',
             'badge' => 'All Inclusive',
-            'description' => 'Full suite including CRM, Backups, Queue Inspector, Audit Logs, and Visual Designer.',
-            'modules' => ['blog', 'forms', 'documents', 'newsletter', 'payment', 'crm', 'backups', 'queue_manager', 'activity_log', 'visual_builder'],
+            'description' => 'Full suite including CRM, Backups, Queue Inspector, Audit Logs, Visual Designer, and Appointments.',
+            'modules' => ['blog', 'forms', 'documents', 'newsletter', 'payment', 'crm', 'backups', 'queue_manager', 'activity_log', 'visual_builder', 'appointments'],
         ],
     ],
 ];

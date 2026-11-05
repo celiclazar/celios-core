@@ -46,6 +46,11 @@ class ReleaseCeliosCommand extends Command
             'repo' => 'git@github.com:celiclazar/celios-payment.git',
             'branch' => 'main',
         ],
+        'appointments' => [
+            'prefix' => 'packages/appointments',
+            'repo' => 'git@github.com:celiclazar/celios-appointments.git',
+            'branch' => 'main',
+        ],
     ];
 
     /**

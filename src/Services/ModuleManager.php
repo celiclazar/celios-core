@@ -192,6 +192,10 @@ class ModuleManager
             $blocks[] = NewsletterBlock::make();
         }
 
+        if (self::isEnabled('appointments') && class_exists(\Modules\Appointments\Filament\Blocks\AppointmentBookingBlock::class)) {
+            $blocks[] = \Modules\Appointments\Filament\Blocks\AppointmentBookingBlock::make();
+        }
+
         return $blocks;
     }
 

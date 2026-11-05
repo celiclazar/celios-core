@@ -5,7 +5,16 @@ return [
     'group_content' => 'Content Management',
     'group_marketing' => 'CRM & Marketing',
     'group_payments' => 'Payments',
+    'group_appointments' => 'Appointments',
     'group_system' => 'System & Access',
+
+    // Appointments
+    'appointments' => 'Appointments',
+    'appointment_single' => 'Appointment',
+    'calendar_preview' => 'Calendar Preview',
+    'my_schedule' => 'My Schedule & Calendar',
+    'appointment_types' => 'Appointment Types',
+    'appointment_type_single' => 'Appointment Type',
 
     // CRM
     'crm' => 'CRM & Leads',

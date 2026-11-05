@@ -5,7 +5,16 @@ return [
     'group_content' => 'Content Management',
     'group_marketing' => 'CRM & Marketing',
     'group_payments' => 'Plaćanja',
+    'group_appointments' => 'Zakazivanja',
     'group_system' => 'Sistem & Pristup',
+
+    // Appointments
+    'appointments' => 'Zakazivanja',
+    'appointment_single' => 'Termin',
+    'calendar_preview' => 'Kalendar pregled',
+    'my_schedule' => 'Moj raspored i kalendar',
+    'appointment_types' => 'Tipovi termina',
+    'appointment_type_single' => 'Tip termina',
 
     // CRM
     'crm' => 'CRM & Prijave',
