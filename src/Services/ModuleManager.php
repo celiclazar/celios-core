@@ -150,6 +150,25 @@ class ModuleManager
     }
 
     /**
+     * Custom blocks registered dynamically by the host application or plugins.
+     *
+     * @var array<\Filament\Forms\Components\Builder\Block>
+     */
+    protected static array $customBlocks = [];
+
+    public static function registerBlock(\Filament\Forms\Components\Builder\Block $block): void
+    {
+        static::$customBlocks[] = $block;
+    }
+
+    public static function registerBlocks(array $blocks): void
+    {
+        foreach ($blocks as $block) {
+            static::registerBlock($block);
+        }
+    }
+
+    /**
      * Returns an array of Page Builder block instances enabled for active modules.
      */
     public static function getAvailablePageBlocks(): array
@@ -196,7 +215,7 @@ class ModuleManager
             $blocks[] = \Modules\Appointments\Filament\Blocks\AppointmentBookingBlock::make();
         }
 
-        return $blocks;
+        return array_merge($blocks, static::$customBlocks);
     }
 
     /**

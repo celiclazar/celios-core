@@ -155,7 +155,9 @@ class Page extends Model
             return $locale === $defaultLocale ? url('/') : url("/{$locale}");
         }
 
-        return url("/{$locale}/".ltrim($slug, '/'));
+        return $locale === $defaultLocale
+            ? url('/'.ltrim($slug, '/'))
+            : url("/{$locale}/".ltrim($slug, '/'));
     }
 
     public function isSystem(): bool
@@ -209,7 +211,9 @@ class Page extends Model
 
         $slug = $pageType->standardSlug($locale) ?? $pageType->standardSlug($defaultLocale);
         if ($slug) {
-            return url("/{$locale}/".ltrim($slug, '/'));
+            return $locale === $defaultLocale
+                ? url('/'.ltrim($slug, '/'))
+                : url("/{$locale}/".ltrim($slug, '/'));
         }
 
         return null;

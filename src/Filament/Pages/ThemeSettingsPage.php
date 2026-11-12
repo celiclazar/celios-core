@@ -184,6 +184,7 @@ class ThemeSettingsPage extends Page
                                 'ocean' => 'Ocean Blue — Corporate blue accents with clean slate surfaces (Default)',
                                 'emerald' => 'Emerald Forest — Vivid emerald & mint accents with organic surfaces',
                                 'midnight' => 'Midnight Obsidian — Ultra-modern violet & amber accents with deep slate/obsidian contrast',
+                                'ravangrad' => 'Ravangrad Athletic Modernism — KSF Ravangrad crimson red & athletic stone surfaces',
                             ])
                             ->default('ocean')
                             ->required(),
@@ -198,6 +199,7 @@ class ThemeSettingsPage extends Page
                                 'ocean' => 'Ocean Blue — Original brand styling with deep corporate navy and cobalt primary (Default)',
                                 'emerald' => 'Emerald Forest — Modern fresh green tone with mint surfaces and sky secondary accents',
                                 'midnight' => 'Midnight Obsidian — Sleek dark aesthetic with indigo/violet primary and zinc surfaces',
+                                'ravangrad' => 'Ravangrad Athletic Modernism — KSF Ravangrad crimson red & athletic minimalism',
                             ])
                             ->default('ocean')
                             ->required(),

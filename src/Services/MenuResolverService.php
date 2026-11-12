@@ -196,14 +196,20 @@ class MenuResolverService
                 return $item->linkable->getUrl($locale);
             }
 
+            $defaultLocale = config('locales.default', 'sr');
             $slug = $item->linkable->getTranslation('slug', $locale, false);
 
             if (blank($slug)) {
-                $defaultLocale = config('locales.default', 'sr');
                 $slug = $item->linkable->getTranslation('slug', $defaultLocale, false);
             }
 
-            return filled($slug) ? url("/{$locale}/".ltrim($slug, '/')) : url("/{$locale}");
+            if (blank($slug) || $slug === 'home') {
+                return $locale === $defaultLocale ? url('/') : url("/{$locale}");
+            }
+
+            return $locale === $defaultLocale
+                ? url('/'.ltrim($slug, '/'))
+                : url("/{$locale}/".ltrim($slug, '/'));
         }
 
         $customUrl = $item->getTranslation('custom_url', $locale, false);
