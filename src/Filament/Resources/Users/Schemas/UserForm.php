@@ -62,7 +62,15 @@ class UserForm
 
                         Select::make('roles')
                             ->label(fn () => __('fields.roles'))
-                            ->relationship('roles', 'name')
+                            ->relationship(
+                                name: 'roles',
+                                titleAttribute: 'name',
+                                modifyQueryUsing: fn ($query) => (
+                                    auth()->user()?->hasRole('super_admin') || auth()->user()?->hasRole('super-admin')
+                                        ? $query
+                                        : $query->whereNotIn('name', ['super_admin', 'super-admin'])
+                                )
+                            )
                             ->multiple()
                             ->preload()
                             ->searchable(),

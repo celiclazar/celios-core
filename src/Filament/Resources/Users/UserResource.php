@@ -37,6 +37,18 @@ class UserResource extends Resource
         return UsersTable::configure($table);
     }
 
+    public static function getEloquentQuery(): \Illuminate\Database\Eloquent\Builder
+    {
+        $query = parent::getEloquentQuery();
+
+        $user = auth()->user();
+        if ($user && method_exists($user, 'hasRole') && ! ($user->hasRole('super_admin') || $user->hasRole('super-admin'))) {
+            $query->whereDoesntHave('roles', fn ($q) => $q->whereIn('name', ['super_admin', 'super-admin']));
+        }
+
+        return $query;
+    }
+
     public static function getRelations(): array
     {
         return [

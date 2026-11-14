@@ -10,6 +10,7 @@ use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Notifications\Notification;
+use Celios\Core\Filament\Traits\HasModuleToggle;
 use Filament\Pages\Page;
 use Filament\Schemas\Components\Grid;
 use Filament\Schemas\Components\Section;
@@ -18,6 +19,8 @@ use Illuminate\Support\Facades\Cache;
 
 class CookieSettingsPage extends Page
 {
+    use HasModuleToggle;
+
     protected static ?string $slug = 'settings/cookies';
 
     protected static string|null|BackedEnum $navigationIcon = 'heroicon-o-shield-check';
@@ -41,17 +44,6 @@ class CookieSettingsPage extends Page
     public function getTitle(): string
     {
         return __('cookies.title');
-    }
-
-    public static function canAccess(): bool
-    {
-        $user = auth()->user();
-
-        if (! $user) {
-            return false;
-        }
-
-        return $user->hasRole('super_admin') || $user->hasRole('admin') || $user->can('page_CookieSettingsPage');
     }
 
     public function mount(): void

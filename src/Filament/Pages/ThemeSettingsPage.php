@@ -17,11 +17,14 @@ use Filament\Schemas\Components\Grid;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 use Illuminate\Support\Collection;
+use Celios\Core\Filament\Traits\HasModuleToggle;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
 
 class ThemeSettingsPage extends Page
 {
+    use HasModuleToggle;
+
     protected static ?string $slug = 'settings/themes';
 
     protected static string|null|BackedEnum $navigationIcon = 'heroicon-o-paint-brush';

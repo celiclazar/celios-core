@@ -10,10 +10,12 @@ use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Contracts\HasTable;
 use Filament\Tables\Table;
+use Celios\Core\Filament\Traits\HasModuleToggle;
 use Illuminate\Support\Collection;
 
 class SitemapManager extends Page implements HasTable
 {
+    use HasModuleToggle;
     use Tables\Concerns\InteractsWithTable;
 
     protected static string|null|\BackedEnum $navigationIcon = 'heroicon-o-globe-alt';

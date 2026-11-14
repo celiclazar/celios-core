@@ -207,8 +207,16 @@ class FormForm
                                 Select::make('authorized_roles')
                                     ->label(__('forms.authorized_roles'))
                                     ->helperText(__('forms.authorized_roles_helper'))
+                                    ->options(function (): array {
+                                        $query = Role::query();
+                                        $user = auth()->user();
+                                        if (! $user || ! ($user->hasRole('super_admin') || $user->hasRole('super-admin'))) {
+                                            $query->whereNotIn('name', ['super_admin', 'super-admin']);
+                                        }
+
+                                        return $query->pluck('name', 'name')->all();
+                                    })
                                     ->multiple()
-                                    ->options(fn () => Role::query()->pluck('name', 'name')->all())
                                     ->preload(),
 
                                 Toggle::make('is_active')

@@ -64,16 +64,15 @@ class User extends Authenticatable implements FilamentUser, HasMedia, PasskeyUse
 
     public function canAccessPanel(Panel $panel): bool
     {
-        $allowedRoles = ['super_admin', 'super-admin', 'admin', 'panel_user'];
-
-        $hasRole = $this->hasAnyRole($allowedRoles);
+        $hasRole = $this->hasAnyRole(['super_admin', 'super-admin', 'admin', 'panel_user'])
+            || $this->roles()->where('name', '!=', 'user')->exists();
 
         if (! $hasRole && Schema::hasTable('model_has_roles')) {
             $hasRole = DB::table('model_has_roles')
                 ->join('roles', 'roles.id', '=', 'model_has_roles.role_id')
                 ->where('model_has_roles.model_id', $this->getKey())
                 ->whereIn('model_has_roles.model_type', ['App\\Models\\User', static::class])
-                ->whereIn('roles.name', $allowedRoles)
+                ->where('roles.name', '!=', 'user')
                 ->exists();
         }
 

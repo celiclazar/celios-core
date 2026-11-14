@@ -2,12 +2,15 @@
 
 namespace Celios\Core\Filament\Widgets;
 
+use Celios\Core\Filament\Traits\HasWidgetToggle;
 use Celios\Core\Models\Page;
 use Celios\Core\Models\Post;
 use Filament\Widgets\Widget;
 
 class LocalizationWidget extends Widget
 {
+    use HasWidgetToggle;
+
     protected string $view = 'filament.widgets.localization-widget';
 
     protected int|string|array $columnSpan = [

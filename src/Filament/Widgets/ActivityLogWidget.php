@@ -3,11 +3,16 @@
 namespace Celios\Core\Filament\Widgets;
 
 use Celios\Core\Filament\Resources\Activities\ActivityResource;
+use Celios\Core\Filament\Traits\HasWidgetToggle;
 use Filament\Widgets\Widget;
 use Spatie\Activitylog\Models\Activity;
 
 class ActivityLogWidget extends Widget
 {
+    use HasWidgetToggle;
+
+    public const MODULE_KEY = 'activity_log';
+
     protected string $view = 'filament.widgets.activity-log-widget';
 
     protected int|string|array $columnSpan = [

@@ -3,12 +3,15 @@
 namespace Celios\Core\Filament\Widgets;
 
 use Carbon\Carbon;
+use Celios\Core\Filament\Traits\HasWidgetToggle;
 use Filament\Widgets\Widget;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Storage;
 
 class SystemCoreWidget extends Widget
 {
+    use HasWidgetToggle;
+
     protected string $view = 'filament.widgets.system-core-widget';
 
     protected int|string|array $columnSpan = [

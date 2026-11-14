@@ -101,8 +101,15 @@ class InstallCeliosCommand extends Command
         }
 
         Role::firstOrCreate(['name' => 'super_admin', 'guard_name' => 'web']);
-        Role::firstOrCreate(['name' => 'admin', 'guard_name' => 'web']);
+        $admin = Role::firstOrCreate(['name' => 'admin', 'guard_name' => 'web']);
         Role::firstOrCreate(['name' => 'panel_user', 'guard_name' => 'web']);
+
+        if (Schema::hasTable('permissions')) {
+            $permissions = \Spatie\Permission\Models\Permission::all();
+            if ($permissions->isNotEmpty()) {
+                $admin->syncPermissions($permissions);
+            }
+        }
     }
 
     /**

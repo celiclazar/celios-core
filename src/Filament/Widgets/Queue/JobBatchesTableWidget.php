@@ -2,6 +2,7 @@
 
 namespace Celios\Core\Filament\Widgets\Queue;
 
+use Celios\Core\Filament\Traits\HasWidgetToggle;
 use Celios\Core\Models\JobBatch;
 use Filament\Actions\Action;
 use Filament\Notifications\Notification;
@@ -13,6 +14,10 @@ use Illuminate\Support\Facades\Bus;
 
 class JobBatchesTableWidget extends TableWidget
 {
+    use HasWidgetToggle;
+
+    public const MODULE_KEY = 'queue_manager';
+
     protected int|string|array $columnSpan = 'full';
 
     public function getHeading(): string

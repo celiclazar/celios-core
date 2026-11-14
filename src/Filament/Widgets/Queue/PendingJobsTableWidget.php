@@ -2,6 +2,7 @@
 
 namespace Celios\Core\Filament\Widgets\Queue;
 
+use Celios\Core\Filament\Traits\HasWidgetToggle;
 use Celios\Core\Services\Queue\QueueInspectorManager;
 use Filament\Actions\Action;
 use Filament\Notifications\Notification;
@@ -13,6 +14,10 @@ use Illuminate\Support\Collection;
 
 class PendingJobsTableWidget extends TableWidget
 {
+    use HasWidgetToggle;
+
+    public const MODULE_KEY = 'queue_manager';
+
     protected int|string|array $columnSpan = 'full';
 
     public string $selectedQueue = 'default';

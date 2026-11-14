@@ -78,7 +78,10 @@ class PagesTable
                     ->label('Visual')
                     ->icon('heroicon-o-paint-brush')
                     ->color('primary')
-                    ->visible(fn () => Route::has('admin.visual_builder.edit'))
+                    ->visible(fn () => Route::has('admin.visual_builder.edit') && (
+                        (auth()->user() && (auth()->user()->hasRole('super_admin') || auth()->user()->hasRole('super-admin')))
+                        || \Celios\Core\Services\ModuleManager::isEnabled('visual_builder')
+                    ))
                     ->url(fn (Page $record): ?string => Route::has('admin.visual_builder.edit')
                         ? route('admin.visual_builder.edit', ['page' => $record->id])
                         : null),

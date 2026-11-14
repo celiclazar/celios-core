@@ -4,12 +4,15 @@ namespace Celios\Core\Filament\Widgets;
 
 use Celios\Core\Filament\Resources\Pages\PageResource;
 use Celios\Core\Filament\Resources\Posts\PostResource;
+use Celios\Core\Filament\Traits\HasWidgetToggle;
 use Celios\Core\Models\Page;
 use Celios\Core\Models\Post;
 use Filament\Widgets\Widget;
 
 class RecentResourcesTableWidget extends Widget
 {
+    use HasWidgetToggle;
+
     protected string $view = 'filament.widgets.recent-resources-table-widget';
 
     protected int|string|array $columnSpan = [

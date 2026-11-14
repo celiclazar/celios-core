@@ -14,7 +14,7 @@ class FormSubmissionPolicy
 
     public function before(AuthUser $authUser, string $ability): ?bool
     {
-        if ($authUser->hasRole('super_admin')) {
+        if (method_exists($authUser, 'hasRole') && ($authUser->hasRole('super_admin') || $authUser->hasRole('super-admin'))) {
             return true;
         }
 

@@ -10,11 +10,16 @@ use Filament\Actions\Action;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Notifications\Notification;
+use Celios\Core\Filament\Traits\HasModuleToggle;
 use Filament\Pages\Page;
 use Illuminate\Support\Facades\Artisan;
 
 class QueueManager extends Page
 {
+    use HasModuleToggle;
+
+    public const MODULE_KEY = 'queue_manager';
+
     protected static string|null|BackedEnum $navigationIcon = 'heroicon-o-queue-list';
 
     protected static ?int $navigationSort = 7;
@@ -29,30 +34,6 @@ class QueueManager extends Page
     public string $activeTab = 'failed';
 
     public array $stats = [];
-
-    public static function canAccess(): bool
-    {
-        if (! ModuleManager::isEnabled('queue_manager')) {
-            return false;
-        }
-
-        $user = auth()->user();
-
-        if (! $user) {
-            return false;
-        }
-
-        return $user->hasRole('super_admin') || $user->can('page_QueueManager');
-    }
-
-    public static function shouldRegisterNavigation(): bool
-    {
-        if (! ModuleManager::isEnabled('queue_manager')) {
-            return false;
-        }
-
-        return parent::shouldRegisterNavigation();
-    }
 
     public function mount(): void
     {

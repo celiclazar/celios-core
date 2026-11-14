@@ -2,11 +2,14 @@
 
 namespace Celios\Core\Filament\Pages;
 
+use Celios\Core\Filament\Traits\HasModuleToggle;
 use Filament\Notifications\Notification as FilamentNotification;
 use Filament\Pages\Page;
 
 class Notifications extends Page
 {
+    use HasModuleToggle;
+
     protected static string|null|\BackedEnum $navigationIcon = 'heroicon-o-bell';
 
     protected string $view = 'filament.pages.notifications';

@@ -27,6 +27,10 @@ class CeliosServiceProvider extends ServiceProvider
             return new Celios;
         });
 
+        // Register Celios Shield (with dynamic module discovery filter)
+        $this->app->scoped('filament-shield', fn (): \Celios\Core\Services\Shield\CeliosShield => new \Celios\Core\Services\Shield\CeliosShield);
+
+
         // 1. Auto-merge Core configs
         if (file_exists(__DIR__.'/../config/modules.php')) {
             $this->mergeConfigFrom(__DIR__.'/../config/modules.php', 'modules');
@@ -171,6 +175,10 @@ class CeliosServiceProvider extends ServiceProvider
             $router->aliasMiddleware('permission', \Spatie\Permission\Middleware\PermissionMiddleware::class);
         }
 
+        if (class_exists(\Livewire\Livewire::class)) {
+            \Livewire\Livewire::componentHook(\Celios\Core\Livewire\Hooks\EnsureModuleEnabledHook::class);
+        }
+
         // 4. Load Core API Routes
         if (file_exists(__DIR__.'/../routes/api.php')) {
             Route::prefix('api')
@@ -184,7 +192,18 @@ class CeliosServiceProvider extends ServiceProvider
                 ->group(__DIR__.'/../routes/web.php');
         }
 
-        // 6. Superadmin Gate Authorization
+        // 6. Superadmin Gate Authorization & Core Policies
+        Gate::policy(\Spatie\Permission\Models\Role::class, \Celios\Core\Policies\RolePolicy::class);
+        Gate::policy(\Celios\Core\Models\User::class, \Celios\Core\Policies\UserPolicy::class);
+        Gate::policy(\Celios\Core\Models\Section::class, \Celios\Core\Policies\SectionPolicy::class);
+        Gate::policy(\Celios\Core\Models\Post::class, \Celios\Core\Policies\PostPolicy::class);
+        Gate::policy(\Celios\Core\Models\Page::class, \Celios\Core\Policies\PagePolicy::class);
+        Gate::policy(\Celios\Core\Models\Category::class, \Celios\Core\Policies\CategoryPolicy::class);
+        Gate::policy(\Celios\Core\Models\Menu::class, \Celios\Core\Policies\MenuPolicy::class);
+        Gate::policy(\Celios\Core\Models\NewsletterCampaign::class, \Celios\Core\Policies\NewsletterCampaignPolicy::class);
+        Gate::policy(\Celios\Core\Models\NewsletterSubscriber::class, \Celios\Core\Policies\NewsletterSubscriberPolicy::class);
+        Gate::policy(\Spatie\Activitylog\Models\Activity::class, \Celios\Core\Policies\ActivityPolicy::class);
+
         Gate::before(function ($user, $ability) {
             if (is_object($user) && method_exists($user, 'hasRole')) {
                 return ($user->hasRole('super_admin') || $user->hasRole('super-admin')) ? true : null;

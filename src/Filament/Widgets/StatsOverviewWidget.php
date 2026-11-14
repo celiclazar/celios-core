@@ -2,6 +2,7 @@
 
 namespace Celios\Core\Filament\Widgets;
 
+use Celios\Core\Filament\Traits\HasWidgetToggle;
 use Celios\Core\Models\FormSubmission;
 use Celios\Core\Models\Media;
 use Celios\Core\Models\Page;
@@ -11,6 +12,8 @@ use Filament\Widgets\Widget;
 
 class StatsOverviewWidget extends Widget
 {
+    use HasWidgetToggle;
+
     protected string $view = 'filament.widgets.stats-overview-widget';
 
     protected int|string|array $columnSpan = 'full';

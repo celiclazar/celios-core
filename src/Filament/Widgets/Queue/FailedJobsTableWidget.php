@@ -2,6 +2,7 @@
 
 namespace Celios\Core\Filament\Widgets\Queue;
 
+use Celios\Core\Filament\Traits\HasWidgetToggle;
 use Celios\Core\Models\FailedJob;
 use Filament\Actions\Action;
 use Filament\Actions\BulkActionGroup;
@@ -15,6 +16,10 @@ use Illuminate\Support\Facades\Artisan;
 
 class FailedJobsTableWidget extends TableWidget
 {
+    use HasWidgetToggle;
+
+    public const MODULE_KEY = 'queue_manager';
+
     protected int|string|array $columnSpan = 'full';
 
     public function getHeading(): string

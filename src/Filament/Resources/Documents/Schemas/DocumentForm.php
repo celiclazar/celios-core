@@ -135,7 +135,13 @@ class DocumentForm
                                     ->label(__('documents.allowed_roles'))
                                     ->helperText(__('documents.allowed_roles_helper'))
                                     ->options(function (): array {
-                                        return Role::query()->pluck('name', 'name')->all();
+                                        $query = Role::query();
+                                        $user = auth()->user();
+                                        if (! $user || ! ($user->hasRole('super_admin') || $user->hasRole('super-admin'))) {
+                                            $query->whereNotIn('name', ['super_admin', 'super-admin']);
+                                        }
+
+                                        return $query->pluck('name', 'name')->all();
                                     })
                                     ->multiple()
                                     ->searchable()

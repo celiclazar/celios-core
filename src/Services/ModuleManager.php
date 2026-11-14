@@ -40,14 +40,6 @@ class ModuleManager
             return true;
         }
 
-        $currentPlan = self::getCurrentPlan();
-        if ($currentPlan !== 'custom') {
-            $planModules = config("modules.plans.{$currentPlan}.modules");
-            if ($planModules !== null && in_array($moduleKey, $planModules, true)) {
-                return true;
-            }
-        }
-
         $activeModules = self::getActiveModules();
 
         return in_array($moduleKey, $activeModules, true);
