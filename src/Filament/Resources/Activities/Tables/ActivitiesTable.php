@@ -2,13 +2,14 @@
 
 namespace Celios\Core\Filament\Resources\Activities\Tables;
 
-use Filament\Actions\BulkActionGroup;
-use Filament\Actions\DeleteBulkAction;
-use Filament\Actions\EditAction;
+use Celios\Core\Models\User;
 use Filament\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Str;
+use Spatie\Activitylog\Models\Activity;
 
 class ActivitiesTable
 {
@@ -52,17 +53,72 @@ class ActivitiesTable
                     ->sortable(),
             ])
             ->filters([
-                //
+                SelectFilter::make('subject_type')
+                    ->label(fn () => __('fields.activity_module'))
+                    ->options(fn () => Activity::query()
+                        ->whereNotNull('subject_type')
+                        ->distinct()
+                        ->pluck('subject_type')
+                        ->mapWithKeys(fn (string $type) => [$type => Str::headline(class_basename($type))])
+                        ->sort()
+                        ->toArray()
+                    )
+                    ->searchable(),
+
+                SelectFilter::make('causer')
+                    ->label(fn () => __('fields.activity_performed_by'))
+                    ->options(function () {
+                        $users = User::query()
+                            ->whereIn('id', Activity::query()->whereNotNull('causer_id')->select('causer_id'))
+                            ->pluck('name', 'id')
+                            ->toArray();
+
+                        return [
+                            'system' => __('fields.system'),
+                            ...$users,
+                        ];
+                    })
+                    ->query(function (Builder $query, array $data) {
+                        $value = $data['value'] ?? null;
+                        if (blank($value)) {
+                            return $query;
+                        }
+
+                        if ($value === 'system') {
+                            return $query->whereNull('causer_id');
+                        }
+
+                        return $query->where('causer_id', $value);
+                    })
+                    ->searchable(),
+
+                SelectFilter::make('action')
+                    ->label(fn () => __('fields.activity_action'))
+                    ->options([
+                        'created' => __('fields.action_created'),
+                        'updated' => __('fields.action_updated'),
+                        'deleted' => __('fields.action_deleted'),
+                        'marked_as_read' => __('forms.mark_as_read'),
+                        'marked_as_unread' => __('forms.mark_as_unread'),
+                        'submission_received' => __('forms.submission_single').' - '.__('forms.submitted_at'),
+                    ])
+                    ->query(function (Builder $query, array $data) {
+                        $value = $data['value'] ?? null;
+                        if (blank($value)) {
+                            return $query;
+                        }
+
+                        return $query->where(function (Builder $q) use ($value) {
+                            $q->where('description', $value)
+                                ->orWhere('event', $value)
+                                ->orWhere('description', 'like', "% {$value}");
+                        });
+                    }),
             ])
             ->recordActions([
                 ViewAction::make()->label(fn () => __('actions.view')),
-                EditAction::make()->label(fn () => __('actions.edit')),
             ])
-            ->toolbarActions([
-                BulkActionGroup::make([
-                    DeleteBulkAction::make()->label(fn () => __('actions.delete_selected')),
-                ])->label(fn () => __('actions.bulk_actions')),
-            ])
+            ->toolbarActions([])
             ->defaultSort('created_at', 'desc');
     }
 }
