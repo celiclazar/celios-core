@@ -3,6 +3,8 @@
 @php
     $footerItems = $menuResolver->getMenuForLocation('footer') ?? [];
     $locale = app()->getLocale();
+    $brand = current_brand();
+    $hasCustomLogo = $brand?->hasCustomLogo() ?? false;
 @endphp
 
 <!-- PODNOŽJE (FOOTER) -->
@@ -11,17 +13,40 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-12 gap-y-8 gap-x-6 sm:gap-space-8 pb-space-8 border-b border-surface-container">
             <!-- Brand Info -->
             <div class="sm:col-span-2 md:col-span-5 space-y-space-3">
-                <a aria-label="Home" class="flex items-center gap-space-3 group focus:outline-none" href="{{ url('/' . $locale) }}">
-                    <span class="font-display-lg text-2xl font-bold tracking-tight text-on-surface flex items-center gap-1.5">
-                        <span class="w-8 h-8 rounded-xl bg-primary text-on-primary flex items-center justify-center font-bold text-lg shadow-sm">
-                            C
+                <a aria-label="{{ $brand?->name ?? 'Home' }}" class="flex items-center gap-space-3 group focus:outline-none" href="{{ url('/' . $locale) }}">
+                    @if($hasCustomLogo && $brand?->logo_light_url)
+                        <img src="{{ $brand->logo_light_url }}" alt="{{ $brand->name }}" class="h-9 w-auto max-w-[200px] object-contain dark:hidden" />
+                        <img src="{{ $brand->logo_dark_url ?: $brand->logo_light_url }}" alt="{{ $brand->name }}" class="h-9 w-auto max-w-[200px] object-contain hidden dark:block" />
+                        @if($brand?->name)
+                            <span class="font-display-lg text-2xl font-bold tracking-tight text-on-surface">
+                                {{ $brand->name }}
+                            </span>
+                        @endif
+                    @elseif($brand?->name)
+                        <span class="font-display-lg text-2xl font-bold tracking-tight text-on-surface flex items-center gap-1.5">
+                            <span class="w-8 h-8 rounded-xl bg-primary text-on-primary flex items-center justify-center font-bold text-lg shadow-sm">
+                                {{ mb_strtoupper(mb_substr($brand->name, 0, 1)) }}
+                            </span>
+                            <span>{{ $brand->name }}</span>
                         </span>
-                        <span>Celios<span class="text-primary">.cms</span></span>
-                    </span>
+                    @else
+                        <span class="font-display-lg text-2xl font-bold tracking-tight text-on-surface flex items-center gap-1.5">
+                            <span class="w-8 h-8 rounded-xl bg-primary text-on-primary flex items-center justify-center font-bold text-lg shadow-sm">
+                                C
+                            </span>
+                            <span>Celios<span class="text-primary">.cms</span></span>
+                        </span>
+                    @endif
                 </a>
-                <p class="font-body-md text-body-md text-on-surface-variant max-w-sm leading-relaxed">
-                    {{ $locale === 'sr' ? 'Open, stabilan i modularan CMS engine kreiran za programere, digitalne studije i autore sadržaja širom sveta.' : 'Open, reliable, and modular CMS engine engineered for developers, digital studios, and content creators.' }}
-                </p>
+                @if($brand?->description)
+                    <p class="font-body-md text-body-md text-on-surface-variant max-w-sm leading-relaxed">
+                        {{ $brand->description }}
+                    </p>
+                @else
+                    <p class="font-body-md text-body-md text-on-surface-variant max-w-sm leading-relaxed">
+                        {{ $locale === 'sr' ? 'Open, stabilan i modularan CMS engine kreiran za programere, digitalne studije i autore sadržaja širom sveta.' : 'Open, reliable, and modular CMS engine engineered for developers, digital studios, and content creators.' }}
+                    </p>
+                @endif
                 <div class="flex items-center gap-space-2 pt-space-1">
                     <span class="font-label-xs text-label-xs bg-surface-container px-2.5 py-1 rounded font-semibold text-primary">v3.4.2 Engine</span>
                     <span class="font-label-xs text-label-xs text-on-surface-variant">MIT Licensed</span>
@@ -78,7 +103,7 @@
 
         <!-- Bottom Bar -->
         <div class="pt-space-6 flex flex-col sm:flex-row items-center justify-between gap-space-4 font-body-sm text-body-sm text-on-surface-variant text-center sm:text-left">
-            <p>© {{ date('Y') }} Celios CMS. {{ $locale === 'sr' ? 'Sva prava zadržana.' : 'All rights reserved.' }}</p>
+            <p>{{ $brand?->copyright_text ?: ('© ' . date('Y') . ' ' . ($brand?->name ?? 'Celios CMS') . '. ' . ($locale === 'sr' ? 'Sva prava zadržana.' : 'All rights reserved.')) }}</p>
             <div class="flex flex-wrap items-center justify-center sm:justify-end gap-space-4">
                 <a class="hover:text-on-surface transition-colors" href="{{ url('/' . $locale . '/politika-privatnosti') }}">{{ $locale === 'sr' ? 'Privatnost' : 'Privacy' }}</a>
                 <a class="hover:text-on-surface transition-colors" href="{{ url('/' . $locale . '/uslovi-koriscenja') }}">{{ $locale === 'sr' ? 'Uslovi' : 'Terms' }}</a>

@@ -32,8 +32,15 @@
                     <!-- Header -->
                     <tr>
                         <td class="header">
+                            @php
+                                $brand = current_brand();
+                            @endphp
                             <a href="{{ url('/') }}" class="header-logo">
-                                {{ setting('site_name', config('app.name', 'Celios CMS')) }}
+                                @if($brand && $brand->hasCustomLogo() && $brand->logo_light_url)
+                                    <img src="{{ $brand->logo_light_url }}" alt="{{ $brand->name }}" style="max-height: 40px; width: auto; vertical-align: middle; border: 0;" />
+                                @else
+                                    {{ $brand?->name ?: setting('site_name', config('app.name', 'Celios CMS')) }}
+                                @endif
                             </a>
                         </td>
                     </tr>
@@ -49,7 +56,7 @@
                     <tr>
                         <td class="footer">
                             <p style="margin: 0 0 8px 0;">
-                                {{ setting('newsletter_company_address', 'Celios CMS • All rights reserved') }}
+                                {{ $brand?->address ? ($brand->company_name ?: $brand->name) . ' • ' . $brand->address . ', ' . $brand->city : setting('newsletter_company_address', ($brand?->name ?? 'Celios CMS') . ' • All rights reserved') }}
                             </p>
                             @yield('footer_links')
                         </td>

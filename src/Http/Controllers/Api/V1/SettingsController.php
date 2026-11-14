@@ -21,10 +21,40 @@ class SettingsController extends Controller
             ->pluck('value', 'key')
             ->toArray();
 
+        $brand = current_brand();
+        $brandData = $brand ? [
+            'id' => $brand->id,
+            'name' => $brand->name,
+            'slug' => $brand->slug,
+            'headline' => $brand->headline,
+            'description' => $brand->description,
+            'copyright_text' => $brand->copyright_text,
+            'primary_domain' => $brand->primary_domain,
+            'domains' => $brand->domains,
+            'logo_light_url' => $brand->logo_light_url,
+            'logo_dark_url' => $brand->logo_dark_url,
+            'favicon_url' => $brand->favicon_url,
+            'company_name' => $brand->company_name,
+            'email' => $brand->email,
+            'phone' => $brand->phone,
+            'address' => $brand->address,
+            'city' => $brand->city,
+            'postal_code' => $brand->postal_code,
+            'country' => $brand->country,
+            'tax_id' => $brand->tax_id,
+            'social_links' => $brand->social_links,
+            'default_locale' => $brand->default_locale,
+            'supported_locales' => $brand->supported_locales,
+            'default_currency' => $brand->default_currency,
+            'supported_currencies' => $brand->supported_currencies,
+            'currency_symbol_position' => $brand->currency_symbol_position,
+        ] : null;
+
         return response()->json([
-            'site_name' => setting('site_name', config('app.name', 'Celios CMS')),
+            'site_name' => $brand?->name ?: setting('site_name', config('app.name', 'Celios CMS')),
+            'brand' => $brandData,
             'frontend_theme' => setting('frontend_theme', 'ocean'),
-            'default_locale' => config('locales.default', 'sr'),
+            'default_locale' => $brand?->default_locale ?: config('locales.default', 'sr'),
             'available_locales' => config('locales.available', [
                 'sr' => 'Srpski',
                 'en' => 'English',

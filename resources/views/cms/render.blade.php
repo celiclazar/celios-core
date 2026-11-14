@@ -19,6 +19,7 @@
 
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    @include('partials.brand-head')
 
     {{-- Pouzdano uzimanje prevoda naslova stranice preko Spatie modela --}}
     <title>{{ $page->getTranslation('title', app()->getLocale()) }}</title>

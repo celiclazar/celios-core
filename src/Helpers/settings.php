@@ -25,3 +25,10 @@ if (! function_exists('module_enabled')) {
         return ModuleManager::isEnabled($module);
     }
 }
+
+if (! function_exists('current_brand')) {
+    function current_brand(?string $domain = null): ?\Celios\Core\Models\Brand
+    {
+        return \Celios\Core\Models\Brand::current($domain);
+    }
+}

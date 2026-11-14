@@ -3,6 +3,8 @@
 @php
     $headerItems = $menuResolver->getMenuForLocation('primary') ?? [];
     $locale = app()->getLocale();
+    $brand = current_brand();
+    $hasCustomLogo = $brand?->hasCustomLogo() ?? false;
 @endphp
 
 <!-- TOP HEADER / NAVIGATION -->
@@ -10,13 +12,30 @@
     <div class="max-w-max-content-width mx-auto px-gutter-md sm:px-gutter-lg h-20 flex items-center justify-between gap-space-4">
         
         <!-- Brand Logo -->
-        <a aria-label="Home" class="flex items-center gap-space-3 group focus:outline-none" href="{{ url('/' . $locale) }}">
-            <span class="font-display-lg text-2xl font-bold tracking-tight text-on-surface flex items-center gap-1.5">
-                <span class="w-8 h-8 rounded-xl bg-primary text-on-primary flex items-center justify-center font-bold text-lg shadow-sm">
-                    C
+        <a aria-label="{{ $brand?->name ?? 'Home' }}" class="flex items-center gap-space-3 group focus:outline-none" href="{{ url('/' . $locale) }}">
+            @if($hasCustomLogo && $brand?->logo_light_url)
+                <img src="{{ $brand->logo_light_url }}" alt="{{ $brand->name }}" class="h-9 w-auto max-w-[200px] object-contain dark:hidden" />
+                <img src="{{ $brand->logo_dark_url ?: $brand->logo_light_url }}" alt="{{ $brand->name }}" class="h-9 w-auto max-w-[200px] object-contain hidden dark:block" />
+                @if($brand?->name)
+                    <span class="font-display-lg text-2xl font-bold tracking-tight text-on-surface">
+                        {{ $brand->name }}
+                    </span>
+                @endif
+            @elseif($brand?->name)
+                <span class="font-display-lg text-2xl font-bold tracking-tight text-on-surface flex items-center gap-1.5">
+                    <span class="w-8 h-8 rounded-xl bg-primary text-on-primary flex items-center justify-center font-bold text-lg shadow-sm">
+                        {{ mb_strtoupper(mb_substr($brand->name, 0, 1)) }}
+                    </span>
+                    <span>{{ $brand->name }}</span>
                 </span>
-                <span>Celios<span class="text-primary">.cms</span></span>
-            </span>
+            @else
+                <span class="font-display-lg text-2xl font-bold tracking-tight text-on-surface flex items-center gap-1.5">
+                    <span class="w-8 h-8 rounded-xl bg-primary text-on-primary flex items-center justify-center font-bold text-lg shadow-sm">
+                        C
+                    </span>
+                    <span>Celios<span class="text-primary">.cms</span></span>
+                </span>
+            @endif
         </a>
 
         <!-- Center Navigation Links (Dynamic CMS Menu with Fallback) -->

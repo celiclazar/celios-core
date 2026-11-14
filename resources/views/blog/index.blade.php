@@ -3,6 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    @include('partials.brand-head')
 
     <title>{{ $currentCategory ? ($currentCategory->getTranslation('title', $locale, true) . ' - ' . __('blog.blog')) : __('blog.blog') }}</title>
 

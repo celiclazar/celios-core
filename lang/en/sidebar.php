@@ -73,4 +73,8 @@ return [
     // Appearance & Compliance
     'theme_settings' => 'Themes & Appearance',
     'cookie_settings' => 'Cookie Management',
+
+    // Brands & Multi-domain
+    'brands' => 'Brands',
+    'brand_single' => 'Brand',
 ];

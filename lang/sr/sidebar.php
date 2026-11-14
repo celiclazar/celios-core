@@ -66,4 +66,8 @@ return [
     // Appearance & Compliance
     'theme_settings' => 'Teme i izgled',
     'cookie_settings' => 'Upravljanje kolačićima',
+
+    // Brands & Multi-domain
+    'brands' => 'Brendovi',
+    'brand_single' => 'Brend',
 ];
