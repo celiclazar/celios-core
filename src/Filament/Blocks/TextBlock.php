@@ -17,8 +17,8 @@ class TextBlock
             ->schema([
                 Tabs::make(fn () => __('blocks.translations'))
                     ->tabs(
-                        collect(['sr', 'en', 'it'])->map(function ($lang) {
-                            return Tabs\Tab::make(strtoupper($lang))
+                        collect(active_locales())->map(function ($label, $lang) {
+                            return Tabs\Tab::make(strtoupper($lang)." ({$label})")
                                 ->schema([
                                     RichEditor::make("body.{$lang}")
                                         ->label(fn () => __('blocks.content'))

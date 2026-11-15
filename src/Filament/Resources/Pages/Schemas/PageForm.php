@@ -64,7 +64,7 @@ class PageForm
                     ->schema([
                         Tabs::make('translations_tabs')
                             ->tabs(
-                                collect(config('locales.available', ['sr' => 'Srpski', 'en' => 'English', 'it' => 'Italiano']))
+                                collect(active_locales())
                                     ->map(fn (string $label, string $lang) => self::getLocaleTab($lang, $label))
                                     ->values()
                                     ->all()

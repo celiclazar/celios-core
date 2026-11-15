@@ -99,34 +99,39 @@
 
         <!-- Right Utility Actions -->
         <div class="flex items-center gap-2 sm:gap-space-3">
-            <!-- Language Switcher SR / EN / IT -->
-            <div class="flex items-center p-0.5 bg-surface-container rounded-lg border border-surface-container-high/60">
-                @foreach(['sr' => 'SR', 'en' => 'EN', 'it' => 'IT'] as $code => $label)
-                    @php
-                        if (isset($currentPost)) {
-                            $localizedSlug = $currentPost->getTranslation('slug', $code);
-                            $langUrl = !empty($localizedSlug) ? url("/{$code}/blog/{$localizedSlug}") : url("/{$code}/blog");
-                        } elseif (isset($currentCategory) && $currentCategory) {
-                            $langUrl = $currentCategory->getUrl($code);
-                        } elseif (isset($isBlogIndex) && $isBlogIndex) {
-                            $langUrl = url("/{$code}/blog");
-                        } elseif (isset($currentPage) && method_exists($currentPage, 'getTranslation')) {
-                            $localizedSlug = $currentPage->getTranslation('slug', $code);
-                            $langUrl = !empty($localizedSlug) ? url("/{$code}/{$localizedSlug}") : url("/{$code}");
-                        } else {
-                            $langUrl = route('language.switch', ['locale' => $code]);
-                        }
+            @php
+                $navLocales = function_exists('active_locales') ? active_locales() : ['sr' => 'Srpski', 'en' => 'English'];
+            @endphp
+            @if(count($navLocales) > 1)
+                <!-- Language Switcher Dynamic -->
+                <div class="flex items-center p-0.5 bg-surface-container rounded-lg border border-surface-container-high/60">
+                    @foreach($navLocales as $code => $labelName)
+                        @php
+                            $codeUpper = strtoupper($code);
+                            if (isset($currentPost)) {
+                                $localizedSlug = $currentPost->getTranslation('slug', $code);
+                                $langUrl = !empty($localizedSlug) ? url("/{$code}/blog/{$localizedSlug}") : url("/{$code}/blog");
+                            } elseif (isset($currentCategory) && $currentCategory) {
+                                $langUrl = $currentCategory->getUrl($code);
+                            } elseif (isset($isBlogIndex) && $isBlogIndex) {
+                                $langUrl = url("/{$code}/blog");
+                            } elseif (isset($currentPage) && method_exists($currentPage, 'getTranslation')) {
+                                $localizedSlug = $currentPage->getTranslation('slug', $code);
+                                $langUrl = !empty($localizedSlug) ? url("/{$code}/{$localizedSlug}") : url("/{$code}");
+                            } else {
+                                $langUrl = route('language.switch', ['locale' => $code]);
+                            }
 
-                        if (request()->has('preview')) {
-                            $langUrl .= (str_contains($langUrl, '?') ? '&' : '?') . 'preview=true';
-                        }
-                    @endphp
-                    <a href="{{ $langUrl }}"
-                       class="px-2 sm:px-2.5 py-1 rounded-md text-xs sm:text-label-xs transition-colors {{ $locale === $code ? 'bg-surface-container-lowest text-on-surface font-semibold shadow-[0_1px_2px_rgba(15,23,42,0.06)]' : 'text-on-surface-variant hover:text-on-surface font-medium' }}">
-                        {{ $label }}
-                    </a>
-                @endforeach
-            </div>
+                            if (request()->has('preview')) {
+                                $langUrl .= (str_contains($langUrl, '?') ? '&' : '?') . 'preview=true';
+                            }
+                        @endphp
+                        <a href="{{ $langUrl }}"
+                           class="px-2 sm:px-2.5 py-1 rounded-md text-xs sm:text-label-xs transition-colors {{ $locale === $code ? 'bg-surface-container-lowest text-on-surface font-semibold shadow-[0_1px_2px_rgba(15,23,42,0.06)]' : 'text-on-surface-variant hover:text-on-surface font-medium' }}">{{ $codeUpper }}</a>
+
+                    @endforeach
+                </div>
+            @endif
 
             <!-- Mobile Hamburger Button -->
             <button @click="mobileMenuOpen = !mobileMenuOpen" type="button" class="md:hidden inline-flex items-center justify-center p-2 rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container focus:outline-none cursor-pointer" aria-label="Toggle Navigation Menu">

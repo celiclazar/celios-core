@@ -134,10 +134,10 @@ class RecentResourcesTableWidget extends Widget
                         'edit_url' => $editUrl,
                         'module' => 'Stranica',
                         'module_icon' => 'document',
-                        'languages' => [
-                            ['code' => 'SR', 'status' => filled($page->getTranslation('title', 'sr', false)) ? 'full' : 'missing'],
-                            ['code' => 'EN', 'status' => filled($page->getTranslation('title', 'en', false)) ? 'full' : 'missing'],
-                        ],
+                        'languages' => collect(active_locale_codes())->map(fn ($code) => [
+                            'code' => strtoupper($code),
+                            'status' => filled($page->getTranslation('title', $code, false)) ? 'full' : 'missing',
+                        ])->all(),
                         'status' => $status,
                         'status_type' => $statusType,
                         'icon_bg' => 'bg-[#dfe8ff] text-[#275ba5]',
@@ -207,10 +207,10 @@ class RecentResourcesTableWidget extends Widget
                         'edit_url' => $editUrl,
                         'module' => 'Blog',
                         'module_icon' => 'newspaper',
-                        'languages' => [
-                            ['code' => 'SR', 'status' => filled($post->getTranslation('title', 'sr', false)) ? 'full' : 'missing'],
-                            ['code' => 'EN', 'status' => filled($post->getTranslation('title', 'en', false)) ? 'full' : 'missing'],
-                        ],
+                        'languages' => collect(active_locale_codes())->map(fn ($code) => [
+                            'code' => strtoupper($code),
+                            'status' => filled($post->getTranslation('title', $code, false)) ? 'full' : 'missing',
+                        ])->all(),
                         'status' => $status,
                         'status_type' => $statusType,
                         'icon_bg' => 'bg-[#c1ecd5] text-[#088557]',
@@ -252,6 +252,16 @@ class RecentResourcesTableWidget extends Widget
 
     protected function getDefaultResources(): array
     {
+        $activeCodes = array_map('strtoupper', active_locale_codes());
+        $buildMockLanguages = function (string $primaryStatus, string $secondaryStatus) use ($activeCodes) {
+            return array_map(function ($code, $idx) use ($primaryStatus, $secondaryStatus) {
+                return [
+                    'code' => $code,
+                    'status' => $idx === 0 ? $primaryStatus : $secondaryStatus,
+                ];
+            }, $activeCodes, array_keys($activeCodes));
+        };
+
         return [
             [
                 'id' => 'mock-1',
@@ -261,10 +271,7 @@ class RecentResourcesTableWidget extends Widget
                 'edit_url' => url('/admin/pages'),
                 'module' => 'Portfolio',
                 'module_icon' => 'briefcase',
-                'languages' => [
-                    ['code' => 'SR', 'status' => 'full'],
-                    ['code' => 'EN', 'status' => 'full'],
-                ],
+                'languages' => $buildMockLanguages('full', 'full'),
                 'status' => 'Objavljeno',
                 'status_type' => 'published',
                 'icon_bg' => 'bg-[#e8eeff] text-[#4474bf]',
@@ -278,10 +285,7 @@ class RecentResourcesTableWidget extends Widget
                 'edit_url' => url('/admin/pages'),
                 'module' => 'Stranica',
                 'module_icon' => 'document',
-                'languages' => [
-                    ['code' => 'SR', 'status' => 'full'],
-                    ['code' => 'EN', 'status' => 'partial'],
-                ],
+                'languages' => $buildMockLanguages('full', 'partial'),
                 'status' => 'U pregledu',
                 'status_type' => 'review',
                 'icon_bg' => 'bg-[#dfe8ff] text-[#275ba5]',
@@ -295,10 +299,7 @@ class RecentResourcesTableWidget extends Widget
                 'edit_url' => url('/admin/posts'),
                 'module' => 'Blog',
                 'module_icon' => 'newspaper',
-                'languages' => [
-                    ['code' => 'SR', 'status' => 'full'],
-                    ['code' => 'EN', 'status' => 'missing'],
-                ],
+                'languages' => $buildMockLanguages('full', 'missing'),
                 'status' => 'Nacrt (Draft)',
                 'status_type' => 'draft',
                 'icon_bg' => 'bg-[#c1ecd5] text-[#088557]',
@@ -312,10 +313,7 @@ class RecentResourcesTableWidget extends Widget
                 'edit_url' => url('/admin/pages'),
                 'module' => 'Blok',
                 'module_icon' => 'grid',
-                'languages' => [
-                    ['code' => 'SR', 'status' => 'full'],
-                    ['code' => 'EN', 'status' => 'full'],
-                ],
+                'languages' => $buildMockLanguages('full', 'full'),
                 'status' => 'Objavljeno',
                 'status_type' => 'published',
                 'icon_bg' => 'bg-[#d6e3ff] text-[#00458d]',

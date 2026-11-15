@@ -8,7 +8,9 @@ class TranslatableTabs
 {
     public static function make(callable $schemaBuilder): array
     {
-        $locales = config('locales.available', ['sr' => 'Srpski', 'en' => 'English', 'it' => 'Italiano']);
+        $locales = function_exists('active_locales')
+            ? active_locales()
+            : config('locales.available', ['sr' => 'Srpski', 'en' => 'English', 'it' => 'Italiano']);
 
         return collect($locales)
             ->map(function ($label, $lang) use ($schemaBuilder) {

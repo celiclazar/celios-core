@@ -22,7 +22,7 @@ class ImageBlock
 
                 Tabs::make(fn () => __('blocks.translations'))
                     ->tabs(
-                        collect(config('locales.available', []))->map(function ($name, $code) {
+                        collect(active_locales())->map(function ($name, $code) {
                             return Tabs\Tab::make(strtoupper($code))
                                 ->schema([
                                     TextInput::make("caption.{$code}")

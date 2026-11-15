@@ -17,11 +17,9 @@ class ApiLocalizationMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $availableConfig = config('locales.available', ['sr' => 'Srpski', 'en' => 'English', 'it' => 'Italiano']);
-        $supportedLocales = is_array(reset($availableConfig)) ? array_keys($availableConfig) : array_keys($availableConfig);
-        if (empty($supportedLocales)) {
-            $supportedLocales = ['sr', 'en', 'it'];
-        }
+        $supportedLocales = function_exists('active_locale_codes')
+            ? active_locale_codes()
+            : array_keys(config('locales.available', ['sr' => 'Srpski', 'en' => 'English', 'it' => 'Italiano']));
 
         // 1. Check for query parameter (?lang=en or ?locale=en)
         $locale = $request->query('lang', $request->query('locale'));
@@ -42,7 +40,9 @@ class ApiLocalizationMiddleware
         if ($locale && in_array($locale, $supportedLocales, true)) {
             App::setLocale($locale);
         } else {
-            $defaultLocale = config('locales.default', config('app.fallback_locale', 'sr'));
+            $defaultLocale = function_exists('default_locale')
+                ? default_locale()
+                : config('locales.default', config('app.fallback_locale', 'sr'));
             App::setLocale($defaultLocale);
         }
 

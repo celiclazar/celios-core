@@ -21,9 +21,11 @@ class FormSubmissionController extends Controller
     {
         // 1. Resolve Locale and Slug
         $targetSlug = $slug ?: $locale;
-        $supportedLocales = ['sr', 'en', 'it'];
+        $supportedLocales = function_exists('active_locale_codes')
+            ? active_locale_codes()
+            : array_keys(config('locales.available', ['sr' => 'Srpski', 'en' => 'English', 'it' => 'Italiano']));
 
-        if ($locale && in_array($locale, $supportedLocales)) {
+        if ($locale && in_array($locale, $supportedLocales, true)) {
             App::setLocale($locale);
         }
 

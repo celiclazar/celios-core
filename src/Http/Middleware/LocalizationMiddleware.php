@@ -16,16 +16,18 @@ class LocalizationMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $supportedLocales = ['sr', 'en', 'it'];
+        $supportedLocales = function_exists('active_locale_codes')
+            ? active_locale_codes()
+            : array_keys(config('locales.available', ['sr' => 'Srpski', 'en' => 'English', 'it' => 'Italiano']));
 
         $locale = $request->segment(1);
 
-        if (in_array($locale, $supportedLocales)) {
+        if (in_array($locale, $supportedLocales, true)) {
             App::setLocale($locale);
         } else {
-            // Fallback ako u URL-u nema jezika (npr. direktan dolazak na sajt "domain.com/o-nama")
-            // Možeš preusmeriti na podrazumevani jezik (npr. 'sr') ili pročitati iz config-a
-            $defaultLocale = config('app.fallback_locale', 'sr');
+            $defaultLocale = function_exists('default_locale')
+                ? default_locale()
+                : config('locales.default', config('app.fallback_locale', 'sr'));
             App::setLocale($defaultLocale);
         }
 

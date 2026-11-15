@@ -25,7 +25,7 @@ class CategoryForm
                     ->schema([
                         Tabs::make('translations_tabs')
                             ->tabs(
-                                collect(config('locales.available', ['sr' => 'Srpski', 'en' => 'English', 'it' => 'Italiano']))
+                                collect(active_locales())
                                     ->map(function (string $label, string $lang) {
                                         return Tabs\Tab::make(strtoupper($lang)." ({$label})")
                                             ->id($lang)

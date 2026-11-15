@@ -27,8 +27,8 @@ class NewsletterSubscriberForm
 
                             Select::make('locale')
                                 ->label(__('fields.language'))
-                                ->options(config('locales.available', ['sr' => 'Srpski', 'en' => 'English', 'it' => 'Italiano']))
-                                ->default(config('locales.default', 'sr'))
+                                ->options(active_locales())
+                                ->default(default_locale())
                                 ->required(),
 
                             TextInput::make('first_name')

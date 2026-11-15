@@ -80,7 +80,7 @@ class NewsletterSubscribersTable
 
                 SelectFilter::make('locale')
                     ->label(__('fields.language'))
-                    ->options(config('locales.available', ['sr' => 'Srpski', 'en' => 'English', 'it' => 'Italiano'])),
+                    ->options(active_locales()),
             ])
             ->recordActions([
                 Action::make('resendVerification')

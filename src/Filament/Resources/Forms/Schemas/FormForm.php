@@ -30,7 +30,7 @@ class FormForm
                     ->schema([
                         Tabs::make('translations_tabs')
                             ->tabs(
-                                collect(config('locales.available', ['sr' => 'Srpski', 'en' => 'English', 'it' => 'Italiano']))
+                                collect(active_locales())
                                     ->map(function (string $label, string $lang) {
                                         return Tabs\Tab::make(strtoupper($lang)." ({$label})")
                                             ->id($lang)
@@ -123,7 +123,7 @@ class FormForm
 
                                 Tabs::make('field_translations')
                                     ->tabs(
-                                        collect(config('locales.available', ['sr' => 'Srpski', 'en' => 'English', 'it' => 'Italiano']))
+                                        collect(active_locales())
                                             ->map(function (string $label, string $lang) {
                                                 return Tabs\Tab::make(strtoupper($lang)." ({$label})")
                                                     ->schema([
@@ -233,7 +233,7 @@ class FormForm
                             ->schema([
                                 Tabs::make('confirmation_translations')
                                     ->tabs(
-                                        collect(config('locales.available', ['sr' => 'Srpski', 'en' => 'English', 'it' => 'Italiano']))
+                                        collect(active_locales())
                                             ->map(function (string $label, string $lang) {
                                                 return Tabs\Tab::make(strtoupper($lang)." ({$label})")
                                                     ->schema([

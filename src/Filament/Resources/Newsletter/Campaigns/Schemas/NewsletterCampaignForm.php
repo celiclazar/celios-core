@@ -15,7 +15,7 @@ class NewsletterCampaignForm
 {
     public static function configure(Schema $schema): Schema
     {
-        $locales = config('locales.available', ['sr' => 'Srpski', 'en' => 'English', 'it' => 'Italiano']);
+        $locales = active_locales();
 
         return $schema
             ->columns(1)

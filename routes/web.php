@@ -12,10 +12,11 @@ use Illuminate\Support\Facades\Route;
 // 1. LANGUAGE SWITCHER
 // ==========================================
 Route::get('/language/{locale}', function ($locale) {
-    $available = config('locales.available', []);
-    $locales = is_array(reset($available)) ? array_keys($available) : $available;
+    $locales = function_exists('active_locale_codes')
+        ? active_locale_codes()
+        : array_keys(config('locales.available', ['sr' => 'Srpski', 'en' => 'English', 'it' => 'Italiano']));
 
-    if (in_array($locale, $locales)) {
+    if (in_array($locale, $locales, true)) {
         session()->put('locale', $locale);
     }
 

@@ -22,7 +22,7 @@ class DocumentsBlock
             ->schema([
                 Tabs::make('translations')
                     ->tabs(
-                        collect(config('locales.available', ['sr' => 'Srpski', 'en' => 'English', 'it' => 'Italiano']))
+                        collect(active_locales())
                             ->map(function ($label, $lang) {
                                 return Tabs\Tab::make(strtoupper($lang)." ({$label})")
                                     ->schema([

@@ -21,8 +21,10 @@ class NewsletterController extends Controller
      */
     public function subscribe(Request $request, ?string $locale = null): JsonResponse|RedirectResponse
     {
-        $supportedLocales = ['sr', 'en', 'it'];
-        $currentLocale = ($locale && in_array($locale, $supportedLocales))
+        $supportedLocales = function_exists('active_locale_codes')
+            ? active_locale_codes()
+            : array_keys(config('locales.available', ['sr' => 'Srpski', 'en' => 'English', 'it' => 'Italiano']));
+        $currentLocale = ($locale && in_array($locale, $supportedLocales, true))
             ? $locale
             : app()->getLocale();
 

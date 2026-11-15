@@ -25,7 +25,9 @@ class CmsPageController extends Controller
 
     public function render($locale = null, $slug = null)
     {
-        $supportedLocales = ['sr', 'en', 'it'];
+        $supportedLocales = function_exists('active_locale_codes')
+            ? active_locale_codes()
+            : array_keys(config('locales.available', ['sr' => 'Srpski', 'en' => 'English', 'it' => 'Italiano']));
         $page = null;
 
         // KORAK 1: Ako je eksplicitno prosleđen jezik kao prvi parametar (npr. /en/test ili /en)

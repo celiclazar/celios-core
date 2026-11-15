@@ -56,7 +56,7 @@ class ManageMenuLinks extends ManageRelatedRecords
                     ->schema([
                         Tabs::make('translations_tabs')
                             ->tabs(
-                                collect(config('locales.available', ['sr' => 'Srpski', 'en' => 'English', 'it' => 'Italiano']))
+                                collect(active_locales())
                                     ->map(function (string $label, string $locale) {
                                         return Tabs\Tab::make(strtoupper($locale)." ({$label})")
                                             ->id($locale)
