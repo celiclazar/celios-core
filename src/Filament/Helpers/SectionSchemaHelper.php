@@ -7,6 +7,7 @@ use Celios\Core\Filament\Blocks\CTABlock;
 use Celios\Core\Filament\Blocks\FAQBlock;
 use Celios\Core\Filament\Blocks\FeaturesBlock;
 use Celios\Core\Filament\Blocks\FormBlock;
+use Celios\Core\Filament\Blocks\GalleryBlock;
 use Celios\Core\Filament\Blocks\ImageBlock;
 use Celios\Core\Filament\Blocks\NewsletterBlock;
 use Celios\Core\Filament\Blocks\StatsBlock;
@@ -23,6 +24,23 @@ use Filament\Schemas\Components\Tabs;
 class SectionSchemaHelper
 {
     /**
+     * Custom blocks registered for section columns.
+     */
+    protected static array $customColumnBlocks = [];
+
+    public static function registerColumnBlock(\Filament\Forms\Components\Builder\Block $block): void
+    {
+        static::$customColumnBlocks[] = $block;
+    }
+
+    public static function registerColumnBlocks(array $blocks): void
+    {
+        foreach ($blocks as $block) {
+            static::registerColumnBlock($block);
+        }
+    }
+
+    /**
      * Blocks enabled inside section columns.
      */
     public static function getColumnBlocks(): array
@@ -31,6 +49,7 @@ class SectionSchemaHelper
             TextBlock::make(),
             ButtonBlock::make(),
             ImageBlock::make(),
+            GalleryBlock::make(),
             CTABlock::make(),
             FAQBlock::make(),
             FeaturesBlock::make(),
@@ -45,7 +64,7 @@ class SectionSchemaHelper
             $blocks[] = NewsletterBlock::make();
         }
 
-        return $blocks;
+        return array_merge($blocks, static::$customColumnBlocks);
     }
 
     /**
