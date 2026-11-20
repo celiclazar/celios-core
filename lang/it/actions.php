@@ -22,4 +22,5 @@ return [
     'restore_to_draft_description' => 'Questo caricherà il contenuto di questa revisione nella tua bozza di lavoro. Potrai rivederlo e modificarlo prima della pubblicazione.',
     'save_snapshot' => 'Salva Istantanea',
     'back_to_editor' => 'Torna all\'editor',
+    'open_section' => 'Apri sezione in una nuova scheda',
 ];

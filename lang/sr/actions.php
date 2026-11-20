@@ -22,4 +22,5 @@ return [
     'restore_to_draft_description' => 'Ova akcija će učitati sadržaj ove revizije u radni draft. Moći ćete da pregledate i uredite sadržaj pre objavljivanja.',
     'save_snapshot' => 'Sačuvaj snapshot',
     'back_to_editor' => 'Nazad na uređivanje',
+    'open_section' => 'Otvori sekciju u novom tabu',
 ];

@@ -1,5 +1,6 @@
 @import '../../../../vendor/filament/filament/resources/css/theme.css';
 @import '../../../../vendor/awcodes/filament-curator/resources/css/plugin.css';
+@import '../../../../vendor/saade/filament-fullcalendar/resources/css/filament-fullcalendar.css';
 
 @variant dark (&:where(.dark, .dark *));
 
@@ -11,6 +12,7 @@
 @source '../../../../vendor/awcodes/filament-curator/resources/**/*.blade.php';
 @source '../../../../vendor/bezhansalleh/filament-shield/resources/**/*.blade.php';
 @source '../../../../vendor/bezhansalleh/filament-language-switch/resources/**/*.blade.php';
+@source '../../../../vendor/saade/filament-fullcalendar/resources/views/**/*.blade.php';
 
 /* Hide tree dots and connecting vertical lines in sidebar */
 .fi-sidebar-item-grouped-border {

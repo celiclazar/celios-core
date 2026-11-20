@@ -22,4 +22,5 @@ return [
     'restore_to_draft_description' => 'This will load this revision content into your working draft. You will be able to review, edit, and publish it when ready.',
     'save_snapshot' => 'Save Snapshot',
     'back_to_editor' => 'Back to Editor',
+    'open_section' => 'Open section in new tab',
 ];

@@ -70,40 +70,39 @@ class SectionSchemaHelper
     /**
      * Shared schema for Section styling, layout, header, and column blocks.
      */
-    public static function getSchema(bool $includeNameFields = false): array
+    public static function getBasicInfoSection(): FormSection
     {
-        $components = [];
+        return FormSection::make('Osnovni podaci sekcije')
+            ->icon('heroicon-o-information-circle')
+            ->schema([
+                Grid::make(['default' => 1, '2xl' => 3])->schema([
+                    TextInput::make('name')
+                        ->label('Naziv sekcije (Interni)')
+                        ->placeholder('npr. 2 Kolone Tekst + Dugme')
+                        ->required(),
 
-        if ($includeNameFields) {
-            $components[] = FormSection::make('Osnovni podaci sekcije')
-                ->icon('heroicon-o-information-circle')
-                ->schema([
-                    Grid::make(3)->schema([
-                        TextInput::make('name')
-                            ->label('Naziv sekcije (Interni)')
-                            ->placeholder('npr. 2 Kolone Tekst + Dugme')
-                            ->required(),
+                    TextInput::make('slug')
+                        ->label('Slug / Identifikator')
+                        ->placeholder('npr. homepage-services-split')
+                        ->unique(table: 'sections', column: 'slug', ignoreRecord: true),
 
-                        TextInput::make('slug')
-                            ->label('Slug / Identifikator')
-                            ->placeholder('npr. homepage-services-split')
-                            ->unique(table: 'sections', column: 'slug', ignoreRecord: true),
+                    Select::make('category')
+                        ->label('Kategorija')
+                        ->options([
+                            'content' => 'Tekst & Sadržaj (Content)',
+                            'features' => 'Prednosti & Usluge (Features)',
+                            'cta' => 'Poziv na akciju (CTA)',
+                            'headers' => 'Zaglavlja & Uvod (Headers)',
+                            'custom' => 'Prilagođeno (Custom)',
+                        ])
+                        ->default('content'),
+                ]),
+            ]);
+    }
 
-                        Select::make('category')
-                            ->label('Kategorija')
-                            ->options([
-                                'content' => 'Tekst & Sadržaj (Content)',
-                                'features' => 'Prednosti & Usluge (Features)',
-                                'cta' => 'Poziv na akciju (CTA)',
-                                'headers' => 'Zaglavlja & Uvod (Headers)',
-                                'custom' => 'Prilagođeno (Custom)',
-                            ])
-                            ->default('content'),
-                    ]),
-                ]);
-        }
-
-        $components[] = Tabs::make('section_configuration')
+    public static function getConfigurationTabs(): Tabs
+    {
+        return Tabs::make('section_configuration')
             ->tabs([
                 Tabs\Tab::make('Raspored & Kolone')
                     ->icon('heroicon-o-squares-2x2')
@@ -248,7 +247,19 @@ class SectionSchemaHelper
                             ->default('left'),
                     ]),
             ]);
+    }
 
-        return $components;
+    public static function getSchema(bool $includeNameFields = false): array
+    {
+        if ($includeNameFields) {
+            return [
+                self::getConfigurationTabs(),
+                self::getBasicInfoSection(),
+            ];
+        }
+
+        return [
+            self::getConfigurationTabs(),
+        ];
     }
 }
