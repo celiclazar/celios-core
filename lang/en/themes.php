@@ -39,4 +39,10 @@ return [
     'settings_saved_description' => 'Active theme and navigation locations have been updated.',
     'theme_activated' => "Theme ':theme' activated successfully!",
     'theme_installation_failed' => 'Theme installation failed',
+    'delete_theme' => 'Delete Theme',
+    'confirm_delete_theme' => 'Are you sure you want to delete \':theme\'? This will permanently remove all theme template files from disk.',
+    'theme_deleted' => "Theme ':theme' deleted successfully.",
+    'cannot_delete_active_theme' => 'You cannot delete the active theme. Please switch to another theme first.',
+    'cannot_delete_default_theme' => 'The default core theme cannot be deleted.',
+    'unauthorized_delete_theme' => 'You do not have permission to delete themes.',
 ];

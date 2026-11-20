@@ -39,4 +39,10 @@ return [
     'settings_saved_description' => 'Aktivna tema i navigacione lokacije su ažurirane.',
     'theme_activated' => "Tema ':theme' je uspešno aktivirana!",
     'theme_installation_failed' => 'Instalacija teme nije uspela',
+    'delete_theme' => 'Obriši temu',
+    'confirm_delete_theme' => 'Da li ste sigurni da želite da obrišete temu \':theme\'? Ovo će trajno ukloniti sve datoteke šablona sa diska.',
+    'theme_deleted' => "Tema ':theme' je uspešno obrisana.",
+    'cannot_delete_active_theme' => 'Ne možete obrisati aktivnu temu. Prvo aktivirajte drugu temu.',
+    'cannot_delete_default_theme' => 'Podrazumevana tema sistema se ne može obrisati.',
+    'unauthorized_delete_theme' => 'Nemate dozvolu za brisanje tema.',
 ];

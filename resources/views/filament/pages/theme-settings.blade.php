@@ -71,19 +71,31 @@
                         <!-- Action Button -->
                         <div class="pt-2 flex items-center justify-between">
                             <span class="text-[11px] text-gray-400">{{ __('themes.by_author', ['author' => $theme->getAuthor()]) }}</span>
-                            @if(!$isActive)
-                                <button type="button" 
-                                        wire:click="activateTheme('{{ $id }}')"
-                                        class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-semibold bg-primary text-white hover:bg-primary-600 transition shadow-sm cursor-pointer">
-                                    <span>{{ __('themes.activate') }}</span>
-                                    <x-heroicon-m-arrow-right class="w-3.5 h-3.5" />
-                                </button>
-                            @else
-                                <span class="text-xs font-semibold text-emerald-600 dark:text-emerald-400 flex items-center gap-1.5">
-                                    <x-heroicon-m-check-circle class="w-4 h-4 text-emerald-500" />
-                                    {{ __('themes.currently_in_use') }}
-                                </span>
-                            @endif
+                            <div class="flex items-center gap-2">
+                                @if(!$isActive && $id !== 'default' && $this->canDeleteThemes())
+                                    <button type="button" 
+                                            wire:click="deleteTheme('{{ $id }}')"
+                                            wire:confirm="{{ __('themes.confirm_delete_theme', ['theme' => $theme->getName()]) }}"
+                                            class="inline-flex items-center justify-center p-1.5 rounded-lg text-xs font-semibold text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/40 transition cursor-pointer"
+                                            title="{{ __('themes.delete_theme') }}">
+                                        <x-heroicon-o-trash class="w-4 h-4" />
+                                    </button>
+                                @endif
+
+                                @if(!$isActive)
+                                    <button type="button" 
+                                            wire:click="activateTheme('{{ $id }}')"
+                                            class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-semibold bg-primary text-white hover:bg-primary-600 transition shadow-sm cursor-pointer">
+                                        <span>{{ __('themes.activate') }}</span>
+                                        <x-heroicon-m-arrow-right class="w-3.5 h-3.5" />
+                                    </button>
+                                @else
+                                    <span class="text-xs font-semibold text-emerald-600 dark:text-emerald-400 flex items-center gap-1.5">
+                                        <x-heroicon-m-check-circle class="w-4 h-4 text-emerald-500" />
+                                        {{ __('themes.currently_in_use') }}
+                                    </span>
+                                @endif
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -135,6 +135,41 @@ class ThemeSettingsPage extends Page
         }
     }
 
+    public function canDeleteThemes(): bool
+    {
+        $user = auth()->user();
+        if (! $user) {
+            return false;
+        }
+
+        if (method_exists($user, 'hasRole') && ($user->hasRole('super_admin') || $user->hasRole('super-admin'))) {
+            return true;
+        }
+
+        return $user->can('Delete:Theme') || $user->can('delete_themes') || $user->can('manage_themes');
+    }
+
+    public function deleteTheme(string $themeId): void
+    {
+        abort_unless($this->canDeleteThemes(), 403, __('themes.unauthorized_delete_theme'));
+
+        $result = app(ThemeInstallerService::class)->deleteTheme($themeId);
+
+        if ($result['success']) {
+            Notification::make()
+                ->title($result['message'])
+                ->success()
+                ->send();
+
+            $this->redirect(static::getUrl());
+        } else {
+            Notification::make()
+                ->title($result['message'])
+                ->danger()
+                ->send();
+        }
+    }
+
     public function form(Schema $schema): Schema
     {
         $themeManager = app(ThemeManager::class);

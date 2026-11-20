@@ -191,32 +191,44 @@ class ThemeInstallerService
      */
     public function deleteTheme(string $themeId): array
     {
-        if ($themeId === 'default') {
+        if (empty($themeId) || ! preg_match('/^[a-z0-9_-]+$/i', $themeId)) {
             return [
                 'success' => false,
-                'message' => 'Cannot delete the built-in default theme.',
+                'message' => 'Invalid theme identifier.',
             ];
         }
 
-        if ($this->themeManager->getActiveTheme()->getId() === $themeId) {
-            $this->themeManager->setActiveTheme('default');
+        $sanitizedId = strtolower($themeId);
+
+        if ($sanitizedId === 'default') {
+            return [
+                'success' => false,
+                'message' => __('themes.cannot_delete_default_theme'),
+            ];
         }
 
-        $themePath = base_path("themes/{$themeId}");
+        if ($this->themeManager->getActiveTheme()->getId() === $sanitizedId) {
+            return [
+                'success' => false,
+                'message' => __('themes.cannot_delete_active_theme'),
+            ];
+        }
+
+        $themePath = base_path("themes/{$sanitizedId}");
         if (File::isDirectory($themePath)) {
             File::deleteDirectory($themePath);
         }
 
-        $publicPath = public_path("themes/{$themeId}");
+        $publicPath = public_path("themes/{$sanitizedId}");
         if (File::isDirectory($publicPath)) {
             File::deleteDirectory($publicPath);
         }
 
-        $this->themeManager->discoverLocalThemes();
+        $this->themeManager->unregister($sanitizedId);
 
         return [
             'success' => true,
-            'message' => "Theme '{$themeId}' deleted successfully.",
+            'message' => __('themes.theme_deleted', ['theme' => $sanitizedId]),
         ];
     }
 }

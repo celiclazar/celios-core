@@ -39,4 +39,10 @@ return [
     'settings_saved_description' => 'Il tema attivo e le posizioni di navigazione sono stati aggiornati.',
     'theme_activated' => "Tema ':theme' attivato con successo!",
     'theme_installation_failed' => 'Installazione del tema non riuscita',
+    'delete_theme' => 'Elimina Tema',
+    'confirm_delete_theme' => 'Sei sicuro di voler eliminare il tema \':theme\'? Questo rimuoverà permanentemente tutti i file del template dal disco.',
+    'theme_deleted' => "Tema ':theme' eliminato con successo.",
+    'cannot_delete_active_theme' => 'Non puoi eliminare il tema attivo. Passa prima a un altro tema.',
+    'cannot_delete_default_theme' => 'Il tema di sistema predefinito non può essere eliminato.',
+    'unauthorized_delete_theme' => 'Non hai il permesso di eliminare i temi.',
 ];

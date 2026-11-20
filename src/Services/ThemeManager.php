@@ -43,6 +43,16 @@ class ThemeManager
     }
 
     /**
+     * Unregisters a theme instance by ID.
+     */
+    public function unregister(string $themeId): self
+    {
+        unset($this->registeredThemes[$themeId]);
+
+        return $this;
+    }
+
+    /**
      * Discover all themes having a theme.json in base_path('themes').
      */
     public function discoverLocalThemes(): void
