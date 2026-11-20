@@ -14,8 +14,8 @@
         <!-- Brand Logo -->
         <a aria-label="{{ $brand?->name ?? 'Home' }}" class="flex items-center gap-space-3 group focus:outline-none" href="{{ url('/' . $locale) }}">
             @if($hasCustomLogo && $brand?->logo_light_url)
-                <img src="{{ $brand->logo_light_url }}" alt="{{ $brand->name }}" class="h-9 w-auto max-w-[200px] object-contain dark:hidden" />
-                <img src="{{ $brand->logo_dark_url ?: $brand->logo_light_url }}" alt="{{ $brand->name }}" class="h-9 w-auto max-w-[200px] object-contain hidden dark:block" />
+                <img src="{{ $brand->logo_light_url }}" alt="{{ $brand->name }}" class="h-9 w-auto max-w-[200px] object-contain dark:hidden [html[data-frontend-theme='modern-builder']_&]:hidden [html[data-frontend-theme='midnight']_&]:hidden" />
+                <img src="{{ $brand->logo_dark_url ?: $brand->logo_light_url }}" alt="{{ $brand->name }}" class="h-9 w-auto max-w-[200px] object-contain brand-logo-ambient hidden dark:block [html[data-frontend-theme='modern-builder']_&]:block [html[data-frontend-theme='midnight']_&]:block" />
                 @if($brand?->name)
                     <span class="font-display-lg text-2xl font-bold tracking-tight text-on-surface">
                         {{ $brand->name }}

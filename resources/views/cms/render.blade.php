@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" data-frontend-theme="{{ setting('frontend_theme', 'ocean') }}">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="{{ in_array(setting('frontend_theme', 'ocean'), ['modern-builder', 'midnight']) ? 'dark' : '' }}" data-frontend-theme="{{ setting('frontend_theme', 'ocean') }}">
 <head>
     {{-- Kanonski URL - uvek forsiramo verziju sa jezičkim prefiksom --}}
     <link rel="canonical" href="{{ url('/' . app()->getLocale() . '/' . $page->getTranslation('slug', app()->getLocale())) }}" />

@@ -40,7 +40,7 @@
             @if($hasCustomLogo)
                 <!-- Custom Uploaded Brand Logo (Expanded) -->
                 <div x-show="$store.sidebar.isOpen" x-cloak class="flex items-center gap-2.5 min-w-0">
-                    <x-filament-panels::logo class="max-w-[140px] object-contain shrink-0" />
+                    <x-filament-panels::logo class="max-w-[140px] object-contain shrink-0 brand-logo-ambient" />
                     <div class="truncate">
                         <div class="text-sm font-bold text-[#111c2e] dark:text-gray-100 leading-tight tracking-tight truncate">{{ $siteName }}</div>
                         <div class="text-[10px] font-semibold text-[#424751] dark:text-gray-400 tracking-wider uppercase">CMS STUDIO</div>
@@ -50,9 +50,9 @@
                 <!-- Custom Uploaded Brand Mark (Collapsed) -->
                 <div x-show="!$store.sidebar.isOpen" class="flex items-center justify-center">
                     @if($faviconUrl)
-                        <img src="{{ $faviconUrl }}" alt="{{ $siteName }}" class="w-8 h-8 rounded-lg object-contain shrink-0" />
+                        <img src="{{ $faviconUrl }}" alt="{{ $siteName }}" class="w-8 h-8 rounded-lg object-contain shrink-0 brand-logo-ambient" />
                     @else
-                        <x-filament-panels::logo class="w-8 h-8 rounded-lg object-contain shrink-0" />
+                        <x-filament-panels::logo class="w-8 h-8 rounded-lg object-contain shrink-0 brand-logo-ambient" />
                     @endif
                 </div>
             @else

@@ -1026,3 +1026,26 @@ body.fi-body {
     }
 }
 
+/* Ambient Brand Logo Contrast Backlight (Option 2) */
+.brand-logo-ambient,
+.dark .brand-logo-ambient,
+.dark .fi-logo img,
+[data-admin-theme="modern-builder"] .brand-logo-ambient,
+[data-admin-theme="modern-builder"] .fi-logo img,
+[data-admin-theme="midnight"] .brand-logo-ambient,
+[data-admin-theme="midnight"] .fi-logo img {
+    filter: drop-shadow(0 0 1px rgba(255, 255, 255, 0.85))
+            drop-shadow(0 0 7px rgba(255, 255, 255, 0.35))
+            drop-shadow(0 0 16px rgba(16, 185, 129, 0.3));
+    transition: filter 0.3s ease, transform 0.2s ease;
+}
+
+.brand-logo-ambient:hover,
+.dark .fi-logo img:hover,
+[data-admin-theme="modern-builder"] .fi-logo img:hover,
+[data-admin-theme="modern-builder"] .brand-logo-ambient:hover {
+    filter: drop-shadow(0 0 1.5px rgba(255, 255, 255, 1))
+            drop-shadow(0 0 10px rgba(255, 255, 255, 0.5))
+            drop-shadow(0 0 22px rgba(16, 185, 129, 0.45));
+}
+
