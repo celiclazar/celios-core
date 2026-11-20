@@ -41,33 +41,18 @@ class ThemeInstallerService
             ];
         }
 
-        // 1. Security check: prevent zip slip / directory traversal
-        $manifestEntry = null;
-        for ($i = 0; $i < $zip->numFiles; $i++) {
-            $filename = $zip->getNameIndex($i);
-
-            if (str_contains($filename, '..') || str_starts_with($filename, '/') || str_starts_with($filename, '\\')) {
-                $zip->close();
-                return [
-                    'success' => false,
-                    'message' => 'Security warning: ZIP contains illegal directory traversal paths.',
-                    'theme' => null,
-                ];
-            }
-
-            if (basename($filename) === 'theme.json') {
-                $manifestEntry = $filename;
-            }
-        }
-
-        if (! $manifestEntry) {
+        // 1. Security scan: Traversal, file whitelist & malicious code detection
+        $scan = $this->validateArchiveSecurity($zip);
+        if (! $scan['valid']) {
             $zip->close();
             return [
                 'success' => false,
-                'message' => 'Invalid theme archive: theme.json manifest was not found.',
+                'message' => $scan['message'] ?? 'Security scan failed.',
                 'theme' => null,
             ];
         }
+
+        $manifestEntry = $scan['manifestEntry'];
 
         // 2. Read and validate manifest
         $manifestContent = $zip->getFromName($manifestEntry);
@@ -230,5 +215,130 @@ class ThemeInstallerService
             'success' => true,
             'message' => __('themes.theme_deleted', ['theme' => $sanitizedId]),
         ];
+    }
+
+    /**
+     * Validates security of a theme ZIP archive before extraction.
+     * Checks for directory traversal, disallowed extensions, and malicious code patterns.
+     *
+     * @return array{valid: bool, message?: string, manifestEntry?: string}
+     */
+    public function validateArchiveSecurity(ZipArchive $zip): array
+    {
+        $manifestEntry = null;
+
+        $allowedExtensions = [
+            'json', 'md', 'txt',
+            'css', 'scss', 'sass', 'less', 'map',
+            'js', 'mjs', 'cjs', 'ts',
+            'png', 'jpg', 'jpeg', 'gif', 'svg', 'webp', 'ico', 'avif',
+            'woff', 'woff2', 'ttf', 'eot', 'otf',
+            'mp4', 'webm',
+        ];
+
+        $dangerousPatterns = [
+            'system_execution' => '/\b(shell_exec|exec|system|passthru|proc_open|popen|pcntl_exec)\s*\(/i',
+            'code_evaluation' => '/\b(eval|assert|create_function)\s*\(/i',
+            'file_manipulation' => '/\b(unlink|rmdir|chmod|chown)\s*\(/i',
+            'network_sockets' => '/\b(fsockopen|pfsockopen)\s*\(/i',
+            'backtick_execution' => '/`[^`\r\n]{2,}`/',
+        ];
+
+        for ($i = 0; $i < $zip->numFiles; $i++) {
+            $filename = $zip->getNameIndex($i);
+
+            // 1. Check directory traversal / zip slip
+            if (str_contains($filename, '..') || str_starts_with($filename, '/') || str_starts_with($filename, '\\')) {
+                return [
+                    'valid' => false,
+                    'message' => 'Security warning: ZIP contains illegal directory traversal paths.',
+                ];
+            }
+
+            // Skip directory entries for extension and content scanning
+            if (str_ends_with($filename, '/')) {
+                continue;
+            }
+
+            $baseName = basename($filename);
+
+            // 2. Disallow hidden files / dotfiles (except .gitignore / .gitkeep)
+            if (str_starts_with($baseName, '.') && ! in_array($baseName, ['.gitignore', '.gitkeep'], true)) {
+                return [
+                    'valid' => false,
+                    'message' => "Security warning: Prohibited hidden file '{$filename}' in ZIP archive.",
+                ];
+            }
+
+            $lowerName = strtolower($filename);
+
+            // 3. Extension check: Must be .blade.php or in whitelist
+            $isBlade = str_ends_with($lowerName, '.blade.php');
+            if (! $isBlade) {
+                $ext = pathinfo($lowerName, PATHINFO_EXTENSION);
+                if (! in_array($ext, $allowedExtensions, true)) {
+                    return [
+                        'valid' => false,
+                        'message' => "Security violation: Disallowed file extension '.{$ext}' in '{$filename}'.",
+                    ];
+                }
+            }
+
+            // Locate theme.json
+            if ($baseName === 'theme.json') {
+                $manifestEntry = $filename;
+            }
+
+            // 4. Deep static analysis for .blade.php files
+            if ($isBlade) {
+                $content = (string) $zip->getFromIndex($i);
+                foreach ($dangerousPatterns as $threat => $pattern) {
+                    if (preg_match($pattern, $content, $matches)) {
+                        $matchedCode = trim($matches[0]);
+                        return [
+                            'valid' => false,
+                            'message' => "Security violation: File '{$filename}' contains prohibited function or execution syntax '{$matchedCode}'.",
+                        ];
+                    }
+                }
+            }
+        }
+
+        if (! $manifestEntry) {
+            return [
+                'valid' => false,
+                'message' => 'Invalid theme archive: theme.json manifest was not found.',
+            ];
+        }
+
+        return [
+            'valid' => true,
+            'manifestEntry' => $manifestEntry,
+        ];
+    }
+
+    /**
+     * Generates and returns the path to the bundled Starter Theme Kit ZIP.
+     */
+    public function getStarterKitZipPath(): string
+    {
+        $sourceDir = __DIR__ . '/../../resources/starter-theme';
+        $targetZip = storage_path('app/celios-starter-theme.zip');
+
+        File::ensureDirectoryExists(dirname($targetZip));
+
+        $zip = new ZipArchive();
+        if ($zip->open($targetZip, ZipArchive::CREATE | ZipArchive::OVERWRITE) === true) {
+            if (File::isDirectory($sourceDir)) {
+                $files = File::allFiles($sourceDir);
+                foreach ($files as $file) {
+                    $relative = $file->getRelativePathname();
+                    $zip->addFile($file->getRealPath(), 'starter-theme/' . $relative);
+                }
+            }
+            $zip->close();
+        }
+
+        return $targetZip;
     }
 }

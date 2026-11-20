@@ -80,6 +80,18 @@ class ThemeSettingsPage extends Page
     protected function getHeaderActions(): array
     {
         return [
+            Action::make('download_starter_kit')
+                ->label(__('themes.download_starter_kit'))
+                ->icon('heroicon-o-arrow-down-tray')
+                ->color('gray')
+                ->action(function () {
+                    $zipPath = app(ThemeInstallerService::class)->getStarterKitZipPath();
+
+                    return response()->download($zipPath, 'celios-starter-theme.zip', [
+                        'Content-Type' => 'application/zip',
+                    ]);
+                }),
+
             Action::make('install_theme')
                 ->label(__('themes.install_theme'))
                 ->icon('heroicon-o-arrow-up-tray')

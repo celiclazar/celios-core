@@ -29,7 +29,17 @@ class JsonTheme extends AbstractTheme
         $this->menuLocations = (array) ($json['menu_locations'] ?? []);
 
         if (file_exists($this->path . '/screenshot.png')) {
-            $this->screenshotUrl = url('themes/' . $this->id . '/screenshot.png');
+            $publicDir = public_path('themes/' . $this->id);
+            $publicFile = $publicDir . '/screenshot.png';
+
+            if (! file_exists($publicFile)) {
+                if (! is_dir($publicDir)) {
+                    @mkdir($publicDir, 0755, true);
+                }
+                @copy($this->path . '/screenshot.png', $publicFile);
+            }
+
+            $this->screenshotUrl = asset('themes/' . $this->id . '/screenshot.png');
         } elseif (isset($json['screenshot'])) {
             $this->screenshotUrl = (string) $json['screenshot'];
         }

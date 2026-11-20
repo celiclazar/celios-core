@@ -1,0 +1,11 @@
+{
+  "id": "starter-theme",
+  "name": "Celios Starter Theme",
+  "version": "1.0.0",
+  "author": "Your Name / Studio",
+  "description": "A clean, dead-simple Blade starter theme for Celios CMS. Customize HTML & CSS with zero backend complexity.",
+  "menu_locations": {
+    "primary": "Header Navigation Menu",
+    "footer": "Footer Links"
+  }
+}

@@ -26,9 +26,16 @@
                     <!-- Screenshot / Preview Header -->
                     <div class="h-36 bg-gradient-to-br from-slate-100 to-slate-200 dark:from-gray-800 dark:to-gray-950 flex items-center justify-center border-b border-gray-100 dark:border-gray-800 overflow-hidden relative group">
                         @if($theme->getScreenshotUrl())
-                            <img src="{{ $theme->getScreenshotUrl() }}" alt="{{ $theme->getName() }}" class="w-full h-full object-cover">
+                            <img src="{{ $theme->getScreenshotUrl() }}" 
+                                 alt="{{ $theme->getName() }}" 
+                                 class="w-full h-full object-cover"
+                                 onerror="this.style.display='none'; if(this.nextElementSibling) this.nextElementSibling.style.display='flex';">
+                            <div class="hidden flex-col items-center justify-center text-gray-400 dark:text-gray-500 w-full h-full">
+                                <x-heroicon-o-computer-desktop class="w-9 h-9 mb-1" />
+                                <span class="text-[11px] font-medium uppercase tracking-wider">{{ $theme->getId() }}</span>
+                            </div>
                         @else
-                            <div class="flex flex-col items-center justify-center text-gray-400 dark:text-gray-500">
+                            <div class="flex flex-col items-center justify-center text-gray-400 dark:text-gray-500 w-full h-full">
                                 <x-heroicon-o-computer-desktop class="w-9 h-9 mb-1" />
                                 <span class="text-[11px] font-medium uppercase tracking-wider">{{ $theme->getId() }}</span>
                             </div>

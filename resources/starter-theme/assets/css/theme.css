@@ -1,0 +1,20 @@
+/**
+ * Celios Starter Theme Stylesheet
+ * Custom CSS rules and variables for your theme.
+ */
+
+:root {
+    --theme-header-height: 5rem;
+    --theme-border-radius: 0.75rem;
+}
+
+/* Custom header backdrop enhancements */
+.theme-header {
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+}
+
+/* Custom footer hover animations */
+.theme-footer a {
+    transition: color 0.2s ease, opacity 0.2s ease;
+}
