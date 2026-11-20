@@ -71,7 +71,6 @@ class ThemeSettingsPage extends Page
         }
 
         $this->form->fill([
-            'active_theme' => $themeManager->getActiveTheme()->getId(),
             'menu_locations' => $menuLocationsState,
             'admin_theme' => setting('admin_theme', 'ocean'),
             'frontend_theme' => setting('frontend_theme', 'ocean'),
@@ -82,14 +81,14 @@ class ThemeSettingsPage extends Page
     {
         return [
             Action::make('install_theme')
-                ->label('Install Theme (.zip)')
+                ->label(__('themes.install_theme'))
                 ->icon('heroicon-o-arrow-up-tray')
                 ->color('primary')
-                ->modalHeading('Upload & Install Theme')
-                ->modalDescription('Upload a .zip package containing theme.json and theme templates.')
+                ->modalHeading(__('themes.upload_theme'))
+                ->modalDescription(__('themes.upload_theme_description'))
                 ->schema([
                     FileUpload::make('theme_zip')
-                        ->label('Theme ZIP Package')
+                        ->label(__('themes.theme_zip_label'))
                         ->acceptedFileTypes(['application/zip', 'application/x-zip-compressed', 'application/octet-stream'])
                         ->disk('local')
                         ->directory('temp-themes')
@@ -114,7 +113,7 @@ class ThemeSettingsPage extends Page
                         $this->redirect(static::getUrl());
                     } else {
                         Notification::make()
-                            ->title('Theme installation failed')
+                            ->title(__('themes.theme_installation_failed'))
                             ->body($result['message'])
                             ->danger()
                             ->send();
@@ -128,7 +127,7 @@ class ThemeSettingsPage extends Page
         $themeManager = app(ThemeManager::class);
         if ($themeManager->setActiveTheme($themeId)) {
             Notification::make()
-                ->title("Theme '{$themeId}' activated successfully!")
+                ->title(__('themes.theme_activated', ['theme' => $themeId]))
                 ->success()
                 ->send();
 
@@ -139,12 +138,6 @@ class ThemeSettingsPage extends Page
     public function form(Schema $schema): Schema
     {
         $themeManager = app(ThemeManager::class);
-        $themes = $themeManager->getAvailableThemes();
-        $themeOptions = [];
-
-        foreach ($themes as $id => $theme) {
-            $themeOptions[$id] = "{$theme->getName()} (v{$theme->getVersion()}) — by {$theme->getAuthor()}: {$theme->getDescription()}";
-        }
 
         // Dynamically build Select inputs for each menu location defined by the active theme
         $locationFields = [];
@@ -154,55 +147,48 @@ class ThemeSettingsPage extends Page
             $locationFields[] = Select::make("menu_locations.{$locKey}")
                 ->label($locLabel)
                 ->options($menuOptions)
-                ->placeholder('— Select Menu for this Location —')
-                ->helperText("Location identifier key: '{$locKey}'");
+                ->placeholder(__('themes.select_menu_placeholder'))
+                ->helperText(__('themes.location_identifier_key', ['key' => $locKey]));
         }
 
         return $schema
             ->statePath('data')
             ->columns(1)
             ->components([
-                Section::make('Active Website Theme')
-                    ->description('Choose the active frontend view theme. Custom themes can override layouts, blocks, and styling.')
-                    ->schema([
-                        Radio::make('active_theme')
-                            ->label('Select Installed Theme')
-                            ->options($themeOptions)
-                            ->required(),
-                    ]),
-
-                Section::make('Theme Navigation Locations (Slots)')
-                    ->description('Assign which menus appear in the navigation slots defined by your active theme. No hardcoded template keys required.')
+                Section::make(__('themes.navigation_slots'))
+                    ->description(__('themes.navigation_slots_description', ['theme' => $themeManager->getActiveTheme()->getName()]))
                     ->schema([
                         Grid::make(2)
                             ->schema($locationFields),
                     ]),
 
-                Section::make('Admin Panel Palette')
-                    ->description('Customize the visual appearance of your administration dashboard. Changes apply instantly.')
+                Section::make(__('themes.admin_palette'))
+                    ->description(__('themes.admin_palette_description'))
                     ->schema([
                         Radio::make('admin_theme')
-                            ->label('Select Active Admin Theme')
+                            ->label(__('themes.select_admin_theme'))
                             ->options([
-                                'ocean' => 'Ocean Blue — Corporate blue accents with clean slate surfaces (Default)',
-                                'emerald' => 'Emerald Forest — Vivid emerald & mint accents with organic surfaces',
-                                'midnight' => 'Midnight Obsidian — Ultra-modern violet & amber accents with deep slate/obsidian contrast',
-                                'ravangrad' => 'Ravangrad Athletic Modernism — KSF Ravangrad crimson red & athletic stone surfaces',
+                                'ocean' => __('themes.admin_theme_ocean'),
+                                'emerald' => __('themes.admin_theme_emerald'),
+                                'midnight' => __('themes.admin_theme_midnight'),
+                                'modern-builder' => __('themes.admin_theme_modern_builder'),
+                                'ravangrad' => __('themes.admin_theme_ravangrad'),
                             ])
                             ->default('ocean')
                             ->required(),
                     ]),
 
-                Section::make('Frontend Palette & Swatches')
-                    ->description('Color variables and surface tokens for the default theme stylesheets.')
+                Section::make(__('themes.frontend_palette'))
+                    ->description(__('themes.frontend_palette_description'))
                     ->schema([
                         Radio::make('frontend_theme')
-                            ->label('Select Active Frontend Color Swatch')
+                            ->label(__('themes.select_frontend_palette'))
                             ->options([
-                                'ocean' => 'Ocean Blue — Original brand styling with deep corporate navy and cobalt primary (Default)',
-                                'emerald' => 'Emerald Forest — Modern fresh green tone with mint surfaces and sky secondary accents',
-                                'midnight' => 'Midnight Obsidian — Sleek dark aesthetic with indigo/violet primary and zinc surfaces',
-                                'ravangrad' => 'Ravangrad Athletic Modernism — KSF Ravangrad crimson red & athletic minimalism',
+                                'ocean' => __('themes.frontend_theme_ocean'),
+                                'emerald' => __('themes.frontend_theme_emerald'),
+                                'midnight' => __('themes.frontend_theme_midnight'),
+                                'modern-builder' => __('themes.frontend_theme_modern_builder'),
+                                'ravangrad' => __('themes.frontend_theme_ravangrad'),
                             ])
                             ->default('ocean')
                             ->required(),
@@ -213,14 +199,8 @@ class ThemeSettingsPage extends Page
     public function save(): void
     {
         $formData = $this->form->getState();
-        $themeManager = app(ThemeManager::class);
 
-        // 1. Save active theme
-        if (! empty($formData['active_theme'])) {
-            $themeManager->setActiveTheme((string) $formData['active_theme']);
-        }
-
-        // 2. Save theme menu locations mapping
+        // 1. Save theme menu locations mapping
         $menuLocations = $formData['menu_locations'] ?? [];
         if (is_array($menuLocations)) {
             $cleanedLocations = [];
@@ -237,7 +217,7 @@ class ThemeSettingsPage extends Page
             Cache::forget('setting.theme_menu_locations');
         }
 
-        // 3. Save admin and frontend color tokens
+        // 2. Save admin and frontend color tokens
         foreach (['admin_theme', 'frontend_theme'] as $colorKey) {
             Setting::updateOrCreate(
                 ['key' => $colorKey],
@@ -247,8 +227,8 @@ class ThemeSettingsPage extends Page
         }
 
         Notification::make()
-            ->title('Theme settings saved successfully!')
-            ->body('Active theme and navigation locations have been updated.')
+            ->title(__('themes.settings_saved'))
+            ->body(__('themes.settings_saved_description'))
             ->success()
             ->send();
 

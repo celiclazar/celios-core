@@ -90,14 +90,60 @@
     color-scheme: dark;
 }
 
-/* Eliminate white backgrounds and style cards in Midnight Obsidian */
+/* 4. Theme: The Modern Builder */
+[data-admin-theme="modern-builder"] {
+    --brand-primary: #10b981;
+    --brand-primary-hover: #34d399;
+    --brand-surface: #18181b;
+    --brand-surface-card: #27272a;
+    --brand-surface-low: #121215;
+    --brand-surface-container: #27272a;
+    --brand-surface-high: #3f3f46;
+    --brand-surface-highest: #52525b;
+    --brand-on-surface: #f4f4f5;
+    --brand-on-surface-variant: #a1a1aa;
+    --brand-outline: #3f3f46;
+    --brand-secondary: #34d399;
+    --brand-secondary-container: #064e3b;
+    --brand-secondary-text: #a7f3d0;
+    --brand-tertiary: #10b981;
+    --brand-tertiary-container: #064e3b;
+
+    color-scheme: dark;
+}
+
+/* Light mode overrides if user toggles off dark mode under Modern Builder */
+html:not(.dark)[data-admin-theme="modern-builder"] {
+    --brand-primary: #059669;
+    --brand-primary-hover: #10b981;
+    --brand-surface: #fafafa;
+    --brand-surface-card: #ffffff;
+    --brand-surface-low: #f4f4f5;
+    --brand-surface-container: #e4e4e7;
+    --brand-surface-high: #d4d4d8;
+    --brand-surface-highest: #a1a1aa;
+    --brand-on-surface: #18181b;
+    --brand-on-surface-variant: #52525b;
+    --brand-outline: #d4d4d8;
+    --brand-secondary: #10b981;
+    --brand-secondary-container: #d1fae5;
+    --brand-secondary-text: #065f46;
+    --brand-tertiary: #047857;
+    --brand-tertiary-container: #a7f3d0;
+
+    color-scheme: light;
+}
+
+/* Eliminate white backgrounds and style cards in Midnight Obsidian and Modern Builder */
 [data-admin-theme="midnight"],
-[data-admin-theme="obsidian"] {
+[data-admin-theme="obsidian"],
+html.dark[data-admin-theme="modern-builder"] {
     color: #f4f4f5 !important;
 }
 
 [data-admin-theme="midnight"] body.fi-body,
-[data-admin-theme="obsidian"] body.fi-body {
+[data-admin-theme="obsidian"] body.fi-body,
+html.dark[data-admin-theme="modern-builder"] body.fi-body {
     background-color: var(--brand-surface) !important;
     color: #f4f4f5 !important;
 }
@@ -277,6 +323,116 @@
 
 [data-admin-theme="midnight"] .text-\[\#00458d\],
 [data-admin-theme="obsidian"] .text-\[\#00458d\] {
+    color: var(--brand-primary) !important;
+}
+
+/* ==========================================================================
+   THE MODERN BUILDER DARK THEME POLISH & CONTRASTS
+   ========================================================================== */
+html.dark[data-admin-theme="modern-builder"] .fi-section,
+html.dark[data-admin-theme="modern-builder"] .fi-section-content-ctn,
+html.dark[data-admin-theme="modern-builder"] .fi-section-header,
+html.dark[data-admin-theme="modern-builder"] .fi-card,
+html.dark[data-admin-theme="modern-builder"] .fi-ta-ctn,
+html.dark[data-admin-theme="modern-builder"] .fi-ta-content,
+html.dark[data-admin-theme="modern-builder"] .fi-ta-row,
+html.dark[data-admin-theme="modern-builder"] .fi-ta-header,
+html.dark[data-admin-theme="modern-builder"] .fi-ta-header-cell,
+html.dark[data-admin-theme="modern-builder"] .fi-ta-table thead .fi-ta-selection-cell,
+html.dark[data-admin-theme="modern-builder"] .fi-ta-actions-header-cell,
+html.dark[data-admin-theme="modern-builder"] .fi-ta-table-stacked-header-cell,
+html.dark[data-admin-theme="modern-builder"] .fi-ta-content-header,
+html.dark[data-admin-theme="modern-builder"] .fi-ta-table thead tr,
+html.dark[data-admin-theme="modern-builder"] .fi-ta-table thead th,
+html.dark[data-admin-theme="modern-builder"] .fi-ta-filter-indicators,
+html.dark[data-admin-theme="modern-builder"] .fi-ta-pagination,
+html.dark[data-admin-theme="modern-builder"] .fi-input-wrp,
+html.dark[data-admin-theme="modern-builder"] .fi-select-input,
+html.dark[data-admin-theme="modern-builder"] .fi-dropdown-panel,
+html.dark[data-admin-theme="modern-builder"] .fi-dropdown-list,
+html.dark[data-admin-theme="modern-builder"] .fi-modal-window,
+html.dark[data-admin-theme="modern-builder"] .fi-modal-header,
+html.dark[data-admin-theme="modern-builder"] .fi-modal-footer,
+html.dark[data-admin-theme="modern-builder"] .fi-widget,
+html.dark[data-admin-theme="modern-builder"] .fi-tabs,
+html.dark[data-admin-theme="modern-builder"] .bg-white {
+    background-color: var(--brand-surface-card) !important;
+    color: #f4f4f5 !important;
+    border-color: var(--brand-surface-container) !important;
+}
+
+html.dark[data-admin-theme="modern-builder"] .fi-tabs-item:not(.fi-active) .fi-tabs-item-label {
+    color: #a1a1aa !important;
+}
+
+html.dark[data-admin-theme="modern-builder"] .fi-tabs-item:not(.fi-active):hover {
+    background-color: var(--brand-surface-low) !important;
+}
+
+html.dark[data-admin-theme="modern-builder"] .fi-tabs-item.fi-active {
+    background-color: var(--brand-surface-container) !important;
+}
+
+html.dark[data-admin-theme="modern-builder"] .fi-tabs-item.fi-active .fi-tabs-item-label {
+    color: #34d399 !important;
+    font-weight: 600 !important;
+}
+
+html.dark[data-admin-theme="modern-builder"] input,
+html.dark[data-admin-theme="modern-builder"] select,
+html.dark[data-admin-theme="modern-builder"] textarea {
+    background-color: var(--brand-surface-low) !important;
+    color: #f4f4f5 !important;
+    border-color: var(--brand-surface-container) !important;
+}
+
+html.dark[data-admin-theme="modern-builder"] .fi-input-wrp input {
+    background-color: transparent !important;
+    color: #f4f4f5 !important;
+}
+
+html.dark[data-admin-theme="modern-builder"] .fi-ta-row:hover {
+    background-color: var(--brand-surface-low) !important;
+}
+
+html.dark[data-admin-theme="modern-builder"] p,
+html.dark[data-admin-theme="modern-builder"] span,
+html.dark[data-admin-theme="modern-builder"] label,
+html.dark[data-admin-theme="modern-builder"] h1,
+html.dark[data-admin-theme="modern-builder"] h2,
+html.dark[data-admin-theme="modern-builder"] h3,
+html.dark[data-admin-theme="modern-builder"] h4,
+html.dark[data-admin-theme="modern-builder"] td,
+html.dark[data-admin-theme="modern-builder"] th,
+html.dark[data-admin-theme="modern-builder"] .fi-header-heading,
+html.dark[data-admin-theme="modern-builder"] .fi-section-header-heading,
+html.dark[data-admin-theme="modern-builder"] .fi-ta-header-heading,
+html.dark[data-admin-theme="modern-builder"] .fi-fo-field-wrp-label,
+html.dark[data-admin-theme="modern-builder"] .fi-fo-field-wrp-label span,
+html.dark[data-admin-theme="modern-builder"] .fi-ta-text-item,
+html.dark[data-admin-theme="modern-builder"] .fi-ta-text-item span,
+html.dark[data-admin-theme="modern-builder"] .fi-breadcrumbs-item-label {
+    color: #f4f4f5;
+}
+
+html.dark[data-admin-theme="modern-builder"] .text-gray-950,
+html.dark[data-admin-theme="modern-builder"] .text-gray-900,
+html.dark[data-admin-theme="modern-builder"] .text-gray-800,
+html.dark[data-admin-theme="modern-builder"] .text-gray-700,
+html.dark[data-admin-theme="modern-builder"] .text-\[\#111c2e\],
+html.dark[data-admin-theme="modern-builder"] .text-black {
+    color: #f4f4f5 !important;
+}
+
+html.dark[data-admin-theme="modern-builder"] .text-gray-600,
+html.dark[data-admin-theme="modern-builder"] .text-gray-500,
+html.dark[data-admin-theme="modern-builder"] .text-gray-400,
+html.dark[data-admin-theme="modern-builder"] .text-\[\#424751\],
+html.dark[data-admin-theme="modern-builder"] .text-\[\#737782\] {
+    color: #a1a1aa !important;
+}
+
+html.dark[data-admin-theme="modern-builder"] .text-\[\#00458d\] {
     color: var(--brand-primary) !important;
 }
 
