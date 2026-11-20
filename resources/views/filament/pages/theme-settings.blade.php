@@ -90,12 +90,15 @@
                                 @endif
 
                                 @if(!$isActive)
-                                    <button type="button" 
-                                            wire:click="activateTheme('{{ $id }}')"
-                                            class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-semibold bg-primary text-white hover:bg-primary-600 transition shadow-sm cursor-pointer">
-                                        <span>{{ __('themes.activate') }}</span>
-                                        <x-heroicon-m-arrow-right class="w-3.5 h-3.5" />
-                                    </button>
+                                    <x-filament::button
+                                        type="button"
+                                        wire:click="activateTheme('{{ $id }}')"
+                                        size="xs"
+                                        color="primary"
+                                        icon="heroicon-m-arrow-right"
+                                        icon-position="after">
+                                        {{ __('themes.activate') }}
+                                    </x-filament::button>
                                 @else
                                     <span class="text-xs font-semibold text-emerald-600 dark:text-emerald-400 flex items-center gap-1.5">
                                         <x-heroicon-m-check-circle class="w-4 h-4 text-emerald-500" />
