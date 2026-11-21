@@ -26,6 +26,12 @@ trait HasWidgetToggle
             return false;
         }
 
+        if (defined('static::MODULE_KEY') && static::MODULE_KEY === 'queue_manager') {
+            if ($user->can('View:QueueManager') || $user->can('page_QueueManager')) {
+                return parent::canView();
+            }
+        }
+
         $baseName = class_basename(static::class);
         $permission = "View:{$baseName}";
         $legacyPermission = "widget_{$baseName}";
